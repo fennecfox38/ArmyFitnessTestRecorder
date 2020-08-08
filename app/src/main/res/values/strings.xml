@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">ACFT Recorder</string>
+    <string name="title_acft">ACFT</string>
+    <string name="title_abcp">ABCP</string>
+    <string name="title_history">History</string>
+    <string name="setting">Settings</string>
+    <string name="Points">points</string>
+    <string name="MDL">Maximum Dead Lift</string>
+    <string name="lbs">lbs</string>
+    <string name="SPT">Standing Power Throw</string>
+    <string name="m">m</string>
+    <string name="HPU">Hand-Release Push-Up</string>
+    <string name="reps">reps</string>
+    <string name="SDC">Sprint-Drag-Carry</string>
+    <string name="LTK">Leg Tucks</string>
+    <string name="Cardio">Cardio</string>
+    <string name="min">min</string>
+    <string name="sec">sec</string>
+</resources>

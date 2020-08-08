@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_acft"
+        android:icon="@drawable/ic_acft"
+        android:title="@string/title_acft" />
+
+    <item
+        android:id="@+id/navigation_abcp"
+        android:icon="@drawable/ic_abcp"
+        android:title="@string/title_abcp" />
+
+    <item
+        android:id="@+id/navigation_history"
+        android:icon="@drawable/ic_history"
+        android:title="@string/title_history" />
+
+</menu>
