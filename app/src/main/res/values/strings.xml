@@ -1,8 +1,11 @@
 <resources>
     <string name="app_name">ACFT Recorder</string>
     <string name="title_acft">ACFT</string>
+    <string name="title_long_acft">Combat Fitness Test</string>
     <string name="title_abcp">ABCP</string>
-    <string name="title_history">History</string>
+    <string name="title_long_abcp">Body Composition</string>
+    <string name="title_log">Log</string>
+    <string name="title_more">More</string>
     <string name="setting">Settings</string>
     <string name="Points">points</string>
     <string name="MDL">Maximum Dead Lift</string>
@@ -16,4 +19,6 @@
     <string name="Cardio">Cardio</string>
     <string name="min">min</string>
     <string name="sec">sec</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

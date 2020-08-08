@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_acft">
+
+    <fragment
+        android:id="@+id/navigation_acft"
+        android:name="mil.army.acft.recorder.ACFT.ACFTFragment"
+        android:label="@string/title_long_acft"
+        tools:layout="@layout/fragment_acft" />
+
+    <fragment
+        android:id="@+id/navigation_abcp"
+        android:name="mil.army.acft.recorder.ABCP.ABCPFragment"
+        android:label="@string/title_long_abcp"
+        tools:layout="@layout/fragment_abcp" />
+
+    <fragment
+        android:id="@+id/navigation_log"
+        android:name="mil.army.acft.recorder.Log.LogFragment"
+        android:label="@string/title_log"
+        tools:layout="@layout/fragment_log" />
+
+    <fragment
+        android:id="@+id/navigation_more"
+        android:name="mil.army.acft.recorder.More.MoreFragment"
+        android:label="@string/title_more"
+        tools:layout="@layout/fragment_more" />
+
+</navigation>

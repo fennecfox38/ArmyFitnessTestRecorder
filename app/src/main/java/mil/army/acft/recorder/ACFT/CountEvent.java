@@ -19,16 +19,17 @@ import static android.text.InputType.TYPE_NUMBER_VARIATION_NORMAL;
 
 public class CountEvent {
     public final static int MDL=1,SPT=2,HPU=3,LTK=5;
+    private View root;
     private SeekBar seekBar_event;
-    private boolean isTenthScale=false; // True for SPT
+    private boolean isTenthScale;
     private EditText editText_raw_event, editText_sco_event;
     private float rawTenth;
     private int raw,sco,eventType;
 
-    CountEvent(LayoutInflater inflater, ViewGroup container, int eventtype, Resources resources){
-        eventType = eventtype;
+    CountEvent(LayoutInflater inflater, ViewGroup container, int eventType, Resources resources){
+        this.eventType = eventType;
 
-        View root = inflater.inflate(R.layout.layout_event_count, container, true);
+        root = inflater.inflate(R.layout.layout_event_count, container, true);
         editText_raw_event = root.findViewById(R.id.editText_raw_event);
         editText_sco_event = root.findViewById(R.id.editText_sco_event);
         seekBar_event = root.findViewById(R.id.seekbar_event);

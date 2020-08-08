@@ -20,8 +20,8 @@ public class DurationEvent {
     private Duration duration;
     private int sco,eventType;
 
-    DurationEvent(final LayoutInflater inflater, ViewGroup container, int eventtype, Resources resources){
-        eventType=eventtype;
+    DurationEvent(final LayoutInflater inflater, ViewGroup container, int eventType, Resources resources){
+        this.eventType=eventType;
         duration = new Duration();
 
         root = inflater.inflate(R.layout.layout_event_duration, container, true);

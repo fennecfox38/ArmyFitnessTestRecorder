@@ -1,16 +1,16 @@
-package mil.army.acft.recorder.History;
+package mil.army.acft.recorder.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class HistoryViewModel extends ViewModel {
+public class LogViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
 
-    public HistoryViewModel() {
+    public LogViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is History fragment");
+        mText.setValue("This is Log fragment");
     }
 
     public LiveData<String> getText() {

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
         android:id="@+id/navigation_acft"
@@ -12,8 +14,13 @@
         android:title="@string/title_abcp" />
 
     <item
-        android:id="@+id/navigation_history"
-        android:icon="@drawable/ic_history"
-        android:title="@string/title_history" />
+        android:id="@+id/navigation_log"
+        android:icon="@drawable/ic_log"
+        android:title="@string/title_log" />
+
+    <item
+        android:id="@+id/navigation_more"
+        android:icon="@drawable/ic_more"
+        android:title="@string/title_more" />
 
 </menu>
