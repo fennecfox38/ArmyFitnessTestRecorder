@@ -1,4 +1,4 @@
-package mil.army.acft.recorder.More;
+package army.prt.recorder.more;
 
 import android.os.Bundle;
 
@@ -8,7 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import mil.army.acft.recorder.R;
+import army.prt.recorder.R;
 
 /**
  * A simple {@link Fragment} subclass.

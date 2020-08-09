@@ -1,4 +1,4 @@
-package mil.army.acft.recorder.ACFT;
+package army.prt.recorder.acft;
 
 public class ACFTRecord {
     private int raw_MDL, raw_HPU, raw_LTK, cardioAlter;

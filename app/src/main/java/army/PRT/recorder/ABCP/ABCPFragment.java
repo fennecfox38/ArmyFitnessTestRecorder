@@ -1,4 +1,4 @@
-package mil.army.acft.recorder.Log;
+package army.prt.recorder.abcp;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,19 +11,18 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
-import mil.army.acft.recorder.R;
+import army.prt.recorder.R;
 
-public class LogFragment extends Fragment {
+public class ABCPFragment extends Fragment {
 
-    private LogViewModel logViewModel;
+    private ABCPViewModel ABCPViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View root = inflater.inflate(R.layout.fragment_log, container, false);
-        logViewModel = ViewModelProviders.of(this).get(LogViewModel.class);
-        logViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
+        View root = inflater.inflate(R.layout.fragment_abcp, container, false);
+        ABCPViewModel = ViewModelProviders.of(this).get(ABCPViewModel.class);
+        ABCPViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override public void onChanged(@Nullable String s) {
                 //Toast.makeText(getContext(), s, Toast.LENGTH_SHORT).show();
             }
         });

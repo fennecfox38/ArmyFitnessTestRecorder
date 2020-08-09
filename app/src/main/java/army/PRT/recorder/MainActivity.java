@@ -1,4 +1,4 @@
-package mil.army.acft.recorder;
+package army.prt.recorder;
 
 import android.os.Bundle;
 import android.view.Menu;

@@ -5,7 +5,7 @@ android {
     buildToolsVersion "29.0.3"
 
     defaultConfig {
-        applicationId "mil.army.acft.recorder"
+        applicationId "army.prt.recorder"
         minSdkVersion 21
         targetSdkVersion 29
         versionCode 1
@@ -19,6 +19,9 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+    }
+    buildFeatures{
+        dataBinding = true
     }
 }
 
