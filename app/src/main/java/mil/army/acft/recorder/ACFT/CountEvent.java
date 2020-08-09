@@ -29,7 +29,7 @@ public class CountEvent {
     CountEvent(LayoutInflater inflater, ViewGroup container, int eventType, Resources resources){
         this.eventType = eventType;
 
-        root = inflater.inflate(R.layout.layout_event_count, container, true);
+        root = inflater.inflate(R.layout.recyclerview_count_event, container, true);
         editText_raw_event = root.findViewById(R.id.editText_raw_event);
         editText_sco_event = root.findViewById(R.id.editText_sco_event);
         seekBar_event = root.findViewById(R.id.seekbar_event);

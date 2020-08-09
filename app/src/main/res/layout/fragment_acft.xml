@@ -8,49 +8,21 @@
     tools:context=".ACFT.ACFTFragment">
 
     <ScrollView
-        android:id="@+id/scrollView_acft_frag"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-            <FrameLayout
-                android:id="@+id/layout_event_MDL"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView_acft"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-            </FrameLayout>
-            <FrameLayout
-                android:id="@+id/layout_event_SPT"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-            </FrameLayout>
-            <FrameLayout
-                android:id="@+id/layout_event_HPU"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-            </FrameLayout>
-            <FrameLayout
-                android:id="@+id/layout_event_SDC"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-            </FrameLayout>
-            <FrameLayout
-                android:id="@+id/layout_event_LTK"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-            </FrameLayout>
-            <FrameLayout
-                android:id="@+id/layout_event_RUN"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-            </FrameLayout>
+                android:layout_height="wrap_content"/>
             <Space
+                android:id="@+id/space"
                 android:layout_width="match_parent"
-                android:layout_height="80dp"/>
+                android:layout_height="96dp"/>
         </LinearLayout>
-
     </ScrollView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

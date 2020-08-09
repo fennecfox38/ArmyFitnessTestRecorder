@@ -24,7 +24,7 @@ public class DurationEvent {
         this.eventType=eventType;
         duration = new Duration();
 
-        root = inflater.inflate(R.layout.layout_event_duration, container, true);
+        root = inflater.inflate(R.layout.recyclerview_duration_event, container, true);
         TextView txt_title_event = root.findViewById(R.id.txt_title_event);
         editText_min = root.findViewById(R.id.editText_min);
         editText_sec = root.findViewById(R.id.editText_sec);
