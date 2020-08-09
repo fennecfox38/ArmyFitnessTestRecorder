@@ -1,4 +1,4 @@
-package army.prts.recorder;
+package army.prt.recorder;
 
 import android.content.Context;
 

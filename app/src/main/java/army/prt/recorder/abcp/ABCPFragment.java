@@ -1,4 +1,4 @@
-package army.prts.recorder.abcps;
+package army.prt.recorder.abcp;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
-import army.prts.recorder.R;
+import army.prt.recorder.R;
 
 public class ABCPFragment extends Fragment {
 

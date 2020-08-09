@@ -1,4 +1,4 @@
-package army.prts.recorder.acfts;
+package army.prt.recorder.acft;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -20,7 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-import army.prts.recorder.R;
+import army.prt.recorder.R;
 
 import static android.text.InputType.TYPE_CLASS_NUMBER;
 import static android.text.InputType.TYPE_NUMBER_FLAG_DECIMAL;
