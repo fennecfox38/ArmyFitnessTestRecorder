@@ -1,16 +1,16 @@
-package army.prt.recorder.abcp;
+package army.prts.recorder.logs;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class ABCPViewModel extends ViewModel {
+public class LogViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
 
-    public ABCPViewModel() {
+    public LogViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("This is ABCP fragment");
+        mText.setValue("This is Log fragment");
     }
 
     public LiveData<String> getText() {

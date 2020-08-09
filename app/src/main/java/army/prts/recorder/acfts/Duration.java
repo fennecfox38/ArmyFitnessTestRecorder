@@ -1,4 +1,4 @@
-package army.prt.recorder.acft;
+package army.prts.recorder.acfts;
 
 public class Duration implements Comparable{
     private int min, sec;

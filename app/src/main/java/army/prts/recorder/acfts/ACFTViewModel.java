@@ -1,4 +1,4 @@
-package army.prt.recorder.acft;
+package army.prts.recorder.acfts;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

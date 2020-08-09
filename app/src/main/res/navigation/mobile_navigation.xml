@@ -8,25 +8,25 @@
 
     <fragment
         android:id="@+id/navigation_acft"
-        android:name="army.prt.recorder.acft.ACFTFragment"
+        android:name="army.prts.recorder.acfts.ACFTFragment"
         android:label="@string/title_long_acft"
         tools:layout="@layout/fragment_acft" />
 
     <fragment
         android:id="@+id/navigation_abcp"
-        android:name="army.prt.recorder.abcp.ABCPFragment"
+        android:name="army.prts.recorder.abcps.ABCPFragment"
         android:label="@string/title_long_abcp"
         tools:layout="@layout/fragment_abcp" />
 
     <fragment
         android:id="@+id/navigation_log"
-        android:name="army.prt.recorder.log.LogFragment"
+        android:name="army.prts.recorder.logs.LogFragment"
         android:label="@string/title_log"
         tools:layout="@layout/fragment_log" />
 
     <fragment
         android:id="@+id/navigation_more"
-        android:name="army.prt.recorder.more.MoreFragment"
+        android:name="army.prts.recorder.mores.MoreFragment"
         android:label="@string/title_more"
         tools:layout="@layout/fragment_more" />
 

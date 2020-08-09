@@ -1,4 +1,4 @@
-package army.prt.recorder.acft;
+package army.prts.recorder.acfts;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import army.prt.recorder.R;
+import army.prts.recorder.R;
 
 public class ACFTFragment extends Fragment{
     private ACFTViewModel ACFTViewModel;
