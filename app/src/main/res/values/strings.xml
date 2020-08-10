@@ -17,6 +17,9 @@
     <string name="SDC">Sprint-Drag-Carry</string>
     <string name="LTK">Leg Tucks</string>
     <string name="Cardio">Cardio</string>
+    <string name="title_duration_picker">Set Duration Time</string>
+    <string name="OK">OK</string>
+    <string name="Cancel">Cancel</string>
     <string name="min">min</string>
     <string name="sec">sec</string>
     <!-- TODO: Remove or change this placeholder text -->
