@@ -8,15 +8,8 @@
         <variable
             name="duration"
             type="army.prt.recorder.acft.Duration" />
-        <variable
-            name="max"
-            type="int" />
     </data>
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -57,7 +50,6 @@
                 android:textSize="20sp"
                 android:text="@string/sec"/>
         </LinearLayout>
-    </LinearLayout>
 
 </layout>
 

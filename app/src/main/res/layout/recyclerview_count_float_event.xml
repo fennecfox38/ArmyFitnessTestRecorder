@@ -7,7 +7,7 @@
     <data>
         <variable
             name="viewholder"
-            type="army.prt.recorder.acft.EventRecyclerAdapter.CountViewHolder" />
+            type="army.prt.recorder.acft.EventRecyclerAdapter.CountFloatViewHolder" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -34,7 +34,7 @@
             android:id="@+id/editText_raw_event"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:inputType="number"
+            android:inputType="numberDecimal"
             android:text="@{viewholder.event.raw}"
             android:afterTextChanged="@{viewholder::afterTextChanged}"
             app:layout_constraintHorizontal_bias="0.1"

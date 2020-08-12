@@ -6,9 +6,6 @@
 
     <data>
         <variable
-            name="event"
-            type="army.prt.recorder.acft.EventRecyclerAdapter.Event" />
-        <variable
             name="viewholder"
             type="army.prt.recorder.acft.EventRecyclerAdapter.DurationViewHolder" />
     </data>
@@ -27,7 +24,7 @@
             android:layout_marginStart="5dp"
             android:layout_marginEnd="20dp"
             android:textSize="24sp"
-            android:text="@{event.title}"
+            android:text="@{viewholder.event.title}"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/layout_duration"
@@ -51,7 +48,7 @@
                 android:focusable="false"
                 android:inputType="number"
                 android:onClick="@{viewholder::onTimeClick}"
-                android:text="@{String.valueOf(event.duration.getMin())}"/>
+                android:text="@{String.valueOf(viewholder.event.duration.getMin())}"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -65,7 +62,7 @@
                 android:focusable="false"
                 android:inputType="number"
                 android:onClick="@{viewholder::onTimeClick}"
-                android:text="@{String.valueOf(event.duration.getSec())}"/>
+                android:text="@{String.valueOf(viewholder.event.duration.getSec())}"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -79,7 +76,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:focusable="false"
-            android:text="@{String.valueOf(event.sco)}"
+            android:text="@{String.valueOf(viewholder.event.sco)}"
             app:layout_constraintTop_toTopOf="@+id/layout_duration"
             app:layout_constraintBottom_toBottomOf="@+id/layout_duration"
             app:layout_constraintStart_toEndOf="@+id/layout_duration"

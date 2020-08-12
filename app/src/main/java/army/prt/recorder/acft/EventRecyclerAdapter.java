@@ -4,13 +4,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.NumberPicker;
 import android.widget.SeekBar;
 
 import androidx.annotation.NonNull;
@@ -18,6 +15,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.databinding.BindingAdapter;
 import androidx.databinding.DataBindingUtil;
 import androidx.databinding.InverseBindingAdapter;
+import androidx.databinding.InverseMethod;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -25,6 +23,7 @@ import java.util.ArrayList;
 import army.prt.recorder.R;
 import army.prt.recorder.databinding.DurationpickBinding;
 import army.prt.recorder.databinding.RecyclerviewCountEventBinding;
+import army.prt.recorder.databinding.RecyclerviewCountFloatEventBinding;
 import army.prt.recorder.databinding.RecyclerviewDurationEventBinding;
 
 import static android.text.InputType.TYPE_CLASS_NUMBER;
@@ -33,31 +32,35 @@ import static android.text.InputType.TYPE_NUMBER_VARIATION_NORMAL;
 
 public class EventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context context;
+    private Resources resources;
     public ArrayList<Event> eventCard;
 
     EventRecyclerAdapter(Context context){
         this.context = context;
-        Resources resources = context.getResources();
+        resources = context.getResources();
         eventCard = new ArrayList<>();
-        eventCard.add(new Event(Event.MDL,resources.getString(R.string.MDL),resources.getString(R.string.lbs),700));
-        eventCard.add(new Event(Event.SPT,resources.getString(R.string.SPT),resources.getString(R.string.m),150));
-        eventCard.add(new Event(Event.HPU,resources.getString(R.string.HPU),resources.getString(R.string.reps),100));
-        eventCard.add(new Event(Event.SDC,resources.getString(R.string.SDC),"min/sec",5));
-        eventCard.add(new Event(Event.LTK,resources.getString(R.string.LTK),resources.getString(R.string.reps),40));
-        eventCard.add(new Event(Event.CARDIO,resources.getString(R.string.Cardio),"min/sec",26));
+        eventCard.add(new CountEvent(Event.MDL,resources.getString(R.string.MDL),700,resources.getString(R.string.lbs)));
+        eventCard.add(new CountFloatEvent(Event.SPT,resources.getString(R.string.SPT),150,resources.getString(R.string.m)));
+        eventCard.add(new CountEvent(Event.HPU,resources.getString(R.string.HPU),100,resources.getString(R.string.reps)));
+        eventCard.add(new DurationEvent(Event.SDC,resources.getString(R.string.SDC),5));
+        eventCard.add(new CountEvent(Event.LTK,resources.getString(R.string.LTK),40,resources.getString(R.string.reps)));
+        eventCard.add(new DurationEvent(Event.CARDIO,resources.getString(R.string.Cardio),26));
     }
 
     public class CountViewHolder extends RecyclerView.ViewHolder{
         private RecyclerviewCountEventBinding binding;
-        public Event event = null;
+        public CountEvent event = null;
         public CountViewHolder(@NonNull View itemView) {
             super(itemView);
             binding = DataBindingUtil.bind(itemView);
+            //binding.setLifecycleOwner(); Fragment.getLifecycleOwner();
         }
         public void afterTextChanged(Editable s) {
             String string = s.toString();
             if(string.length()==0) return;
-            updateRawSco(Integer.parseInt(string));
+            try {
+                updateRawSco(Integer.parseInt(string));
+            }catch (Exception e){ }
         }
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
             if(fromUser) updateRawSco(progress);
@@ -77,83 +80,56 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
         }
     }
     public class CountFloatViewHolder extends RecyclerView.ViewHolder{
-        public RecyclerviewCountEventBinding binding;
-        public Event event = null;
-        EditText editText_raw, editText_sco;
-        SeekBar seekBar;
-        ImageButton btn_minus, btn_plus;
-        Float raw; int sco;
+        public RecyclerviewCountFloatEventBinding binding;
+        public CountFloatEvent event = null;
         public CountFloatViewHolder(@NonNull View itemView) {
             super(itemView);
             binding = DataBindingUtil.bind(itemView);
-            editText_raw = itemView.findViewById(R.id.editText_raw_event);
-            editText_sco = itemView.findViewById(R.id.editText_sco_event);
-            seekBar = itemView.findViewById(R.id.seekbar_event);
-            btn_minus = itemView.findViewById(R.id.btn_minus_event);
-            btn_plus = itemView.findViewById(R.id.btn_plus_event);
-
-            editText_raw.addTextChangedListener(new TextWatcher() {
-                @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
-                @Override public void onTextChanged(CharSequence s, int start, int before, int count) { }
-                @Override public void afterTextChanged(Editable s) {
-                    String string = s.toString();
-                    updateRaw((string.length()!=0) ? Float.parseFloat(string) : 0.0f, false,true);
-                }
-            });
-            seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-                @Override public void onStartTrackingTouch(SeekBar seekBar) { }
-                @Override public void onStopTrackingTouch(SeekBar seekBar) { }
-                @Override public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                    if(fromUser) updateRaw(progress/10.0f,true,false);
-                }
-            });
-            View.OnClickListener onAdjustBtnClickListen = new View.OnClickListener(){
-                @Override public void onClick(View v) {
-                    int progress = seekBar.getProgress();
-                    switch (v.getId()){
-                        case R.id.btn_minus_event: --progress; break;
-                        case R.id.btn_plus_event: ++progress; break;
-                    }
-                    updateRaw(progress/10.0f,true,true);
-                }
-            };
-            btn_minus.setOnClickListener(onAdjustBtnClickListen);
-            btn_plus.setOnClickListener(onAdjustBtnClickListen);
+        }
+        public void afterTextChanged(Editable s) {
+            String string = s.toString();
+            if(string.length()==0) return;
+            try{
+                updateRaw(Float.parseFloat(string));
+            }catch(Exception e){ }
         }
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-            if(fromUser) updateRaw(progress/10.0f,true,false);
+            if(fromUser) updateRaw(progress/10.0f);
         }
-        private void updateRaw(float rawSco, boolean updateEditText, boolean updateSeekBar){
-            if(rawSco<0||rawSco>seekBar.getMax()/10.0f) return;
-            raw = rawSco;
-            if(updateEditText) editText_raw.setText(String.valueOf(raw));
-            if(updateSeekBar) seekBar.setProgress((int)(raw*10));
+        public void onAdjustBtnClick(View v) {
+            switch (v.getId()){
+                case R.id.btn_minus_event: updateRaw(event.raw-0.1f); break;
+                case R.id.btn_plus_event: updateRaw(event.raw+0.1f); break;
+            }
+        }
+        private void updateRaw(float rawSco){
+            if(rawSco<0) rawSco = 0;
+            else if(rawSco>event.max/10.0f) rawSco = event.max/10.0f;
+            event.raw = Math.round(rawSco*10)/10.0f;
             binding.invalidateAll();
             updateSco();
         }
         private void updateSco(){
-            sco=60;
-            //editText_sco.setText(String.valueOf(sco));
+            event.sco=60;
             binding.invalidateAll();
         }
     }
 
     public class DurationViewHolder extends RecyclerView.ViewHolder{
         RecyclerviewDurationEventBinding binding;
-        Event event = null; // It will be assigned in 'onBindViewHolder'\
+        public DurationEvent event = null; // It will be assigned in 'onBindViewHolder'\
         public DurationViewHolder(@NonNull View itemView) {
             super(itemView);
             binding = DataBindingUtil.bind(itemView);
         }
         public void onTimeClick(View view){
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            DurationpickBinding durationBinding = DataBindingUtil.bind(inflater.inflate(R.layout.durationpick, null));
+            DurationpickBinding durationBinding =
+                    DataBindingUtil.inflate((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE),
+                            R.layout.durationpick,null,false);
             durationBinding.setDuration(event.duration);
-            durationBinding.setMax(event.max);
             durationBinding.pickerMin.setMaxValue(event.max);
             durationBinding.pickerSec.setMaxValue(59);
 
-            Resources resources = context.getResources();
             AlertDialog.Builder builder=new AlertDialog.Builder(context);
             builder.setView(durationBinding.getRoot());
             builder.setTitle(resources.getString(R.string.title_duration_picker));
@@ -177,7 +153,7 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
         LayoutInflater inflater =  (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         switch (viewType){
             case Event.SPT:
-                return (new EventRecyclerAdapter.CountFloatViewHolder(inflater.inflate(R.layout.recyclerview_count_event,parent,false)));
+                return (new EventRecyclerAdapter.CountFloatViewHolder(inflater.inflate(R.layout.recyclerview_count_float_event,parent,false)));
             case Event.SDC: case Event.CARDIO:
                 return (new EventRecyclerAdapter.DurationViewHolder(inflater.inflate(R.layout.recyclerview_duration_event,parent,false)));
             default: // case for MDL, HPU, LTK
@@ -185,25 +161,19 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
         }
     }
     @Override public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
-        Event event = eventCard.get(position);
         if(viewHolder instanceof CountViewHolder){
             CountViewHolder holder = (CountViewHolder) viewHolder;
-            holder.event = event;
+            holder.event = (CountEvent) eventCard.get(position);
             holder.binding.setViewholder(holder);
-            //holder.binding.editTextRawEvent.setInputType(TYPE_CLASS_NUMBER | TYPE_NUMBER_VARIATION_NORMAL);
         }
         else if(viewHolder instanceof CountFloatViewHolder){
             CountFloatViewHolder holder = (CountFloatViewHolder) viewHolder;
-            holder.event = event;
-            //holder.binding.setViewholder(holder);
-            holder.seekBar.setMax(event.max);
-            holder.editText_raw.setInputType(TYPE_CLASS_NUMBER | TYPE_NUMBER_FLAG_DECIMAL);
-            holder.editText_raw.setText(String.valueOf(0.0f));
+            holder.event = (CountFloatEvent) eventCard.get(position);
+            holder.binding.setViewholder(holder);
         }
         else if(viewHolder instanceof DurationViewHolder){
-            final DurationViewHolder holder = (DurationViewHolder) viewHolder;
-            holder.event = event;
-            holder.binding.setEvent(event);
+            DurationViewHolder holder = (DurationViewHolder) viewHolder;
+            holder.event = (DurationEvent) eventCard.get(position);
             holder.binding.setViewholder(holder);
         }
     }
@@ -212,31 +182,81 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     public class Event {
         public final static int MDL=0,SPT=1,HPU=2,SDC=3, LTK=4, CARDIO=5;
-        public String title, unit;
-        public int eventType, max, raw = 0, sco = 0;
-        public float rawFloat = 0.0f;
-        public Duration duration;
-        Event(int eventType, String title, String unit, int max){
+        public String title;
+        public int eventType, max, sco = 0;
+        Event(int eventType, String title, int max){
             this.eventType = eventType;
             this.title = title;
-            this.unit = unit;
             this.max = max;
+        }
+    }
+    public class CountEvent extends Event{
+        public String unit;
+        public int raw = 0;
+        CountEvent(int eventType, String title, int max, String unit) {
+            super(eventType, title, max);
+            this.unit = unit;
+        }
+    }
+
+    public class CountFloatEvent extends Event{
+        public String unit;
+        public float raw = 0;
+        CountFloatEvent(int eventType, String title, int max, String unit) {
+            super(eventType, title, max);
+            this.unit = unit;
+        }
+    }
+
+    public class DurationEvent extends Event{
+        public Duration duration;
+        DurationEvent(int eventType, String title, int max){
+            super(eventType, title, max);
             duration = new Duration(0,0);
         }
     }
 
     @BindingAdapter("android:text")
     public static void setText(EditText editText, int raw) {
-        if(! editText.getText().toString().equals(String.valueOf(raw))) {
-            editText.setText(String.valueOf(raw));
-            editText.setSelection(editText.length());
+        try{
+            if(raw == Integer.parseInt(editText.getText().toString())) return;
+        }catch (Exception e){  }
+        editText.setText(String.valueOf(raw));
+        editText.setSelection(editText.length());
+    }
+    /*@InverseBindingAdapter(attribute = "android:text")
+    public static int getText(EditText editText) {
+        try{
+            return Integer.parseInt(editText.getText().toString());
+        }catch (NumberFormatException e) { return 0; }
+    }*/
+
+    @BindingAdapter("android:text")
+    public static void setText(EditText editText, float raw) {
+        try{
+            if(raw == Float.parseFloat(editText.getText().toString()) ) return;
+        }
+        catch (Exception e){  }
+        editText.setText(String.valueOf(raw));
+        editText.setSelection(editText.length());
+    }
+    /*@InverseBindingAdapter(attribute = "android:text")
+    public static float getText(EditText editText) {
+        if (editText.getText().toString().length()==0) return 0.0f;
+        return Float.parseFloat(editText.getText().toString());
+    }*/
+
+
+    @BindingAdapter("android:progress")
+    public static void setProgress(SeekBar seekBar, float rawFloat) {
+        if((int)(rawFloat*10) != seekBar.getProgress()) {
+        seekBar.setProgress((int) (rawFloat*10));
         }
     }
-    @InverseBindingAdapter(attribute = "android:text")
-    public static int getText(EditText editText) {
-        if (editText.getText().toString().length()==0) return 0;
-        return Integer.parseInt(editText.getText().toString());
-    }
+    /*@InverseBindingAdapter(attribute = "android:progress")
+    public static float getProgress(SeekBar seekBar) {
+        return (seekBar.getProgress()/10.0f);
+    }*/
 
 }
 
