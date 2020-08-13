@@ -7,6 +7,12 @@
     <string name="title_log">Log</string>
     <string name="title_more">More</string>
     <string name="setting">Settings</string>
+    <string name="MOS">MOS</string>
+    <string name="Requires"> requires </string>
+    <string name="Moderate">Moderate</string>
+    <string name="Significant">Significant</string>
+    <string name="Heavy">Heavy</string>
+    <string name="Score">Score: </string>
     <string name="Points">points</string>
     <string name="MDL">Maximum Dead Lift</string>
     <string name="lbs">lbs</string>

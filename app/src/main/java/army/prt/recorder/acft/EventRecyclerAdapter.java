@@ -14,8 +14,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.databinding.BindingAdapter;
 import androidx.databinding.DataBindingUtil;
-import androidx.databinding.InverseBindingAdapter;
-import androidx.databinding.InverseMethod;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -26,26 +24,25 @@ import army.prt.recorder.databinding.RecyclerviewCountEventBinding;
 import army.prt.recorder.databinding.RecyclerviewCountFloatEventBinding;
 import army.prt.recorder.databinding.RecyclerviewDurationEventBinding;
 
-import static android.text.InputType.TYPE_CLASS_NUMBER;
-import static android.text.InputType.TYPE_NUMBER_FLAG_DECIMAL;
-import static android.text.InputType.TYPE_NUMBER_VARIATION_NORMAL;
-
 public class EventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context context;
     private Resources resources;
-    public ArrayList<Event> eventCard;
+    public ArrayList<Event> events;
 
     EventRecyclerAdapter(Context context){
         this.context = context;
         resources = context.getResources();
-        eventCard = new ArrayList<>();
-        eventCard.add(new CountEvent(Event.MDL,resources.getString(R.string.MDL),700,resources.getString(R.string.lbs)));
-        eventCard.add(new CountFloatEvent(Event.SPT,resources.getString(R.string.SPT),150,resources.getString(R.string.m)));
-        eventCard.add(new CountEvent(Event.HPU,resources.getString(R.string.HPU),100,resources.getString(R.string.reps)));
-        eventCard.add(new DurationEvent(Event.SDC,resources.getString(R.string.SDC),5));
-        eventCard.add(new CountEvent(Event.LTK,resources.getString(R.string.LTK),40,resources.getString(R.string.reps)));
-        eventCard.add(new DurationEvent(Event.CARDIO,resources.getString(R.string.Cardio),26));
+        events = new ArrayList<>();
+        events.add(new CountEvent(Event.MDL,resources.getString(R.string.MDL),700,resources.getString(R.string.lbs)));
+        events.add(new CountFloatEvent(Event.SPT,resources.getString(R.string.SPT),150,resources.getString(R.string.m)));
+        events.add(new CountEvent(Event.HPU,resources.getString(R.string.HPU),100,resources.getString(R.string.reps)));
+        events.add(new DurationEvent(Event.SDC,resources.getString(R.string.SDC),5));
+        events.add(new CountEvent(Event.LTK,resources.getString(R.string.LTK),40,resources.getString(R.string.reps)));
+        events.add(new DurationEvent(Event.CARDIO,resources.getString(R.string.Cardio),26));
     }
+    /*public void setEventList(ArrayList<Event> eventList){
+        events = eventList;
+    }*/
 
     public class CountViewHolder extends RecyclerView.ViewHolder{
         private RecyclerviewCountEventBinding binding;
@@ -163,22 +160,22 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
     @Override public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
         if(viewHolder instanceof CountViewHolder){
             CountViewHolder holder = (CountViewHolder) viewHolder;
-            holder.event = (CountEvent) eventCard.get(position);
+            holder.event = (CountEvent) events.get(position);
             holder.binding.setViewholder(holder);
         }
         else if(viewHolder instanceof CountFloatViewHolder){
             CountFloatViewHolder holder = (CountFloatViewHolder) viewHolder;
-            holder.event = (CountFloatEvent) eventCard.get(position);
+            holder.event = (CountFloatEvent) events.get(position);
             holder.binding.setViewholder(holder);
         }
         else if(viewHolder instanceof DurationViewHolder){
             DurationViewHolder holder = (DurationViewHolder) viewHolder;
-            holder.event = (DurationEvent) eventCard.get(position);
+            holder.event = (DurationEvent) events.get(position);
             holder.binding.setViewholder(holder);
         }
     }
     @Override public int getItemViewType(int position) { return position; }
-    @Override public int getItemCount() { return eventCard.size(); }
+    @Override public int getItemCount() { return events.size(); }
 
     public class Event {
         public final static int MDL=0,SPT=1,HPU=2,SDC=3, LTK=4, CARDIO=5;

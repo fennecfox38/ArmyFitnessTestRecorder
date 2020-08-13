@@ -16,6 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
+
 import army.prt.recorder.R;
 
 public class ACFTFragment extends Fragment{
@@ -29,6 +31,7 @@ public class ACFTFragment extends Fragment{
 
         root = inflater.inflate(R.layout.fragment_acft, container, false);
         adapter = new EventRecyclerAdapter(requireContext());
+
         RecyclerView recyclerView = root.findViewById(R.id.recyclerView_acft);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)) ;
         recyclerView.setAdapter(adapter);
