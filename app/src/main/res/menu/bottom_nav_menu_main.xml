@@ -9,6 +9,11 @@
         android:title="@string/title_acft" />
 
     <item
+        android:id="@+id/navigation_apft"
+        android:icon="@drawable/ic_apft"
+        android:title="@string/title_apft" />
+
+    <item
         android:id="@+id/navigation_abcp"
         android:icon="@drawable/ic_abcp"
         android:title="@string/title_abcp" />
@@ -17,10 +22,5 @@
         android:id="@+id/navigation_log"
         android:icon="@drawable/ic_log"
         android:title="@string/title_log" />
-
-    <item
-        android:id="@+id/navigation_more"
-        android:icon="@drawable/ic_more"
-        android:title="@string/title_more" />
 
 </menu>

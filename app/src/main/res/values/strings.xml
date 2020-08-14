@@ -2,11 +2,15 @@
     <string name="app_name">ACFT Recorder</string>
     <string name="title_acft">ACFT</string>
     <string name="title_long_acft">Combat Fitness Test</string>
+    <string name="title_apft">APFT</string>
+    <string name="title_long_apft">Physical Fitness Test</string>
     <string name="title_abcp">ABCP</string>
     <string name="title_long_abcp">Body Composition</string>
     <string name="title_log">Log</string>
-    <string name="title_more">More</string>
     <string name="setting">Settings</string>
+    <string name="DashBoard">DashBoard</string>
+    <string name="Notification">Notification</string>
+    <string name="Save">Save</string>
     <string name="MOS">MOS</string>
     <string name="Requires"> requires </string>
     <string name="Moderate">Moderate</string>

@@ -1,4 +1,4 @@
-package army.prt.recorder.acft;
+package army.prt.recorder.acft.event;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.NumberPicker;
 import android.widget.SeekBar;
 
 import androidx.annotation.NonNull;
@@ -19,30 +20,26 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 import army.prt.recorder.R;
-import army.prt.recorder.databinding.DurationpickBinding;
+import army.prt.recorder.acft.ACFTFragment;
 import army.prt.recorder.databinding.RecyclerviewCountEventBinding;
 import army.prt.recorder.databinding.RecyclerviewCountFloatEventBinding;
 import army.prt.recorder.databinding.RecyclerviewDurationEventBinding;
 
 public class EventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private ACFTFragment fragment;
     private Context context;
     private Resources resources;
-    public ArrayList<Event> events;
+    public ArrayList<Event> eventList;
 
-    EventRecyclerAdapter(Context context){
-        this.context = context;
-        resources = context.getResources();
-        events = new ArrayList<>();
-        events.add(new CountEvent(Event.MDL,resources.getString(R.string.MDL),700,resources.getString(R.string.lbs)));
-        events.add(new CountFloatEvent(Event.SPT,resources.getString(R.string.SPT),150,resources.getString(R.string.m)));
-        events.add(new CountEvent(Event.HPU,resources.getString(R.string.HPU),100,resources.getString(R.string.reps)));
-        events.add(new DurationEvent(Event.SDC,resources.getString(R.string.SDC),5));
-        events.add(new CountEvent(Event.LTK,resources.getString(R.string.LTK),40,resources.getString(R.string.reps)));
-        events.add(new DurationEvent(Event.CARDIO,resources.getString(R.string.Cardio),26));
+    public EventRecyclerAdapter(ACFTFragment fragment){
+        this.fragment = fragment;
+        context = fragment.getContext();
+        resources = fragment.getResources();
     }
-    /*public void setEventList(ArrayList<Event> eventList){
-        events = eventList;
-    }*/
+
+    public void setEventList(ArrayList<Event> eventList){
+        this.eventList = eventList;
+    }
 
     public class CountViewHolder extends RecyclerView.ViewHolder{
         private RecyclerviewCountEventBinding binding;
@@ -50,7 +47,6 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
         public CountViewHolder(@NonNull View itemView) {
             super(itemView);
             binding = DataBindingUtil.bind(itemView);
-            //binding.setLifecycleOwner(); Fragment.getLifecycleOwner();
         }
         public void afterTextChanged(Editable s) {
             String string = s.toString();
@@ -74,6 +70,7 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
             event.raw = rawSco;
             event.sco=60; // Score calculation logic needs to be inserted here.
             binding.invalidateAll();
+            fragment.updateEvent(event,getAdapterPosition());
         }
     }
     public class CountFloatViewHolder extends RecyclerView.ViewHolder{
@@ -86,29 +83,27 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
         public void afterTextChanged(Editable s) {
             String string = s.toString();
             if(string.length()==0) return;
-            try{
-                updateRaw(Float.parseFloat(string));
-            }catch(Exception e){ }
+
+            try{ updateRawSco(Float.parseFloat(string)); }
+            catch(Exception e){ }
         }
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-            if(fromUser) updateRaw(progress/10.0f);
+            if(fromUser) updateRawSco(progress/10.0f);
         }
         public void onAdjustBtnClick(View v) {
             switch (v.getId()){
-                case R.id.btn_minus_event: updateRaw(event.raw-0.1f); break;
-                case R.id.btn_plus_event: updateRaw(event.raw+0.1f); break;
+                case R.id.btn_minus_event: updateRawSco(event.raw-0.1f); break;
+                case R.id.btn_plus_event: updateRawSco(event.raw+0.1f); break;
             }
         }
-        private void updateRaw(float rawSco){
+        private void updateRawSco(float rawSco){
             if(rawSco<0) rawSco = 0;
             else if(rawSco>event.max/10.0f) rawSco = event.max/10.0f;
             event.raw = Math.round(rawSco*10)/10.0f;
             binding.invalidateAll();
-            updateSco();
-        }
-        private void updateSco(){
-            event.sco=60;
+            event.sco=60; // Score calculation logic needs to be inserted here.
             binding.invalidateAll();
+            fragment.updateEvent(event,getAdapterPosition());
         }
     }
 
@@ -120,21 +115,22 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
             binding = DataBindingUtil.bind(itemView);
         }
         public void onTimeClick(View view){
-            DurationpickBinding durationBinding =
-                    DataBindingUtil.inflate((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE),
-                            R.layout.durationpick,null,false);
-            durationBinding.setDuration(event.duration);
-            durationBinding.pickerMin.setMaxValue(event.max);
-            durationBinding.pickerSec.setMaxValue(59);
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View dialogView = inflater.inflate(R.layout.durationpick,null,false);
+            final NumberPicker picker_min = dialogView.findViewById(R.id.picker_min);
+            final NumberPicker picker_sec = dialogView.findViewById(R.id.picker_sec);
+            picker_min.setMinValue(0); picker_min.setMaxValue(event.max); picker_min.setValue(event.duration.getMin());
+            picker_sec.setMinValue(0); picker_sec.setMaxValue(59); picker_sec.setValue(event.duration.getSec());
 
             AlertDialog.Builder builder=new AlertDialog.Builder(context);
-            builder.setView(durationBinding.getRoot());
+            builder.setView(dialogView);
             builder.setTitle(resources.getString(R.string.title_duration_picker));
             builder.setPositiveButton(resources.getString(R.string.OK), new DialogInterface.OnClickListener(){
                 @Override public void onClick(DialogInterface dialog, int id){
-                    //event.duration is already changed.
+                    event.duration.setTime(picker_min.getValue(), picker_sec.getValue());
                     event.sco=60; // Score calculation logic needs to be inserted here.
                     binding.invalidateAll();
+                    fragment.updateEvent(event,getAdapterPosition());
                     dialog.dismiss();
                 }
             });
@@ -160,64 +156,27 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
     @Override public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
         if(viewHolder instanceof CountViewHolder){
             CountViewHolder holder = (CountViewHolder) viewHolder;
-            holder.event = (CountEvent) events.get(position);
+            holder.event = (CountEvent) eventList.get(position);
             holder.binding.setViewholder(holder);
         }
         else if(viewHolder instanceof CountFloatViewHolder){
             CountFloatViewHolder holder = (CountFloatViewHolder) viewHolder;
-            holder.event = (CountFloatEvent) events.get(position);
+            holder.event = (CountFloatEvent) eventList.get(position);
             holder.binding.setViewholder(holder);
         }
         else if(viewHolder instanceof DurationViewHolder){
             DurationViewHolder holder = (DurationViewHolder) viewHolder;
-            holder.event = (DurationEvent) events.get(position);
+            holder.event = (DurationEvent) eventList.get(position);
             holder.binding.setViewholder(holder);
         }
     }
     @Override public int getItemViewType(int position) { return position; }
-    @Override public int getItemCount() { return events.size(); }
-
-    public class Event {
-        public final static int MDL=0,SPT=1,HPU=2,SDC=3, LTK=4, CARDIO=5;
-        public String title;
-        public int eventType, max, sco = 0;
-        Event(int eventType, String title, int max){
-            this.eventType = eventType;
-            this.title = title;
-            this.max = max;
-        }
-    }
-    public class CountEvent extends Event{
-        public String unit;
-        public int raw = 0;
-        CountEvent(int eventType, String title, int max, String unit) {
-            super(eventType, title, max);
-            this.unit = unit;
-        }
-    }
-
-    public class CountFloatEvent extends Event{
-        public String unit;
-        public float raw = 0;
-        CountFloatEvent(int eventType, String title, int max, String unit) {
-            super(eventType, title, max);
-            this.unit = unit;
-        }
-    }
-
-    public class DurationEvent extends Event{
-        public Duration duration;
-        DurationEvent(int eventType, String title, int max){
-            super(eventType, title, max);
-            duration = new Duration(0,0);
-        }
-    }
+    @Override public int getItemCount() { return eventList.size(); }
 
     @BindingAdapter("android:text")
     public static void setText(EditText editText, int raw) {
-        try{
-            if(raw == Integer.parseInt(editText.getText().toString())) return;
-        }catch (Exception e){  }
+        try{ if(raw == Integer.parseInt(editText.getText().toString())) return; }
+        catch (Exception e){  }
         editText.setText(String.valueOf(raw));
         editText.setSelection(editText.length());
     }
@@ -230,10 +189,8 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     @BindingAdapter("android:text")
     public static void setText(EditText editText, float raw) {
-        try{
-            if(raw == Float.parseFloat(editText.getText().toString()) ) return;
-        }
-        catch (Exception e){  }
+        try{ if(raw == Float.parseFloat(editText.getText().toString()) ) return; }
+        catch (Exception e){ }
         editText.setText(String.valueOf(raw));
         editText.setSelection(editText.length());
     }

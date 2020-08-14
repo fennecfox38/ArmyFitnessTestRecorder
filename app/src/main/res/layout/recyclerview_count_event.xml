@@ -7,7 +7,7 @@
     <data>
         <variable
             name="viewholder"
-            type="army.prt.recorder.acft.EventRecyclerAdapter.CountViewHolder" />
+            type="army.prt.recorder.acft.event.EventRecyclerAdapter.CountViewHolder" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

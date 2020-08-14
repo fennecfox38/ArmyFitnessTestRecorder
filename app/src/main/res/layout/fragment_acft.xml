@@ -1,115 +1,125 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<layout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     tools:context=".acft.ACFTFragment">
 
+    <data>
+        <variable
+            name="fragment"
+            type="army.prt.recorder.acft.ACFTFragment" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/layout_abstract_acft"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:padding="16dp"
-        app:layout_constraintTop_toBottomOf="@+id/recyclerView_acft"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/txt_mos"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="2dp"
-            android:textSize="20sp"
-            android:text="@string/MOS"
-            app:layout_constraintHorizontal_bias="0"
-            app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintTop_toTopOf="parent"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_abstract_acft"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:padding="16dp"
+            app:layout_constraintTop_toBottomOf="@+id/recyclerView_acft"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/editText_mos"/>
-        <EditText
-            android:id="@+id/editText_mos"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="2dp"
-            android:focusable="false"
-            android:ems="2"
-            app:layout_constraintBaseline_toBaselineOf="@+id/txt_mos"
-            app:layout_constraintStart_toEndOf="@+id/txt_mos"
-            app:layout_constraintEnd_toStartOf="@+id/txt_requires"/>
-        <TextView
-            android:id="@+id/txt_requires"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="2dp"
-            android:textSize="20sp"
-            android:text="@string/Requires"
-            app:layout_constraintBaseline_toBaselineOf="@+id/editText_mos"
-            app:layout_constraintStart_toEndOf="@+id/editText_mos"
-            app:layout_constraintEnd_toStartOf="@+id/txt_requireLevel"/>
-        <TextView
-            android:id="@+id/txt_requireLevel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:textSize="25sp"
-            android:text="@string/Moderate"
-            app:layout_constraintBaseline_toBaselineOf="@+id/txt_requires"
-            app:layout_constraintStart_toEndOf="@+id/txt_requires"
-            app:layout_constraintEnd_toStartOf="@+id/fab"/>
-        <TextView
-            android:id="@+id/txt_sco_total_header"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="2dp"
-            android:textSize="20sp"
-            android:text="@string/Score"
-            app:layout_constraintHorizontal_bias="0"
-            app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintBaseline_toBaselineOf="@+id/txt_sco_total"
-            app:layout_constraintStart_toStartOf="@+id/txt_mos"
-            app:layout_constraintEnd_toStartOf="@+id/txt_sco_total"/>
-        <TextView
-            android:id="@+id/txt_sco_total"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:textSize="25sp"
-            android:text="200"
-            app:layout_constraintTop_toBottomOf="@+id/editText_mos"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/txt_sco_total_header"/>
-        <TextView
-            android:id="@+id/txt_isPassed"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="25sp"
-            android:text="Pass"
-            app:layout_constraintBaseline_toBaselineOf="@+id/txt_sco_total"
-            app:layout_constraintStart_toEndOf="@+id/txt_sco_total"
-            app:layout_constraintEnd_toStartOf="@+id/fab"/>
+            app:layout_constraintEnd_toEndOf="parent">
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_save"
+            <TextView
+                android:id="@+id/txt_mos"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                android:textSize="20sp"
+                android:text="@string/MOS"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/editText_mos"/>
+            <EditText
+                android:id="@+id/editText_mos"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                android:focusable="false"
+                android:ems="2"
+                app:layout_constraintBaseline_toBaselineOf="@+id/txt_mos"
+                app:layout_constraintStart_toEndOf="@+id/txt_mos"
+                app:layout_constraintEnd_toStartOf="@+id/txt_requires"/>
+            <TextView
+                android:id="@+id/txt_requires"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                android:textSize="20sp"
+                android:text="@string/Requires"
+                app:layout_constraintBaseline_toBaselineOf="@+id/editText_mos"
+                app:layout_constraintStart_toEndOf="@+id/editText_mos"
+                app:layout_constraintEnd_toStartOf="@+id/txt_requireLevel"/>
+            <TextView
+                android:id="@+id/txt_requireLevel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:textSize="25sp"
+                android:text="@string/Moderate"
+                app:layout_constraintBaseline_toBaselineOf="@+id/txt_requires"
+                app:layout_constraintStart_toEndOf="@+id/txt_requires"
+                app:layout_constraintEnd_toStartOf="@+id/fab"/>
+            <TextView
+                android:id="@+id/txt_sco_total_header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                android:textSize="20sp"
+                android:text="@string/Score"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintBaseline_toBaselineOf="@+id/txt_sco_total"
+                app:layout_constraintStart_toStartOf="@+id/txt_mos"
+                app:layout_constraintEnd_toStartOf="@+id/txt_sco_total"/>
+            <TextView
+                android:id="@+id/txt_sco_total"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:textSize="25sp"
+                android:text="@{String.valueOf(fragment.record.sco_total)}"
+                app:layout_constraintTop_toBottomOf="@+id/editText_mos"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/txt_sco_total_header"/>
+            <TextView
+                android:id="@+id/txt_isPassed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="25sp"
+                android:text="Pass"
+                app:layout_constraintBaseline_toBaselineOf="@+id/txt_sco_total"
+                app:layout_constraintStart_toEndOf="@+id/txt_sco_total"
+                app:layout_constraintEnd_toStartOf="@+id/fab"/>
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_save"
+                android:onClick="@{fragment.onSaveClick}"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView_acft"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/layout_abstract_acft"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView_acft"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/layout_abstract_acft"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

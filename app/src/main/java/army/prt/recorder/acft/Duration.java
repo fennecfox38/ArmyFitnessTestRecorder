@@ -3,7 +3,7 @@ package army.prt.recorder.acft;
 public class Duration implements Comparable{
     private int min, sec;
     Duration(){ min = 0; sec = 0; }
-    Duration(int min, int sec){
+    public Duration(int min, int sec){
         this.min=min;
         this.sec=sec;
     }
