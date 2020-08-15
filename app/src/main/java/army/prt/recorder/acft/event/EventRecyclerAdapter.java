@@ -40,7 +40,6 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
         context = fragment.getContext();
         resources = fragment.getResources();
     }
-
     public void setEventList(ArrayList<Event> eventList){
         this.eventList = eventList;
     }
@@ -154,7 +153,9 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
                 }
             }
         }
+
     }
+
     @Override public int getItemViewType(int position) { return position; }
     @Override public int getItemCount() { return eventList.size(); }
 

@@ -43,7 +43,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
                 android:textSize="25sp"
-                android:text="@{String.valueOf(fragment.record.sco_total)}"
+                android:text="@{String.valueOf(fragment.ACFTViewModel.getRecord().sco_total)}"
                 app:layout_constraintBaseline_toBaselineOf="@+id/txt_sco_total_header"
                 app:layout_constraintStart_toEndOf="@+id/txt_sco_total_header"
                 app:layout_constraintEnd_toStartOf="@+id/txt_qualifies"/>
@@ -63,7 +63,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
                 android:textSize="25sp"
-                android:text="@{fragment.setQualifiedLevel(fragment.record.qualifiedLevel)}"
+                android:text="@{fragment.setQualifiedLevel(fragment.ACFTViewModel.getRecord().qualifiedLevel)}"
                 app:layout_constraintBaseline_toBaselineOf="@+id/txt_qualifies"
                 app:layout_constraintStart_toEndOf="@+id/txt_qualifies"
                 app:layout_constraintEnd_toStartOf="@+id/fab"/>

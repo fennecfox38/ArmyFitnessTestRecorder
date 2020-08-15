@@ -1,9 +1,12 @@
 package army.prt.recorder;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,8 +29,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        drawer_main = findViewById(R.id.drawer_main);
-
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_nav_view);
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.navigation_acft, R.id.navigation_abcp, R.id.navigation_log,R.id.navigation_apft)
@@ -44,6 +45,20 @@ public class MainActivity extends AppCompatActivity {
                 actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE|ActionBar.DISPLAY_HOME_AS_UP);
             }
         });
+
+        drawer_main = findViewById(R.id.drawer_main);
+        NavigationView nav_main = findViewById(R.id.nav_main);
+        nav_main.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                /*switch (item.getItemId()){
+                    case R.id.menu_1:  break;
+                    case R.id.menu_2:  break;
+                }*/
+                drawer_main.closeDrawer(GravityCompat.START);
+                return false;
+            }
+        });
+
     }
 
     @Override public boolean onOptionsItemSelected(@NonNull MenuItem item) {
