@@ -1,41 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<layout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center"
-    android:gravity="center"
-    android:orientation="horizontal"
-    android:padding="30dp">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <NumberPicker
-        android:id="@+id/picker_min"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:descendantFocusability="blocksDescendants"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:padding="5dp"
-        android:textSize="20sp"
-        android:text="@string/min"/>
-    <NumberPicker
-        android:id="@+id/picker_sec"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:gravity="center"
-        android:descendantFocusability="blocksDescendants"/>
-    <TextView
+    <data>
+        <variable
+            name="duration"
+            type="army.prt.recorder.acft.Duration" />
+    </data>
+
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:padding="5dp"
-        android:textSize="20sp"
-        android:text="@string/sec"/>
-</LinearLayout>
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="30dp">
+
+        <NumberPicker
+            android:id="@+id/picker_min"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            app:min="0"
+            android:value="@={duration.min}"
+            android:descendantFocusability="blocksDescendants"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="5dp"
+            android:textSize="20sp"
+            android:text="@string/min"/>
+        <NumberPicker
+            android:id="@+id/picker_sec"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:gravity="center"
+            app:min="0"
+            android:value="@={duration.sec}"
+            android:descendantFocusability="blocksDescendants"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="5dp"
+            android:textSize="20sp"
+            android:text="@string/sec"/>
+    </LinearLayout>
+
+</layout>
 

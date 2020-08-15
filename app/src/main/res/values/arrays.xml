@@ -1,12 +1,17 @@
 <resources>
-    <!-- Reply Preference -->
-    <string-array name="reply_entries">
-        <item>Reply</item>
-        <item>Reply to all</item>
+
+    <string-array name="Level">
+        <item>@string/Fail</item>
+        <item>@string/Moderate</item>
+        <item>@string/Significant</item>
+        <item>@string/Heavy</item>
     </string-array>
 
-    <string-array name="reply_values">
-        <item>reply</item>
-        <item>reply_all</item>
+    <string-array name="Cardio_Event">
+        <item>@string/Run</item>
+        <item>@string/Row</item>
+        <item>@string/Bike</item>
+        <item>@string/Swim</item>
     </string-array>
+
 </resources>

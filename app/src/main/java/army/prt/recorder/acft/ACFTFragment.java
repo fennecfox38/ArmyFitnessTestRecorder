@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
@@ -13,8 +12,11 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.google.android.material.snackbar.Snackbar;
+
 import java.util.ArrayList;
 
+import army.prt.recorder.MainActivity;
 import army.prt.recorder.R;
 import army.prt.recorder.acft.event.CountEvent;
 import army.prt.recorder.acft.event.CountFloatEvent;
@@ -24,15 +26,14 @@ import army.prt.recorder.acft.event.EventRecyclerAdapter;
 import army.prt.recorder.databinding.FragmentAcftBinding;
 
 public class ACFTFragment extends Fragment{
-    private ACFTViewModel ACFTViewModel;
+    public ACFTViewModel ACFTViewModel;
     private FragmentAcftBinding binding;
-    private EventRecyclerAdapter adapter;
     public ACFTRecord record;
 
     public View onCreateView(@NonNull LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState){
         binding = DataBindingUtil.inflate(inflater,R.layout.fragment_acft,container,false);
 
-        adapter = new EventRecyclerAdapter(this);
+        EventRecyclerAdapter adapter = new EventRecyclerAdapter(this);
 
         ACFTViewModel = ViewModelProviders.of(this).get(ACFTViewModel.class);
         if(ACFTViewModel.getEventList().getValue()==null){
@@ -50,42 +51,24 @@ public class ACFTFragment extends Fragment{
         binding.recyclerViewAcft.setAdapter(adapter);
 
         record = new ACFTRecord();
-
         ACFTViewModel.getEventList().observe(getViewLifecycleOwner(), new Observer<ArrayList<Event>>() {
             @Override public void onChanged(ArrayList<Event> eventList) {
-                CountEvent countEvent = (CountEvent) eventList.get(Event.MDL);
-                record.raw_MDL = countEvent.raw;
-                record.sco_MDL = countEvent.sco;
-                countEvent = (CountEvent) eventList.get(Event.HPU);
-                record.raw_HPU = countEvent.raw;
-                record.sco_HPU = countEvent.sco;
-                countEvent = (CountEvent) eventList.get(Event.LTK);
-                record.raw_LTK = countEvent.raw;
-                record.sco_LTK = countEvent.sco;
-                CountFloatEvent floatEvent = (CountFloatEvent) eventList.get(Event.SPT);
-                record.raw_SPT = floatEvent.raw;
-                record.sco_SPT = floatEvent.sco;
-                DurationEvent durationEvent = (DurationEvent) eventList.get(Event.SDC);
-                record.duration_SDC = durationEvent.duration;
-                record.sco_SDC = durationEvent.sco;
-                durationEvent = (DurationEvent) eventList.get(Event.CARDIO);
-                record.duration_Cardio = durationEvent.duration;
-                record.sco_Cardio = durationEvent.sco;
-                record.getScoreTotal();
+                record.updateRecord(eventList);
                 binding.invalidateAll();
             }
         });
 
-
         binding.setFragment(this);
         return binding.getRoot();
     }
-    public void onSaveClick(View v) {
-        Toast.makeText(getContext(),"Saving Record is on maintenance",Toast.LENGTH_SHORT).show();
-    }
 
-    public void updateEvent(Event event, int position){
-        ACFTViewModel.updateEvent(event,position);
+    public String setQualifiedLevel(int qualifiedLevel) { return getResources().getStringArray(R.array.Level)[qualifiedLevel]; }
+
+    public void onSaveClick(View view) {
+        Snackbar.make(binding.getRoot(),"Saving Record is on maintenance", Snackbar.LENGTH_SHORT)
+                .setAction("log", new View.OnClickListener() {
+                    @Override public void onClick(View v) { ((MainActivity) requireActivity()).navController.navigate(R.id.navigation_log); }
+                }).show();
     }
 
     /*@Override

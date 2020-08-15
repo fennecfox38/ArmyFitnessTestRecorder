@@ -12,7 +12,8 @@
     <string name="Notification">Notification</string>
     <string name="Save">Save</string>
     <string name="MOS">MOS</string>
-    <string name="Requires"> requires </string>
+    <string name="Qualifies"> qualifies </string>
+    <string name="Fail">Fail</string>
     <string name="Moderate">Moderate</string>
     <string name="Significant">Significant</string>
     <string name="Heavy">Heavy</string>
@@ -27,6 +28,10 @@
     <string name="SDC">Sprint-Drag-Carry</string>
     <string name="LTK">Leg Tucks</string>
     <string name="Cardio">Cardio</string>
+    <string name="Run">2 Mile Run</string>
+    <string name="Row">5000 M Row</string>
+    <string name="Bike">15000 M Bike</string>
+    <string name="Swim">1000 M Swim</string>
     <string name="title_duration_picker">Set Duration Time</string>
     <string name="OK">OK</string>
     <string name="Cancel">Cancel</string>

@@ -18,7 +18,8 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 public class MainActivity extends AppCompatActivity {
-    DrawerLayout drawer_main;
+    private DrawerLayout drawer_main;
+    public NavController navController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.navigation_acft, R.id.navigation_abcp, R.id.navigation_log,R.id.navigation_apft)
                 .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
 
@@ -43,7 +44,6 @@ public class MainActivity extends AppCompatActivity {
                 actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE|ActionBar.DISPLAY_HOME_AS_UP);
             }
         });
-
     }
 
     @Override public boolean onOptionsItemSelected(@NonNull MenuItem item) {

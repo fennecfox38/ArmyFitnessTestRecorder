@@ -26,9 +26,18 @@
             android:textSize="24sp"
             android:text="@{viewholder.event.title}"
             app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/layout_duration"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/spinner_cardio_alter"/>
+        <Spinner
+            android:id="@+id/spinner_cardio_alter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            app:layout_constraintBaseline_toBaselineOf="@+id/txt_title_event"
+            app:layout_constraintStart_toEndOf="@+id/txt_title_event"
             app:layout_constraintEnd_toEndOf="parent"/>
         <LinearLayout
             android:id="@+id/layout_duration"
