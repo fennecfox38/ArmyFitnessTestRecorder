@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import army.prt.recorder.MainActivity;
 import army.prt.recorder.R;
 import army.prt.recorder.acft.event.CountEvent;
-import army.prt.recorder.acft.event.CountFloatEvent;
 import army.prt.recorder.acft.event.DurationEvent;
 import army.prt.recorder.acft.event.Event;
 import army.prt.recorder.acft.event.EventRecyclerAdapter;
@@ -39,7 +38,7 @@ public class ACFTFragment extends Fragment{
         if(ACFTViewModel.getEventList().getValue()==null){
             ArrayList<Event> list = new ArrayList<>();
             list.add(new CountEvent(Event.MDL,getString(R.string.MDL),700,getString(R.string.lbs)));
-            list.add(new CountFloatEvent(Event.SPT,getString(R.string.SPT),150,getString(R.string.m)));
+            list.add(new CountEvent(Event.SPT,getString(R.string.SPT),150,getString(R.string.m)));
             list.add(new CountEvent(Event.HPU,getString(R.string.HPU),100,getString(R.string.reps)));
             list.add(new DurationEvent(Event.SDC,getString(R.string.SDC),5));
             list.add(new CountEvent(Event.LTK,getString(R.string.LTK),40,getString(R.string.reps)));

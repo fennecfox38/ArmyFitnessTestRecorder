@@ -10,6 +10,7 @@ public class CountEvent extends Event{
     public void giveScore(){
         switch (eventType){
             case Event.MDL: sco = MDLScore(raw); break;
+            case Event.SPT: sco = SPTScore(raw);break;
             case Event.HPU: sco = giveHPUScore(raw); break;
             case Event.LTK: sco = giveLTKScore(raw); break;
         }
@@ -23,6 +24,12 @@ public class CountEvent extends Event{
         else if(raw>=160) return 63;
         else if(raw>=150) return 62;
         else if(raw>=80) return (((raw/10)-8)*10);
+        else return 0;
+    }
+    public static int SPTScore(int rawInt){
+        if(rawInt>=125) return 100;
+        else if(rawInt>45) return 60;
+        else if(rawInt>33) return ((rawInt-33)*5);
         else return 0;
     }
     public int giveHPUScore(int raw){

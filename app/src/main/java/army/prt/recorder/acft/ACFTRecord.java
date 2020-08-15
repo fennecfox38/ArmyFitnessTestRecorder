@@ -3,7 +3,6 @@ package army.prt.recorder.acft;
 import java.util.ArrayList;
 
 import army.prt.recorder.acft.event.CountEvent;
-import army.prt.recorder.acft.event.CountFloatEvent;
 import army.prt.recorder.acft.event.DurationEvent;
 import army.prt.recorder.acft.event.Event;
 
@@ -23,15 +22,15 @@ public class ACFTRecord{
         CountEvent countEvent = (CountEvent) eventList.get(Event.MDL);
         raw_MDL = countEvent.raw;
         sco_MDL = countEvent.sco;
+        countEvent = (CountEvent) eventList.get(Event.SPT);
+        raw_SPT = (countEvent.raw/10.0f);
+        sco_SPT = countEvent.sco;
         countEvent = (CountEvent) eventList.get(Event.HPU);
         raw_HPU = countEvent.raw;
         sco_HPU = countEvent.sco;
         countEvent = (CountEvent) eventList.get(Event.LTK);
         raw_LTK = countEvent.raw;
         sco_LTK = countEvent.sco;
-        CountFloatEvent floatEvent = (CountFloatEvent) eventList.get(Event.SPT);
-        raw_SPT = floatEvent.raw;
-        sco_SPT = floatEvent.sco;
         DurationEvent durationEvent = (DurationEvent) eventList.get(Event.SDC);
         duration_SDC = durationEvent.duration;
         sco_SDC = durationEvent.sco;

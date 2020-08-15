@@ -35,7 +35,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:inputType="number"
-            android:text="@{viewholder.event.raw}"
+            android:text="@{viewholder.event}"
             android:afterTextChanged="@{viewholder::afterTextChanged}"
             app:layout_constraintHorizontal_bias="0.1"
             app:layout_constraintHorizontal_chainStyle="packed"
