@@ -16,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.databinding.BindingAdapter;
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -33,9 +34,9 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
     private ACFTFragment fragment;
     private Context context;
     private Resources resources;
-    public ArrayList<Event> eventList;
+    public MutableLiveData<ArrayList<Event>> eventList;
 
-    public EventRecyclerAdapter(ACFTFragment fragment, ArrayList<Event> eventList){
+    public EventRecyclerAdapter(ACFTFragment fragment, MutableLiveData<ArrayList<Event>> eventList){
         this.fragment = fragment;
         context = fragment.getContext();
         resources = fragment.getResources();
@@ -75,8 +76,9 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
             else if(rawSco>event.max) rawSco = event.max;
             event.raw = rawSco;
             event.giveScore();
-            fragment.record.updateRecord(eventList);
-            fragment.binding.invalidateAll();
+            ArrayList<Event> list = eventList.getValue();
+            list.set(getAdapterPosition(),event);
+            eventList.setValue(list);
             binding.invalidateAll();
         }
         public String setQualifiedLevel(int sco) {
@@ -113,8 +115,9 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
                 @Override public void onCancel(DialogInterface dialog) {
                     //event.duration is already bound with Number Pickers.
                     event.giveScore();
-                    fragment.record.updateRecord(eventList);
-                    fragment.binding.invalidateAll();
+                    ArrayList<Event> list = eventList.getValue();
+                    list.set(getAdapterPosition(),event);
+                    eventList.setValue(list);
                     binding.invalidateAll();
                     dialog.dismiss();
                 }
@@ -144,14 +147,14 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
     @Override public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
         if(viewHolder instanceof CountViewHolder){
             CountViewHolder holder = (CountViewHolder) viewHolder;
-            holder.event = (CountEvent) eventList.get(position);
+            holder.event = (CountEvent) eventList.getValue().get(position);
             holder.binding.setViewholder(holder);
             if(position == Event.SPT)
                 holder.binding.editTextRawEvent.setInputType(TYPE_CLASS_NUMBER | TYPE_NUMBER_FLAG_DECIMAL);
         }
         else if(viewHolder instanceof DurationViewHolder){
             final DurationViewHolder holder = (DurationViewHolder) viewHolder;
-            holder.event = (DurationEvent) eventList.get(position);
+            holder.event = (DurationEvent) eventList.getValue().get(position);
             holder.binding.setViewholder(holder);
             if(position==Event.CARDIO){
                 if(holder.binding.spinnerCardioAlter.getVisibility()==View.INVISIBLE){
@@ -173,7 +176,7 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
     }
 
     @Override public int getItemViewType(int position) { return position; }
-    @Override public int getItemCount() { return eventList.size(); }
+    @Override public int getItemCount() { return eventList.getValue().size(); }
 
     @BindingAdapter("android:text")
     public static void setText(EditText editText, CountEvent event) {
