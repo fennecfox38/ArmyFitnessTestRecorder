@@ -12,8 +12,6 @@ import androidx.annotation.NonNull;
 import androidx.databinding.BindingAdapter;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -31,38 +29,27 @@ import army.prt.recorder.databinding.FragmentAcftBinding;
 
 public class ACFTFragment extends Fragment{
     private MainActivity activity;
-    private ViewModelProvider.AndroidViewModelFactory viewModelFactory;
-    public ACFTViewModel ACFTViewModel;
-    private FragmentAcftBinding binding;
+    public ACFTRecord record = new ACFTRecord();
+    public ArrayList<Event> eventList = null;
+    public FragmentAcftBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState){
         activity = (MainActivity) requireActivity();
         binding = DataBindingUtil.inflate(inflater,R.layout.fragment_acft,container,false);
 
-        EventRecyclerAdapter adapter = new EventRecyclerAdapter(this);
-        if(viewModelFactory == null)
-            viewModelFactory = ViewModelProvider.AndroidViewModelFactory.getInstance(activity.getApplication());
-        ACFTViewModel = new ViewModelProvider(activity,viewModelFactory).get(ACFTViewModel.class);
-        if(ACFTViewModel.getEventList().getValue()==null){
-            ArrayList<Event> list = new ArrayList<>();
-            list.add(new CountEvent(Event.MDL,getString(R.string.MDL),700,getString(R.string.lbs)));
-            list.add(new CountEvent(Event.SPT,getString(R.string.SPT),150,getString(R.string.m)));
-            list.add(new CountEvent(Event.HPU,getString(R.string.HPU),100,getString(R.string.reps)));
-            list.add(new DurationEvent(Event.SDC,getString(R.string.SDC),5));
-            list.add(new CountEvent(Event.LTK,getString(R.string.LTK),40,getString(R.string.reps)));
-            list.add(new DurationEvent(Event.CARDIO,getString(R.string.Cardio),26));
-            ACFTViewModel.setEventList(list);
+        if(eventList==null){
+            eventList = new ArrayList<>();
+            eventList.add(new CountEvent(Event.MDL,getString(R.string.MDL),700,getString(R.string.lbs)));
+            eventList.add(new CountEvent(Event.SPT,getString(R.string.SPT),150,getString(R.string.m)));
+            eventList.add(new CountEvent(Event.HPU,getString(R.string.HPU),100,getString(R.string.reps)));
+            eventList.add(new DurationEvent(Event.SDC,getString(R.string.SDC),5));
+            eventList.add(new CountEvent(Event.LTK,getString(R.string.LTK),40,getString(R.string.reps)));
+            eventList.add(new DurationEvent(Event.CARDIO,getString(R.string.Cardio),26));
         }
-        adapter.setEventList(ACFTViewModel.getEventList().getValue());
+
+        EventRecyclerAdapter adapter = new EventRecyclerAdapter(this, eventList);
         binding.recyclerViewAcft.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)) ;
         binding.recyclerViewAcft.setAdapter(adapter);
-
-        ACFTViewModel.getEventList().observe(activity, new Observer<ArrayList<Event>>() {
-            @Override public void onChanged(ArrayList<Event> eventList) {
-                ACFTViewModel.updateRecord();
-                binding.invalidateAll();
-            }
-        });
 
         binding.setFragment(this);
         return binding.getRoot();
@@ -78,11 +65,11 @@ public class ACFTFragment extends Fragment{
     }
 
     public void onDateClick(View view) {
-        final Calendar calendar = ACFTViewModel.getRecord().getValue().dateRecord;
+        final Calendar calendar = record.dateRecord;
         DatePickerDialog datePick = new DatePickerDialog(requireContext(), new DatePickerDialog.OnDateSetListener() {
             @Override public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                 calendar.set(year,month,dayOfMonth);
-                ACFTViewModel.getRecord().getValue().dateRecord = calendar;
+                record.dateRecord = calendar;
                 binding.invalidateAll();
             }
         }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));

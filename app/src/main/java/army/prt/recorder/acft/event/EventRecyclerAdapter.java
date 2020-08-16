@@ -11,7 +11,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.SeekBar;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -36,12 +35,10 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
     private Resources resources;
     public ArrayList<Event> eventList;
 
-    public EventRecyclerAdapter(ACFTFragment fragment){
+    public EventRecyclerAdapter(ACFTFragment fragment, ArrayList<Event> eventList){
         this.fragment = fragment;
         context = fragment.getContext();
         resources = fragment.getResources();
-    }
-    public void setEventList(ArrayList<Event> eventList){
         this.eventList = eventList;
     }
 
@@ -78,8 +75,9 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
             else if(rawSco>event.max) rawSco = event.max;
             event.raw = rawSco;
             event.giveScore();
+            fragment.record.updateRecord(eventList);
+            fragment.binding.invalidateAll();
             binding.invalidateAll();
-            fragment.ACFTViewModel.updateEvent(event,getAdapterPosition());
         }
         public String setQualifiedLevel(int sco) {
             int qualifiedLevel;
@@ -115,8 +113,9 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
                 @Override public void onCancel(DialogInterface dialog) {
                     //event.duration is already bound with Number Pickers.
                     event.giveScore();
+                    fragment.record.updateRecord(eventList);
+                    fragment.binding.invalidateAll();
                     binding.invalidateAll();
-                    fragment.ACFTViewModel.updateEvent(event,getAdapterPosition());
                     dialog.dismiss();
                 }
             });
