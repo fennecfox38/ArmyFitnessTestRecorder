@@ -9,6 +9,11 @@ public class Duration implements Comparable{
         this.sec=sec;
         this.totalInSec = min*60 + sec;
     }
+    public  Duration(int totalInSec){
+        this.totalInSec = totalInSec;
+        min = totalInSec/60;
+        sec = totalInSec%60;
+    }
 
     public void setTime(int min, int sec){
         this.min=min;

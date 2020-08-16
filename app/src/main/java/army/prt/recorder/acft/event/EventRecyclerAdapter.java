@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.SeekBar;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -80,6 +81,14 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
             binding.invalidateAll();
             fragment.ACFTViewModel.updateEvent(event,getAdapterPosition());
         }
+        public String setQualifiedLevel(int sco) {
+            int qualifiedLevel;
+            if(sco>=70) qualifiedLevel = Event.HEAVY;
+            else if(sco>=65) qualifiedLevel = Event.SIGNIFICANT;
+            else if(sco>=60) qualifiedLevel = Event.MODERATE;
+            else qualifiedLevel = Event.FAIL;
+            return resources.getStringArray(R.array.Level)[qualifiedLevel];
+        }
     }
 
     public class DurationViewHolder extends RecyclerView.ViewHolder{
@@ -112,6 +121,14 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
                 }
             });
             builder.create().show();
+        }
+        public String setQualifiedLevel(int sco) {
+            int qualifiedLevel;
+            if(sco>=70) qualifiedLevel = Event.HEAVY;
+            else if(sco>=65) qualifiedLevel = Event.SIGNIFICANT;
+            else if(sco>=60) qualifiedLevel = Event.MODERATE;
+            else qualifiedLevel = Event.FAIL;
+            return resources.getStringArray(R.array.Level)[qualifiedLevel];
         }
     }
 

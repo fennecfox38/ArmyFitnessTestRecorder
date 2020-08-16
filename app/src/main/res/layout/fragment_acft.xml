@@ -35,6 +35,7 @@
                 app:layout_constraintHorizontal_bias="0"
                 app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/txt_record_date"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/txt_sco_total"/>
             <TextView
@@ -68,12 +69,37 @@
                 app:layout_constraintStart_toEndOf="@+id/txt_qualifies"
                 app:layout_constraintEnd_toStartOf="@+id/fab"/>
 
+            <TextView
+                android:id="@+id/txt_record_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:textSize="20sp"
+                android:text="@string/recordDate"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintTop_toBottomOf="@+id/txt_sco_total_header"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/editText_record_date"/>
+            <EditText
+                android:id="@+id/editText_record_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:focusable="false"
+                android:text="@{fragment.ACFTViewModel.record.dateRecord}"
+                android:onClick="@{fragment.onDateClick}"
+                app:layout_constraintBaseline_toBaselineOf="@+id/txt_record_date"
+                app:layout_constraintStart_toEndOf="@+id/txt_record_date"
+                app:layout_constraintEnd_toStartOf="@+id/fab"/>
+
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fab"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_save"
-                android:onClick="@{fragment.onSaveClick}"
+                android:onClick="@{fragment::onSaveClick}"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>

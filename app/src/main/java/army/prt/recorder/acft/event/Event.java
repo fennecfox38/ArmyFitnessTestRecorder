@@ -6,10 +6,9 @@ public class Event {
     public String title;
     public int eventType, max, sco = 0;
 
-    Event(int eventType, String title, int max){
+    public Event(int eventType, String title, int max){
         this.eventType = eventType;
         this.title = title;
         this.max = max;
     }
-
 }
