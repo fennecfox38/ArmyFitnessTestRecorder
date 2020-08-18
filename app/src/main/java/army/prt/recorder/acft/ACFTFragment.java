@@ -1,27 +1,24 @@
 package army.prt.recorder.acft;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
-import android.widget.EditText;
 
 import androidx.annotation.NonNull;
-import androidx.databinding.BindingAdapter;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 
 import army.prt.recorder.MainActivity;
 import army.prt.recorder.R;
@@ -49,6 +46,7 @@ public class ACFTFragment extends Fragment{
             list.add(new DurationEvent(Event.SDC,getString(R.string.SDC),5));
             list.add(new CountEvent(Event.LTK,getString(R.string.LTK),40,getString(R.string.reps)));
             list.add(new DurationEvent(Event.CARDIO,getString(R.string.Cardio),26));
+            loadData(record,list);
             eventList.setValue(list);
         }
 
@@ -67,6 +65,45 @@ public class ACFTFragment extends Fragment{
         return binding.getRoot();
     }
 
+    @Override public void onResume() {
+        eventList.setValue(loadData(record,eventList.getValue()));
+        super.onResume();
+    }
+    @Override public void onPause() {
+        saveData(record);
+        super.onPause();
+    }
+    @Override public void onDestroyView() {
+        saveData(record);
+        super.onDestroyView();
+    }
+
+    private ArrayList<Event> loadData(ACFTRecord record, ArrayList<Event> list){
+        SharedPreferences sharedPreferences = activity.getSharedPreferences("ACFTRecord", Activity.MODE_PRIVATE);
+        for(int i=0; i<6; ++i){
+            record.raw[i] = sharedPreferences.getInt("raw_"+i,0);
+            record.sco[i] = sharedPreferences.getInt("sco_"+i,0);
+        }
+        record.cardio_Alter = sharedPreferences.getInt("cardio_Alter",0);
+        record.sco_total = sharedPreferences.getInt("sco_total", 0);
+        record.qualifiedLevel = sharedPreferences.getInt("qualifiedLevel", record.qualifiedLevel);
+        record.stringToDate(sharedPreferences.getString("dateRecord","2020-08-18"));
+        record.restoreEventList(list);
+        return list;
+    }
+    private void saveData(ACFTRecord record){
+        SharedPreferences.Editor editor = activity.getSharedPreferences("ACFTRecord", Activity.MODE_PRIVATE).edit();
+        for(int i=0; i<6; ++i){
+            editor.putInt("raw_"+ i, record.raw[i]);
+            editor.putInt("sco_"+ i, record.sco[i]);
+        }
+        editor.putInt("cardio_Alter", record.cardio_Alter);
+        editor.putInt("sco_total", record.sco_total);
+        editor.putInt("qualifiedLevel", record.qualifiedLevel);
+        editor.putString("dateRecord", record.dateToString());
+        editor.commit();
+    }
+
     public String setQualifiedLevel(int qualifiedLevel) { return getResources().getStringArray(R.array.Level)[qualifiedLevel]; }
 
     public void onSaveClick(View view) {
@@ -77,24 +114,15 @@ public class ACFTFragment extends Fragment{
     }
 
     public void onDateClick(View view) {
-        final Calendar calendar = record.dateRecord;
         DatePickerDialog datePick = new DatePickerDialog(requireContext(), new DatePickerDialog.OnDateSetListener() {
             @Override public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                calendar.set(year,month,dayOfMonth);
-                record.dateRecord = calendar;
+                record.year = year; record.month = month+1;
+                record.day = dayOfMonth;
                 binding.invalidateAll();
             }
-        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+        }, record.year, record.month-1, record.day);
         datePick.getDatePicker().setMaxDate(System.currentTimeMillis());
         datePick.show();
     }
 
-    @BindingAdapter("android:text")
-    public static void setText(EditText editText, Calendar calendar) {
-        String str = String.valueOf(calendar.get(Calendar.YEAR));
-        str += "-"; str += String.valueOf(calendar.get(Calendar.MONTH)+1);
-        str += "-"; str += String.valueOf(calendar.get(Calendar.DAY_OF_MONTH));
-        editText.setText(str);
-        editText.setSelection(editText.length());
-    }
 }

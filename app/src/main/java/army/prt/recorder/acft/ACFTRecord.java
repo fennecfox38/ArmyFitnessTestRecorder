@@ -1,7 +1,5 @@
 package army.prt.recorder.acft;
 
-import androidx.lifecycle.MutableLiveData;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -10,45 +8,79 @@ import army.prt.recorder.acft.event.DurationEvent;
 import army.prt.recorder.acft.event.Event;
 
 public class ACFTRecord{
-    public int raw_MDL=0, raw_HPU=0, raw_LTK=0, cardio_Alter = 0; public float raw_SPT=0.0f;
-    public Duration duration_SDC, duration_Cardio; public Calendar dateRecord;
-    public int sco_MDL=0, sco_SPT=0, sco_HPU=0, sco_SDC=0, sco_LTK=0, sco_Cardio=0, sco_total=0;
-    public int qualifiedLevel = 0;
+    public int[] raw = {0, 0, 0, 0, 0, 0}, sco = {0, 0, 0, 0, 0, 0};
+    public int cardio_Alter = 0, sco_total=0, qualifiedLevel = 0;
+    public int year, month, day;
 
     ACFTRecord(){
-        duration_SDC = new Duration(0,0);
-        duration_Cardio = new Duration(0,0);
-        dateRecord = Calendar.getInstance();
+        Calendar today = Calendar.getInstance();
+        year = today.get(Calendar.YEAR);
+        month = today.get(Calendar.MONTH)+1;
+        day = today.get(Calendar.DAY_OF_MONTH);
     }
 
     public void updateRecord(ArrayList<Event> eventList){
-        CountEvent countEvent = (CountEvent) eventList.get(Event.MDL);
-        raw_MDL = countEvent.raw;
-        sco_MDL = countEvent.sco;
-        countEvent = (CountEvent) eventList.get(Event.SPT);
-        raw_SPT = (countEvent.raw/10.0f);
-        sco_SPT = countEvent.sco;
-        countEvent = (CountEvent) eventList.get(Event.HPU);
-        raw_HPU = countEvent.raw;
-        sco_HPU = countEvent.sco;
-        countEvent = (CountEvent) eventList.get(Event.LTK);
-        raw_LTK = countEvent.raw;
-        sco_LTK = countEvent.sco;
-        DurationEvent durationEvent = (DurationEvent) eventList.get(Event.SDC);
-        duration_SDC = durationEvent.duration;
-        sco_SDC = durationEvent.sco;
-        durationEvent = (DurationEvent) eventList.get(Event.CARDIO);
-        duration_Cardio = durationEvent.duration;
-        sco_Cardio = durationEvent.sco;
-        cardio_Alter = durationEvent.cardioAlter;
+        sco_total = 0; qualifiedLevel = Event.HEAVY;
+        CountEvent countEvent;
+        DurationEvent durationEvent;
+        for(int i=0; i<6; ++i){
+            switch (i){
+                case Event.MDL: case Event.SPT: case Event.HPU: case Event.LTK:
+                    countEvent = (CountEvent) eventList.get(i);
+                    raw[i] = countEvent.raw;
+                    sco[i] = countEvent.sco;
+                    break;
+                case Event.SDC: case Event.CARDIO:
+                    durationEvent = (DurationEvent) eventList.get(i);
+                    raw[i] = durationEvent.duration.getTotalInSec();
+                    sco[i] = durationEvent.sco;
+                    if(i == Event.CARDIO) cardio_Alter = durationEvent.cardioAlter;
+                    break;
+            }
 
-        sco_total = sco_MDL + sco_SPT + sco_HPU + sco_SDC + sco_LTK + sco_Cardio;
-
-        if(sco_MDL>=70&&sco_SPT>=70&&sco_HPU>=70&&sco_SDC>=70&&sco_LTK>=70&&sco_Cardio>=70) qualifiedLevel = Event.HEAVY;
-        else if(sco_MDL>=65&&sco_SPT>=65&&sco_HPU>=65&&sco_SDC>=65&&sco_LTK>=65&&sco_Cardio>=65) qualifiedLevel = Event.SIGNIFICANT;
-        else if(sco_MDL>=60&&sco_SPT>=60&&sco_HPU>=60&&sco_SDC>=60&&sco_LTK>=60&&sco_Cardio>=60) qualifiedLevel = Event.MODERATE;
-        else qualifiedLevel = Event.FAIL;
-
+            if(sco[i]<60) qualifiedLevel = Event.FAIL;
+            else if(sco[i]<65){ if(qualifiedLevel > Event.MODERATE) qualifiedLevel = Event.MODERATE; }
+            else if(sco[i]<70){ if(qualifiedLevel > Event.SIGNIFICANT) qualifiedLevel = Event.SIGNIFICANT; }
+            //else // nothing need to do for over 70.
+            sco_total += sco[i];
+        }
     }
 
+    public void restoreEventList(ArrayList<Event> eventList){
+        for(int i=0; i<6; ++i){
+            switch (i){
+                case Event.MDL: case Event.SPT: case Event.HPU: case Event.LTK:
+                    CountEvent countEvent = (CountEvent) eventList.get(i);
+                    countEvent.raw = raw[i]; countEvent.sco = sco[i];
+                    //eventList.set(i,countEvent);
+                    break;
+                case Event.SDC: case Event.CARDIO:
+                    DurationEvent durationEvent = (DurationEvent) eventList.get(i);
+                    durationEvent.duration.setTotalInSec(raw[i]);
+                    durationEvent.sco = sco[i];
+                    if(i == Event.CARDIO)  durationEvent.cardioAlter = cardio_Alter;
+                    //eventList.set(i,durationEvent);
+                    break;
+            }
+        }
+        //return eventList;
+    }
+
+    public String dateToString(){
+        String str = String.valueOf(year);
+        str += "-"; str += make2digit(String.valueOf(month));
+        str += "-"; str += make2digit(String.valueOf(day));
+        return str;
+    }
+
+    public void stringToDate(String str){
+        String[] array = str.split("-");
+        year = Integer.parseInt(array[0]);
+        month = Integer.parseInt(array[1]);
+        day = Integer.parseInt(array[2]);
+    }
+
+    private String make2digit(String num){ // make number 2 digit by adding 0 at front.
+        return ( (num.length()<2) ? "0"+num : num );
+    }
 }

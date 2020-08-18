@@ -5,7 +5,7 @@ import army.prt.recorder.acft.Duration;
 public class DurationEvent extends Event{
     public static final int RUN=0,ROW=1,BIKE=2,SWIM=3;
     public Duration duration;
-    public int cardioAlter = -1;
+    public int cardioAlter = 0;
 
     public DurationEvent(int eventType, String title, int max){
         super(eventType, title, max);

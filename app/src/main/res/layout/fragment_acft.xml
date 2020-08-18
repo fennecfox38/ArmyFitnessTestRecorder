@@ -88,7 +88,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
                 android:focusable="false"
-                android:text="@{fragment.record.dateRecord}"
+                android:text="@{fragment.record.dateToString()}"
                 android:onClick="@{fragment::onDateClick}"
                 app:layout_constraintBaseline_toBaselineOf="@+id/txt_record_date"
                 app:layout_constraintStart_toEndOf="@+id/txt_record_date"

@@ -76,9 +76,7 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
             else if(rawSco>event.max) rawSco = event.max;
             event.raw = rawSco;
             event.giveScore();
-            ArrayList<Event> list = eventList.getValue();
-            list.set(getAdapterPosition(),event);
-            eventList.setValue(list);
+            updateEventList(event);
             binding.invalidateAll();
         }
         public String setQualifiedLevel(int sco) {
@@ -115,9 +113,7 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
                 @Override public void onCancel(DialogInterface dialog) {
                     //event.duration is already bound with Number Pickers.
                     event.giveScore();
-                    ArrayList<Event> list = eventList.getValue();
-                    list.set(getAdapterPosition(),event);
-                    eventList.setValue(list);
+                    updateEventList(event);
                     binding.invalidateAll();
                     dialog.dismiss();
                 }
@@ -165,6 +161,8 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
                     holder.binding.spinnerCardioAlter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                         @Override public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                             holder.event.cardioAlter = position;
+                            holder.event.giveScore();
+                            holder.binding.invalidateAll();
                         }
                         @Override public void onNothingSelected(AdapterView<?> parent) { }
                     });
@@ -191,6 +189,12 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
             editText.setText(String.valueOf((event.raw)/10.0f));
         }
         editText.setSelection(editText.length());
+    }
+
+    private void updateEventList(Event event){
+        ArrayList<Event> list = eventList.getValue();
+        list.set(event.eventType,event);
+        eventList.setValue(list);
     }
 
     /*@BindingAdapter("android:text")
