@@ -81,7 +81,14 @@ public class ACFTFragment extends Fragment{
     private ArrayList<Event> loadData(ACFTRecord record, ArrayList<Event> list){
         SharedPreferences sharedPreferences = activity.getSharedPreferences("ACFTRecord", Activity.MODE_PRIVATE);
         for(int i=0; i<6; ++i){
-            record.raw[i] = sharedPreferences.getInt("raw_"+i,0);
+            switch (i){
+                case Event.MDL: record.raw_0 = sharedPreferences.getInt("raw_0",0); break;
+                case Event.SPT: record.raw_1 = sharedPreferences.getFloat("raw_1",0.0f); break;
+                case Event.HPU: record.raw_2 = sharedPreferences.getInt("raw_2",0); break;
+                case Event.SDC: record.raw_3.setTotalInSec(sharedPreferences.getInt("raw_3",0));
+                case Event.LTK: record.raw_4 = sharedPreferences.getInt("raw_4",0); break;
+                case Event.CARDIO: record.raw_5.setTotalInSec(sharedPreferences.getInt("raw_5",0)); break;
+            }
             record.sco[i] = sharedPreferences.getInt("sco_"+i,0);
         }
         record.cardio_Alter = sharedPreferences.getInt("cardio_Alter",0);
@@ -94,7 +101,14 @@ public class ACFTFragment extends Fragment{
     private void saveData(ACFTRecord record){
         SharedPreferences.Editor editor = activity.getSharedPreferences("ACFTRecord", Activity.MODE_PRIVATE).edit();
         for(int i=0; i<6; ++i){
-            editor.putInt("raw_"+ i, record.raw[i]);
+            switch (i){
+                case Event.MDL: editor.putInt("raw_0", record.raw_0); break;
+                case Event.SPT: editor.putFloat("raw_1", record.raw_1); break;
+                case Event.HPU: editor.putInt("raw_2", record.raw_2); break;
+                case Event.SDC: editor.putInt("raw_3", record.raw_3.getTotalInSec()); break;
+                case Event.LTK: editor.putInt("raw_4", record.raw_4); break;
+                case Event.CARDIO: editor.putInt("raw_5", record.raw_5.getTotalInSec()); break;
+            }
             editor.putInt("sco_"+ i, record.sco[i]);
         }
         editor.putInt("cardio_Alter", record.cardio_Alter);
