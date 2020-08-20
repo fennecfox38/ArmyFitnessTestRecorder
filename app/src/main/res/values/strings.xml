@@ -8,6 +8,10 @@
     <string name="title_long_abcp">Body Composition</string>
     <string name="title_log">Log</string>
     <string name="setting">Settings</string>
+    <string name="ACFTScale">ACFT Score Scale</string>
+    <string name="APFTScale">APFT Score Scale</string>
+    <string name="ABCPScale">ABCP Score Scale</string>
+    <string name="MOSChart">MOS Chart</string>
     <string name="DashBoard">DashBoard</string>
     <string name="Notification">Notification</string>
     <string name="Save">Save</string>

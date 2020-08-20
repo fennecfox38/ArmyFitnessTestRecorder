@@ -1,23 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android">
     <group
         android:id="@+id/group_nav_main_1"
-        android:checkableBehavior="single">
+        android:checkableBehavior="none">
+        <item
+            android:id="@+id/menu_ACFT_scale"
+            android:icon="@drawable/ic_dashboard"
+            android:title="@string/ACFTScale"/>
+        <item
+            android:id="@+id/menu_APFT_scale"
+            android:icon="@drawable/ic_dashboard"
+            android:title="@string/APFTScale" />
+        <item
+            android:id="@+id/menu_ABCP_scale"
+            android:icon="@drawable/ic_dashboard"
+            android:title="@string/ABCPScale" />
+        <item
+            android:id="@+id/menu_MOS_chart"
+            android:icon="@drawable/ic_table_chart"
+            android:title="@string/MOSChart" />
+    </group>
+    <group
+        android:id="@+id/group_nav_main_2"
+        android:checkableBehavior="none">
         <item
             android:id="@+id/menu_setting"
             android:icon="@drawable/ic_settings"
             android:title="@string/setting" />
-    </group>
-    <group
-        android:id="@+id/group_nav_main_2"
-        android:checkableBehavior="single">
-        <item
-            android:id="@+id/menu_dashboard"
-            android:icon="@drawable/ic_dashboard"
-            android:title="@string/DashBoard" />
-        <item
-            android:id="@+id/menu_notification"
-            android:icon="@drawable/ic_notification"
-            android:title="@string/Notification" />
     </group>
 </menu>

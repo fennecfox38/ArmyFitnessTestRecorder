@@ -75,6 +75,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="20dp"
+            android:gravity="center"
+            android:ems="4"
             android:textSize="20sp"
             android:text="@{viewholder.setQualifiedLevel(viewholder.event.sco)}"
             app:layout_constraintBaseline_toBaselineOf="@+id/txt_sco_event"
@@ -102,7 +104,6 @@
             app:layout_constraintBottom_toBottomOf="@+id/btn_minus_event"
             app:layout_constraintStart_toEndOf="@+id/btn_minus_event"
             app:layout_constraintEnd_toStartOf="@+id/btn_plus_event"/>
-        <!--android:progress="@={viewholder.event.raw}"-->
         <ImageButton
             android:id="@+id/btn_plus_event"
             android:layout_width="wrap_content"

@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.PagerAdapter;
 
 import org.jetbrains.annotations.NotNull;
@@ -16,14 +18,22 @@ import army.prt.recorder.R;
 public class TabPagerAdapter extends PagerAdapter {
     public static final int TAB_ACFT=0, TAB_APFT=1, TAB_ABCP=2;
     private Context context;
-    TabPagerAdapter(Context context){ this.context = context; }
+    private LogRecyclerAdapter[] logRecyclerAdapters = new LogRecyclerAdapter[3];
+    TabPagerAdapter(Context context){
+        this.context = context;
+        logRecyclerAdapters[TAB_ACFT] = new LogRecyclerAdapter(context,LogRecyclerAdapter.LOG_ACFT);
+        logRecyclerAdapters[TAB_APFT] = new LogRecyclerAdapter(context,LogRecyclerAdapter.LOG_APFT);
+        logRecyclerAdapters[TAB_ABCP] = new LogRecyclerAdapter(context,LogRecyclerAdapter.LOG_ABCP);
+    }
 
     @NotNull @Override public Object instantiateItem(ViewGroup container, int position) {
         View view = null ;
         if (context != null) {
             view = ((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).
                     inflate(R.layout.layout_container_log, container, false);
-            ((TextView) view.findViewById(R.id.txt_sample)).setText("Page "+String.valueOf(position+1));
+            RecyclerView recyclerView = view.findViewById(R.id.recyclerView_log);
+            recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
+            recyclerView.setAdapter(logRecyclerAdapters[position]);
         }
         container.addView(view) ;
         return view ;

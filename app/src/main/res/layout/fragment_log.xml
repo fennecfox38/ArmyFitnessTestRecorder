@@ -11,6 +11,8 @@
         android:id="@+id/tabLayout_log"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:tabBackground="@color/colorPrimary"
+        app:tabIndicatorColor="?android:attr/textColorPrimary"
         app:tabGravity="fill"
         app:tabMode="fixed"
         app:layout_constraintTop_toTopOf="parent"

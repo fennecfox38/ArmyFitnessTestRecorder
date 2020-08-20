@@ -2,8 +2,12 @@ package army.prt.recorder.acft;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.content.ContentValues;
 import android.content.SharedPreferences;
+import android.database.SQLException;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +31,7 @@ import army.prt.recorder.acft.event.DurationEvent;
 import army.prt.recorder.acft.event.Event;
 import army.prt.recorder.acft.event.EventRecyclerAdapter;
 import army.prt.recorder.databinding.FragmentAcftBinding;
+import army.prt.recorder.log.ACFTDBHelper;
 
 public class ACFTFragment extends Fragment{
     private MainActivity activity;
@@ -65,14 +70,14 @@ public class ACFTFragment extends Fragment{
         return binding.getRoot();
     }
 
-    @Override public void onResume() {
+    /*@Override public void onResume() {
         eventList.setValue(loadData(record,eventList.getValue()));
         super.onResume();
     }
     @Override public void onPause() {
         saveData(record);
         super.onPause();
-    }
+    }*/
     @Override public void onDestroyView() {
         saveData(record);
         super.onDestroyView();
@@ -117,11 +122,41 @@ public class ACFTFragment extends Fragment{
         editor.putString("dateRecord", record.dateToString());
         editor.commit();
     }
-
-    public String setQualifiedLevel(int qualifiedLevel) { return getResources().getStringArray(R.array.Level)[qualifiedLevel]; }
+    public String getLevelString(int qualifiedLevel) { return getResources().getStringArray(R.array.Level)[qualifiedLevel]; }
+    public String getAlterString(int cardioAlter) { return getResources().getStringArray(R.array.Cardio_Event)[cardioAlter]; }
 
     public void onSaveClick(View view) {
-        Snackbar.make(binding.getRoot(),"Saving Record is on maintenance", Snackbar.LENGTH_SHORT)
+        ACFTDBHelper dbHelper = new ACFTDBHelper(requireContext());
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        if(db == null) return;
+        ContentValues cv = new ContentValues();
+        cv.put(ACFTDBHelper.DBContract.COLUMN_RECORD_DATE,record.dateToString());
+        cv.put(ACFTDBHelper.DBContract.COLUMN_RAW_MDL,record.raw_0);
+        cv.put(ACFTDBHelper.DBContract.COLUMN_SCORE_MDL,record.sco[0]);
+        cv.put(ACFTDBHelper.DBContract.COLUMN_RAW_SPT,record.raw_1);
+        cv.put(ACFTDBHelper.DBContract.COLUMN_SCORE_SPT,record.sco[1]);
+        cv.put(ACFTDBHelper.DBContract.COLUMN_RAW_HPU,record.raw_2);
+        cv.put(ACFTDBHelper.DBContract.COLUMN_SCORE_HPU,record.sco[2]);
+        cv.put(ACFTDBHelper.DBContract.COLUMN_RAW_SDC,record.raw_3.toString());
+        cv.put(ACFTDBHelper.DBContract.COLUMN_SCORE_SDC,record.sco[3]);
+        cv.put(ACFTDBHelper.DBContract.COLUMN_RAW_LTK,record.raw_4);
+        cv.put(ACFTDBHelper.DBContract.COLUMN_SCORE_LTK,record.sco[4]);
+        cv.put(ACFTDBHelper.DBContract.COLUMN_RAW_CARDIO,record.raw_5.toString());
+        cv.put(ACFTDBHelper.DBContract.COLUMN_SCORE_CARDIO,record.sco[5]);
+        cv.put(ACFTDBHelper.DBContract.COLUMN_CARDIO_ALTER,getAlterString(record.cardio_Alter));
+        cv.put(ACFTDBHelper.DBContract.COLUMN_QUALIFIED_LEVEL,getLevelString(record.qualifiedLevel));
+        cv.put(ACFTDBHelper.DBContract.COLUMN_SCORE_TOTAL,record.sco_total);
+        try {
+            db.beginTransaction();  // add one by one
+            db.insert(ACFTDBHelper.DBContract.TABLE_NAME, null, cv);
+            db.setTransactionSuccessful();
+        } catch (SQLException e) {
+            Log.d("saveList", "fail to save list to db. (SQLException e)");
+        }
+        finally { db.endTransaction(); }
+        db.close();
+        dbHelper.close();
+        Snackbar.make(binding.getRoot(),"Saved on log.", Snackbar.LENGTH_SHORT)
                 .setAction("log", new View.OnClickListener() {
                     @Override public void onClick(View v) { activity.navController.navigate(R.id.navigation_log); }
                 }).show();

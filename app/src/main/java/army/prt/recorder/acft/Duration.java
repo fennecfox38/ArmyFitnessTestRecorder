@@ -1,5 +1,7 @@
 package army.prt.recorder.acft;
 
+import androidx.annotation.NonNull;
+
 public class Duration implements Comparable{
     private int min, sec, totalInSec;
 
@@ -40,4 +42,8 @@ public class Duration implements Comparable{
 
     @Override public int compareTo(Object o) { return (totalInSec - ((Duration)o).totalInSec); }
     public int compareTo(int min, int sec){ return (totalInSec - (min*60 + sec)); }
+
+    @NonNull @Override public String toString() {
+        return (String.valueOf(min) +":"+String.valueOf(sec));
+    }
 }

@@ -2,8 +2,8 @@ package army.prt.recorder;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
@@ -46,14 +46,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
         drawer_main = findViewById(R.id.drawer_main);
         NavigationView nav_main = findViewById(R.id.nav_main);
+        Menu navMenu = nav_main.getMenu();
+        navMenu.findItem(R.id.menu_ACFT_scale).setIntent(new Intent(getApplicationContext(), ScaleChartActivity.class).putExtra("requested",ScaleChartActivity.ACFT_REQUESTED));
+        navMenu.findItem(R.id.menu_APFT_scale).setIntent(new Intent(getApplicationContext(), ScaleChartActivity.class).putExtra("requested",ScaleChartActivity.APFT_REQUESTED));
+        navMenu.findItem(R.id.menu_ABCP_scale).setIntent(new Intent(getApplicationContext(), ScaleChartActivity.class).putExtra("requested",ScaleChartActivity.ABCP_REQUESTED));
+        navMenu.findItem(R.id.menu_MOS_chart).setIntent(new Intent(getApplicationContext(), ScaleChartActivity.class).putExtra("requested",ScaleChartActivity.MOS_CHART_REQUESTED));
         nav_main.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                /*switch (item.getItemId()){
-                    case R.id.menu_1:  break;
-                    case R.id.menu_2:  break;
-                }*/
                 drawer_main.closeDrawer(GravityCompat.START);
                 return false;
             }
