@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -18,12 +17,10 @@ import army.prt.recorder.R;
 public class TabPagerAdapter extends PagerAdapter {
     public static final int TAB_ACFT=0, TAB_APFT=1, TAB_ABCP=2;
     private Context context;
-    private LogRecyclerAdapter[] logRecyclerAdapters = new LogRecyclerAdapter[3];
+    private ACFTLogRecyclerAdapter acftAdapter;
     TabPagerAdapter(Context context){
         this.context = context;
-        logRecyclerAdapters[TAB_ACFT] = new LogRecyclerAdapter(context,LogRecyclerAdapter.LOG_ACFT);
-        logRecyclerAdapters[TAB_APFT] = new LogRecyclerAdapter(context,LogRecyclerAdapter.LOG_APFT);
-        logRecyclerAdapters[TAB_ABCP] = new LogRecyclerAdapter(context,LogRecyclerAdapter.LOG_ABCP);
+        acftAdapter = new ACFTLogRecyclerAdapter(context);
     }
 
     @NotNull @Override public Object instantiateItem(ViewGroup container, int position) {
@@ -31,9 +28,11 @@ public class TabPagerAdapter extends PagerAdapter {
         if (context != null) {
             view = ((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).
                     inflate(R.layout.layout_container_log, container, false);
-            RecyclerView recyclerView = view.findViewById(R.id.recyclerView_log);
-            recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
-            recyclerView.setAdapter(logRecyclerAdapters[position]);
+            if(position == TAB_ACFT){
+                RecyclerView recyclerView = view.findViewById(R.id.recyclerView_log);
+                recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
+                recyclerView.setAdapter(acftAdapter);
+            }
         }
         container.addView(view) ;
         return view ;

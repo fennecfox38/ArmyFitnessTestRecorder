@@ -44,6 +44,16 @@ public class Duration implements Comparable{
     public int compareTo(int min, int sec){ return (totalInSec - (min*60 + sec)); }
 
     @NonNull @Override public String toString() {
-        return (String.valueOf(min) +":"+String.valueOf(sec));
+        return (make2digit(min) +":"+make2digit(sec));
+    }
+    private String make2digit(int num){ // make number 2 digit by adding 0 at front.
+        return ( (num>=0&&num<=9) ? "0"+num : String.valueOf(num) );
+    }
+    public void fromString(String str){
+        String[] array = str.split(":");
+        try{
+            min = Integer.parseInt(array[0]);
+            sec = Integer.parseInt(array[1]);
+        }catch (Exception e){ e.printStackTrace(); }
     }
 }

@@ -7,7 +7,7 @@
         <item>@string/Heavy</item>
     </string-array>
 
-    <string-array name="Cardio_Event">
+    <string-array name="CardioEvent">
         <item>@string/Run</item>
         <item>@string/Row</item>
         <item>@string/Bike</item>

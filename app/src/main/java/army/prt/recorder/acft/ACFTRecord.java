@@ -1,20 +1,25 @@
 package army.prt.recorder.acft;
 
+import android.content.ContentValues;
+import android.content.res.Resources;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import army.prt.recorder.R;
 import army.prt.recorder.acft.event.CountEvent;
 import army.prt.recorder.acft.event.DurationEvent;
 import army.prt.recorder.acft.event.Event;
+import army.prt.recorder.log.ACFTDBHelper;
 
 public class ACFTRecord{
     public int[] sco = {0, 0, 0, 0, 0, 0};
     public int raw_0 = 0, raw_2 = 0, raw_4 = 0; public float raw_1 = 0;
     public Duration raw_3, raw_5;
-    public int cardio_Alter = 0, sco_total=0, qualifiedLevel = 0;
+    public int cardioAlter = 0, sco_total=0, qualifiedLevel = 0;
     public int year, month, day;
 
-    ACFTRecord(){
+    public ACFTRecord(){
         raw_3 = new Duration(0);
         raw_5 = new Duration(0);
         Calendar today = Calendar.getInstance();
@@ -26,7 +31,6 @@ public class ACFTRecord{
     public void updateRecord(ArrayList<Event> eventList){
         sco_total = 0; qualifiedLevel = Event.HEAVY;
         for(Event event : eventList){
-            //event = eventList.get(i);
             switch (event.eventType){
                 case Event.MDL: raw_0 = ((CountEvent) event).raw; break;
                 case Event.SPT: raw_1 = (((CountEvent) event).raw/10.0f); break;
@@ -35,7 +39,7 @@ public class ACFTRecord{
                 case Event.LTK: raw_4 = ((CountEvent) event).raw; break;
                 case Event.CARDIO:
                     raw_5.setTotalInSec(((DurationEvent)event).duration.getTotalInSec());
-                    cardio_Alter = ((DurationEvent)event).cardioAlter;
+                    cardioAlter = ((DurationEvent)event).cardioAlter;
                     break;
             }
             sco[event.eventType] = event.sco;
@@ -58,12 +62,11 @@ public class ACFTRecord{
                 case Event.LTK: ((CountEvent)event).raw = raw_4; break;
                 case Event.CARDIO:
                     ((DurationEvent)event).duration.setTotalInSec(raw_5.getTotalInSec());
-                    ((DurationEvent)event).cardioAlter = cardio_Alter;
+                    ((DurationEvent)event).cardioAlter = cardioAlter;
                     break;
             }
             event.sco = sco[event.eventType];
         }
-        //return eventList;
     }
 
     public String dateToString(){
@@ -83,4 +86,26 @@ public class ACFTRecord{
     private String make2digit(String num){ // make number 2 digit by adding 0 at front.
         return ( (num.length()<2) ? "0"+num : num );
     }
+
+    public ContentValues getContentValues(Resources resources){
+        ContentValues cv = new ContentValues();
+        cv.put(ACFTDBHelper.DBContract.COLUMN_RECORD_DATE,dateToString());
+        cv.put(ACFTDBHelper.DBContract.COLUMN_RAW_MDL,raw_0);
+        cv.put(ACFTDBHelper.DBContract.COLUMN_SCORE_MDL,sco[0]);
+        cv.put(ACFTDBHelper.DBContract.COLUMN_RAW_SPT,raw_1);
+        cv.put(ACFTDBHelper.DBContract.COLUMN_SCORE_SPT,sco[1]);
+        cv.put(ACFTDBHelper.DBContract.COLUMN_RAW_HPU,raw_2);
+        cv.put(ACFTDBHelper.DBContract.COLUMN_SCORE_HPU,sco[2]);
+        cv.put(ACFTDBHelper.DBContract.COLUMN_RAW_SDC,raw_3.toString());
+        cv.put(ACFTDBHelper.DBContract.COLUMN_SCORE_SDC,sco[3]);
+        cv.put(ACFTDBHelper.DBContract.COLUMN_RAW_LTK,raw_4);
+        cv.put(ACFTDBHelper.DBContract.COLUMN_SCORE_LTK,sco[4]);
+        cv.put(ACFTDBHelper.DBContract.COLUMN_RAW_CARDIO,raw_5.toString());
+        cv.put(ACFTDBHelper.DBContract.COLUMN_SCORE_CARDIO,sco[5]);
+        cv.put(ACFTDBHelper.DBContract.COLUMN_CARDIO_ALTER,resources.getStringArray(R.array.CardioEvent)[cardioAlter]);
+        cv.put(ACFTDBHelper.DBContract.COLUMN_QUALIFIED_LEVEL,resources.getStringArray(R.array.Level)[qualifiedLevel]);
+        cv.put(ACFTDBHelper.DBContract.COLUMN_SCORE_TOTAL,sco_total);
+        return cv;
+    }
+
 }

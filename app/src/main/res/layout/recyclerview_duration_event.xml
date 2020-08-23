@@ -5,6 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <import type="android.view.View" />
+        <import type="army.prt.recorder.acft.event.Event" />
         <variable
             name="viewholder"
             type="army.prt.recorder.acft.event.EventRecyclerAdapter.DurationViewHolder" />
@@ -31,11 +33,15 @@
             app:layout_constraintBottom_toTopOf="@+id/layout_duration"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/spinner_cardio_alter"/>
-        <Spinner
+        <androidx.appcompat.widget.AppCompatSpinner
             android:id="@+id/spinner_cardio_alter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="invisible"
+            android:visibility="@{(viewholder.event.eventType == Event.CARDIO) ? View.VISIBLE : View.GONE}"
+            android:spinnerMode="dropdown"
+            android:entries="@array/CardioEvent"
+            android:selectedItemPosition="@={viewholder.event.cardioAlter}"
+            android:onItemSelected="@{viewholder.onItemSelected}"
             app:layout_constraintBaseline_toBaselineOf="@+id/txt_title_event"
             app:layout_constraintStart_toEndOf="@+id/txt_title_event"
             app:layout_constraintEnd_toEndOf="parent"/>

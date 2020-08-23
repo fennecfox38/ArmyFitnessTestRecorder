@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ACFT Recorder</string>
+    <string name="app_name">Army PRT Recorder</string>
     <string name="title_acft">ACFT</string>
     <string name="title_long_acft">Combat Fitness Test</string>
     <string name="title_apft">APFT</string>
@@ -25,11 +25,8 @@
     <string name="Score">Score</string>
     <string name="Points">points</string>
     <string name="MDL">Maximum Dead Lift</string>
-    <string name="lbs">lbs</string>
     <string name="SPT">Standing Power Throw</string>
-    <string name="m">m</string>
     <string name="HPU">Hand-Release Push-Up</string>
-    <string name="reps">reps</string>
     <string name="SDC">Sprint-Drag-Carry</string>
     <string name="LTK">Leg Tucks</string>
     <string name="Cardio">Cardio</string>
@@ -37,11 +34,22 @@
     <string name="Row">5000 M Row</string>
     <string name="Bike">15000 M Bike</string>
     <string name="Swim">1000 M Swim</string>
+    <string name="MDL_short">MDL</string>
+    <string name="SPT_short">SPT</string>
+    <string name="HPU_short">HPU</string>
+    <string name="SDC_short">SDC</string>
+    <string name="LTK_short">LTK</string>
+    <string name="lbs">lbs</string>
+    <string name="m">m</string>
+    <string name="reps">reps</string>
     <string name="title_duration_picker">Set Duration Time</string>
     <string name="OK">OK</string>
     <string name="Cancel">Cancel</string>
     <string name="min">min</string>
     <string name="sec">sec</string>
+    <string name="share">Share</string>
+    <string name="delete">Delete</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_apft_fragment">Hello APFT fragment</string>
+    <string name="total">Total</string>
 </resources>
