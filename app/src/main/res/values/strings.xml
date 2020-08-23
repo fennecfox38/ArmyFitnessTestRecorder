@@ -47,8 +47,13 @@
     <string name="Cancel">Cancel</string>
     <string name="min">min</string>
     <string name="sec">sec</string>
+    <string name="record">Record</string>
     <string name="share">Share</string>
     <string name="delete">Delete</string>
+    <string name="shareDB">Share SQLiteDatabase File</string>
+    <string name="shareXLS">Share MS Excel File</string>
+    <string name="recordDeleted">Record deleted successfully.</string>
+    <string name="undo">Undo</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_apft_fragment">Hello APFT fragment</string>
     <string name="total">Total</string>

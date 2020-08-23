@@ -16,7 +16,7 @@
         android:layout_margin="5dp"
         android:padding="5dp"
         android:elevation="5dp"
-        android:background="@color/cardview_dark_background">
+        android:background="@color/cardview_background">
         <TextView
             android:id="@+id/txt_title_event"
             android:layout_width="wrap_content"

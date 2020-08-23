@@ -18,7 +18,7 @@
         android:layout_margin="5dp"
         android:padding="5dp"
         android:elevation="5dp"
-        android:background="@color/cardview_dark_background">
+        android:background="@color/cardview_background">
         <TextView
             android:id="@+id/txt_title_event"
             android:layout_width="wrap_content"
@@ -41,7 +41,7 @@
             android:spinnerMode="dropdown"
             android:entries="@array/CardioEvent"
             android:selectedItemPosition="@={viewholder.event.cardioAlter}"
-            android:onItemSelected="@{viewholder.onItemSelected}"
+            android:onItemSelected="@{viewholder::onItemSelected}"
             app:layout_constraintBaseline_toBaselineOf="@+id/txt_title_event"
             app:layout_constraintStart_toEndOf="@+id/txt_title_event"
             app:layout_constraintEnd_toEndOf="parent"/>

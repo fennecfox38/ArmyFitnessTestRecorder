@@ -7,20 +7,20 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
-import android.util.Log;
 
-import androidx.appcompat.app.AlertDialog;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 
 import java.util.ArrayList;
 
 import army.prt.recorder.R;
 import army.prt.recorder.acft.ACFTRecord;
 
-import static android.content.ContentValues.TAG;
 import static army.prt.recorder.log.ACFTDBHelper.DBContract.*;
 
 public class ACFTDBHelper extends SQLiteOpenHelper {
-    public static final String DATABASE_NAME="ACFTLog.db";
+    public static final String DATABASE_NAME = FileProvider.dbName;
     private static final int DATABASE_VERSION=1;
     private Context context;
     private Resources resources;
@@ -30,13 +30,9 @@ public class ACFTDBHelper extends SQLiteOpenHelper {
         this.context=context; resources = context.getResources();
     }
 
-    @Override public void onCreate(SQLiteDatabase db) {
-        db.execSQL(SQL_CREATE_TBL);
-    }
-
+    @Override public void onCreate(SQLiteDatabase db) { db.execSQL(SQL_CREATE_TBL); }
     @Override public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL(SQL_DROP_TBL);
-        onCreate(db);
+        db.execSQL(SQL_DROP_TBL); onCreate(db);
     }
 
     public ArrayList<ACFTRecord> getRecordList(){
@@ -119,9 +115,72 @@ public class ACFTDBHelper extends SQLiteOpenHelper {
         db.close();
     }
 
+    public void deleteAll(){
+        SQLiteDatabase db = getWritableDatabase();
+        if(db == null) return;
+        try {
+            db.beginTransaction();
+            db.execSQL(SQL_DELETE_ALL);
+            db.setTransactionSuccessful();
+        } catch (SQLException e) { e.printStackTrace(); }
+        finally { db.endTransaction(); }
+        db.close();
+    }
+
+    public void exportExcel(Workbook workbook){
+        Sheet sheet = workbook.createSheet(TABLE_NAME);
+
+        Row row = sheet.createRow(0);
+        row.createCell(0).setCellValue(COLUMN_RECORD_DATE);
+        row.createCell(1).setCellValue(COLUMN_RAW_MDL);
+        row.createCell(2).setCellValue(COLUMN_SCORE_MDL);
+        row.createCell(3).setCellValue(COLUMN_RAW_SPT);
+        row.createCell(4).setCellValue(COLUMN_SCORE_SPT);
+        row.createCell(5).setCellValue(COLUMN_RAW_HPU);
+        row.createCell(6).setCellValue(COLUMN_SCORE_HPU);
+        row.createCell(7).setCellValue(COLUMN_RAW_SDC);
+        row.createCell(8).setCellValue(COLUMN_SCORE_SDC);
+        row.createCell(9).setCellValue(COLUMN_RAW_LTK);
+        row.createCell(10).setCellValue(COLUMN_SCORE_LTK);
+        row.createCell(11).setCellValue(COLUMN_RAW_CARDIO);
+        row.createCell(12).setCellValue(COLUMN_SCORE_CARDIO);
+        row.createCell(13).setCellValue(COLUMN_CARDIO_ALTER);
+        row.createCell(14).setCellValue(COLUMN_QUALIFIED_LEVEL);
+        row.createCell(15).setCellValue(COLUMN_SCORE_TOTAL);
+
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor= db.rawQuery(SQL_SELECT,null);
+
+        int rowIndex = 1;
+        for(boolean haveItem = cursor.moveToFirst(); haveItem; haveItem=cursor.moveToNext()){
+            row = sheet.createRow(rowIndex++);
+            row.createCell(0).setCellValue(cursor.getString(cursor.getColumnIndex(COLUMN_RECORD_DATE)));
+            row.createCell(1).setCellValue(cursor.getInt(cursor.getColumnIndex(COLUMN_RAW_MDL)));
+            row.createCell(2).setCellValue(cursor.getInt(cursor.getColumnIndex(COLUMN_SCORE_MDL)));
+            row.createCell(3).setCellValue(cursor.getFloat(cursor.getColumnIndex(COLUMN_RAW_SPT)));
+            row.createCell(4).setCellValue(cursor.getInt(cursor.getColumnIndex(COLUMN_SCORE_SPT)));
+            row.createCell(5).setCellValue(cursor.getInt(cursor.getColumnIndex(COLUMN_RAW_HPU)));
+            row.createCell(6).setCellValue(cursor.getInt(cursor.getColumnIndex(COLUMN_SCORE_HPU)));
+            row.createCell(7).setCellValue(cursor.getString(cursor.getColumnIndex(COLUMN_RAW_SDC)));
+            row.createCell(8).setCellValue(cursor.getInt(cursor.getColumnIndex(COLUMN_SCORE_SDC)));
+            row.createCell(9).setCellValue(cursor.getInt(cursor.getColumnIndex(COLUMN_RAW_LTK)));
+            row.createCell(10).setCellValue(cursor.getInt(cursor.getColumnIndex(COLUMN_SCORE_LTK)));
+            row.createCell(11).setCellValue(cursor.getString(cursor.getColumnIndex(COLUMN_RAW_CARDIO)));
+            row.createCell(12).setCellValue(cursor.getInt(cursor.getColumnIndex(COLUMN_SCORE_CARDIO)));
+            row.createCell(13).setCellValue(getIndexOfStringArray(R.array.CardioEvent,
+                    cursor.getString(cursor.getColumnIndex(COLUMN_CARDIO_ALTER))));
+            row.createCell(14).setCellValue(getIndexOfStringArray(R.array.Level,
+                    cursor.getString(cursor.getColumnIndex(COLUMN_QUALIFIED_LEVEL))));
+            row.createCell(15).setCellValue(cursor.getInt(cursor.getColumnIndex(COLUMN_SCORE_TOTAL)));
+        }
+
+        cursor.close();
+        db.close();
+    }
+
     private static String sqlWhere(String column, String arg){ return (column+"=\""+arg+"\" "); }
-    private static String sqlWhere(String column, int arg){ return (column+"="+String.valueOf(arg)+" "); }
-    private static String sqlWhere(String column, float arg){ return (column+"="+String.valueOf(arg)+" "); }
+    private static String sqlWhere(String column, int arg){ return (column+"="+ arg +" "); }
+    private static String sqlWhere(String column, float arg){ return (column+"="+ arg +" "); }
 
     public int getIndexOfStringArray(int arrayId, String str){
         String[] array = resources.getStringArray(arrayId);
@@ -129,7 +188,6 @@ public class ACFTDBHelper extends SQLiteOpenHelper {
             if(str.equals(array[index])) return index;
         return -1;
     }
-
 
     public static final class DBContract implements BaseColumns {
         public static final String TABLE_NAME = "ACFTRecord";

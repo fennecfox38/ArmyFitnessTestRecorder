@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+    <cache-path
+        path="../cache/"
+        name="cache"/>
+    <files-path
+        path="../databases/"
+        name="databases"/>
+    <files-path
+        path="../files/"
+        name="files"/>
+</paths>

@@ -14,10 +14,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
-        android:paddingStart="3dp"
+        android:padding="3dp"
         android:elevation="5dp"
         android:stretchColumns="0,1,2,3"
-        android:background="@color/cardview_dark_background">
+        android:background="@color/cardview_background">
 
         <TableRow
             android:layout_width="match_parent"
@@ -53,15 +53,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:textColor="@color/colorAccent"
                 android:textSize="20sp"
                 android:text="@{viewholder.getQualifiedLevel()}"/>
-
         </TableRow>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@android:color/background_light"/>
+            android:layout_marginStart="2dp"
+            android:background="@color/colorAccent"/>
 
         <TableRow
             android:layout_width="match_parent"
@@ -331,55 +332,6 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="@{viewholder.getLevel(viewholder.record.sco[5])}"/>
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:padding="5dp"
-                android:elevation="5dp"
-                android:orientation="horizontal"
-                android:onClick="@{viewholder.onShareClick}">
-                <ImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:background="@android:color/transparent"
-                    android:src="@drawable/ic_share"
-                    android:onClick="@{viewholder.onShareClick}"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="@string/share"
-                    android:onClick="@{viewholder.onShareClick}"/>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:padding="5dp"
-                android:elevation="5dp"
-                android:orientation="horizontal"
-                android:onClick="@{viewholder.onDeleteClick}">
-                <ImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:background="@android:color/transparent"
-                    android:src="@drawable/ic_delete"
-                    android:onClick="@{viewholder.onDeleteClick}"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="@string/delete"
-                    android:onClick="@{viewholder.onDeleteClick}"/>
-            </LinearLayout>
         </TableRow>
 
     </TableLayout>
