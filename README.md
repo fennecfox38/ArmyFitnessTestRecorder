@@ -1,2 +1,2 @@
-# ACFTRecorder
-ACFT Recorder Application
+# Army PRT Recorder
+Army PRT Recorder Application
