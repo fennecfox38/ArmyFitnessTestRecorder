@@ -1,7 +1,7 @@
 <resources>
 
     <string-array name="Level">
-        <item>@string/Fail</item>
+        <item>@string/fail</item>
         <item>@string/Moderate</item>
         <item>@string/Significant</item>
         <item>@string/Heavy</item>
@@ -12,6 +12,13 @@
         <item>@string/Row</item>
         <item>@string/Bike</item>
         <item>@string/Swim</item>
+    </string-array>
+
+    <string-array name="ageGroupABCP">
+        <item>17–20</item>
+        <item>21–27</item>
+        <item>28–39</item>
+        <item>40+</item>
     </string-array>
 
 </resources>

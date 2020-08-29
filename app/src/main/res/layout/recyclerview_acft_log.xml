@@ -27,9 +27,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
-                android:layout_span="2"
                 android:textSize="20sp"
                 android:text="@{viewholder.record.dateToString()}"/>
+            <!--android:layout_span="2"-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textColor="@{viewholder.getPassedColor(viewholder.record.isPassed)}"
+                android:textSize="20sp"
+                android:text="@{viewholder.getPassed(viewholder.record.isPassed)}"/>
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -53,9 +60,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:textColor="@color/colorAccent"
+                android:textColor="@{viewholder.getPassedColor(viewholder.record.isPassed)}"
                 android:textSize="20sp"
-                android:text="@{viewholder.getQualifiedLevel()}"/>
+                android:text="@{viewholder.record.qualifiedLevel.toString()}"/>
         </TableRow>
 
         <View
@@ -304,7 +311,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="15sp"
-                android:text="@{viewholder.getAlter()}"/>
+                android:text="@{viewholder.record.cardioAlter.toString()}"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

@@ -20,11 +20,12 @@
         android:elevation="5dp"
         android:background="@color/cardview_background">
         <TextView
-            android:id="@+id/txt_title_event"
+            android:id="@+id/txt_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
             android:layout_marginEnd="20dp"
+            android:textColor="?android:attr/textColorPrimary"
             android:textSize="24sp"
             android:text="@{viewholder.event.title}"
             app:layout_constraintHorizontal_bias="0"
@@ -40,10 +41,10 @@
             android:visibility="@{(viewholder.event.eventType == Event.CARDIO) ? View.VISIBLE : View.GONE}"
             android:spinnerMode="dropdown"
             android:entries="@array/CardioEvent"
-            android:selectedItemPosition="@={viewholder.event.cardioAlter}"
+            android:selectedItemPosition="@{viewholder.event.cardioAlter.ordinal()}"
             android:onItemSelected="@{viewholder::onItemSelected}"
-            app:layout_constraintBaseline_toBaselineOf="@+id/txt_title_event"
-            app:layout_constraintStart_toEndOf="@+id/txt_title_event"
+            app:layout_constraintBaseline_toBaselineOf="@+id/txt_title"
+            app:layout_constraintStart_toEndOf="@+id/txt_title"
             app:layout_constraintEnd_toEndOf="parent"/>
         <LinearLayout
             android:id="@+id/layout_duration"
@@ -52,10 +53,10 @@
             android:layout_marginEnd="10dp"
             app:layout_constraintHorizontal_bias="1"
             app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintTop_toBottomOf="@+id/txt_title_event"
+            app:layout_constraintTop_toBottomOf="@+id/txt_title"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/editText_sco_event">
+            app:layout_constraintEnd_toStartOf="@+id/editText_sco">
             <EditText
                 android:id="@+id/editText_min"
                 android:layout_width="wrap_content"
@@ -87,7 +88,7 @@
         </LinearLayout>
 
         <EditText
-            android:id="@+id/editText_sco_event"
+            android:id="@+id/editText_sco"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:focusable="false"
@@ -95,29 +96,30 @@
             app:layout_constraintTop_toTopOf="@+id/layout_duration"
             app:layout_constraintBottom_toBottomOf="@+id/layout_duration"
             app:layout_constraintStart_toEndOf="@+id/layout_duration"
-            app:layout_constraintEnd_toStartOf="@+id/txt_sco_event"/>
+            app:layout_constraintEnd_toStartOf="@+id/txt_sco"/>
 
         <TextView
-            android:id="@+id/txt_sco_event"
+            android:id="@+id/txt_sco"
             android:layout_width="42dp"
             android:layout_height="24dp"
             android:layout_marginEnd="20dp"
             android:text="@string/Points"
-            app:layout_constraintBaseline_toBaselineOf="@+id/editText_sco_event"
-            app:layout_constraintStart_toEndOf="@+id/editText_sco_event"
-            app:layout_constraintEnd_toStartOf="@+id/txt_level_event"/>
+            app:layout_constraintBaseline_toBaselineOf="@+id/editText_sco"
+            app:layout_constraintStart_toEndOf="@+id/editText_sco"
+            app:layout_constraintEnd_toStartOf="@+id/txt_level"/>
 
         <TextView
-            android:id="@+id/txt_level_event"
+            android:id="@+id/txt_level"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="20dp"
             android:gravity="center"
             android:ems="4"
+            android:textColor="@{viewholder.getPassedColor(viewholder.event.sco>=60)}"
             android:textSize="20sp"
             android:text="@{viewholder.setQualifiedLevel(viewholder.event.sco)}"
-            app:layout_constraintBaseline_toBaselineOf="@+id/txt_sco_event"
-            app:layout_constraintStart_toEndOf="@+id/txt_sco_event"
+            app:layout_constraintBaseline_toBaselineOf="@+id/txt_sco"
+            app:layout_constraintStart_toEndOf="@+id/txt_sco"
             app:layout_constraintEnd_toEndOf="parent"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

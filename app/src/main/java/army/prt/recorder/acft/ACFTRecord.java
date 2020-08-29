@@ -15,13 +15,15 @@ import army.prt.recorder.log.ACFTDBHelper;
 public class ACFTRecord{
     public int[] sco = {0, 0, 0, 0, 0, 0};
     public int raw_0 = 0, raw_2 = 0, raw_4 = 0; public float raw_1 = 0;
-    public Duration raw_3, raw_5;
-    public int cardioAlter = 0, sco_total=0, qualifiedLevel = 0;
+    public Duration raw_3 = new Duration(0), raw_5 = new Duration(0);
+    public CardioAlter cardioAlter = CardioAlter.RUN;
+    public Level qualifiedLevel = Level.Fail;
+    public int sco_total=0;// qualifiedLevel = 0;
+    public MOS mos = MOS.Moderate;
+    public boolean isPassed=false;
     public int year, month, day;
 
     public ACFTRecord(){
-        raw_3 = new Duration(0);
-        raw_5 = new Duration(0);
         Calendar today = Calendar.getInstance();
         year = today.get(Calendar.YEAR);
         month = today.get(Calendar.MONTH)+1;
@@ -29,7 +31,7 @@ public class ACFTRecord{
     }
 
     public void updateRecord(ArrayList<Event> eventList){
-        sco_total = 0; qualifiedLevel = Event.HEAVY;
+        sco_total = 0; qualifiedLevel = Level.Heavy;
         for(Event event : eventList){
             switch (event.eventType){
                 case Event.MDL: raw_0 = ((CountEvent) event).raw; break;
@@ -44,12 +46,13 @@ public class ACFTRecord{
             }
             sco[event.eventType] = event.sco;
 
-            if(sco[event.eventType]<60) qualifiedLevel = Event.FAIL;
-            else if(sco[event.eventType]<65){ if(qualifiedLevel > Event.MODERATE) qualifiedLevel = Event.MODERATE; }
-            else if(sco[event.eventType]<70){ if(qualifiedLevel > Event.SIGNIFICANT) qualifiedLevel = Event.SIGNIFICANT; }
+            if(sco[event.eventType]<60) qualifiedLevel = Level.Fail;
+            else if(sco[event.eventType]<65){ if(qualifiedLevel.compareTo(Level.Moderate)>0) qualifiedLevel = Level.Moderate; }
+            else if(sco[event.eventType]<70){ if(qualifiedLevel.compareTo(Level.Significant)>0) qualifiedLevel = Level.Significant; }
             //else // nothing need to do for over 70.
             sco_total += sco[event.eventType];
         }
+        invalidate();
     }
 
     public void restoreEventList(ArrayList<Event> eventList){
@@ -67,6 +70,11 @@ public class ACFTRecord{
             }
             event.sco = sco[event.eventType];
         }
+    }
+
+    public void invalidate(){
+        isPassed = (qualifiedLevel.ordinal()>mos.ordinal()); // qualifiedLevel>=mos.ordinal()+1
+        // Issue! : it should be 'Pass' if it is Cardio Alternative Event.
     }
 
     public String dateToString(){
@@ -102,10 +110,23 @@ public class ACFTRecord{
         cv.put(ACFTDBHelper.DBContract.COLUMN_SCORE_LTK,sco[4]);
         cv.put(ACFTDBHelper.DBContract.COLUMN_RAW_CARDIO,raw_5.toString());
         cv.put(ACFTDBHelper.DBContract.COLUMN_SCORE_CARDIO,sco[5]);
-        cv.put(ACFTDBHelper.DBContract.COLUMN_CARDIO_ALTER,resources.getStringArray(R.array.CardioEvent)[cardioAlter]);
-        cv.put(ACFTDBHelper.DBContract.COLUMN_QUALIFIED_LEVEL,resources.getStringArray(R.array.Level)[qualifiedLevel]);
+        cv.put(ACFTDBHelper.DBContract.COLUMN_CARDIO_ALTER,cardioAlter.toString());
+        cv.put(ACFTDBHelper.DBContract.COLUMN_QUALIFIED_LEVEL,qualifiedLevel.toString());
         cv.put(ACFTDBHelper.DBContract.COLUMN_SCORE_TOTAL,sco_total);
+        cv.put(ACFTDBHelper.DBContract.COLUMN_MOS_REQUIREMENT,mos.toString());
+        cv.put(ACFTDBHelper.DBContract.COLUMN_IS_PASSED,isPassed);
         return cv;
+    }
+
+    public enum MOS{
+        Moderate(0,"Moderate"),
+        Significant(1,"Significant"),
+        Heavy(2,"Heavy");
+
+        final private int id; // contains string resources id.
+        final private String str; // contains default string.
+        MOS(int id, String str){this.id=id; this.str=str;} // constructor & setter.
+        public String toString(){return str;}
     }
 
 }

@@ -11,11 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-//import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
-//import androidx.lifecycle.Observer;
-//import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
@@ -33,19 +30,11 @@ public class LogFragment extends Fragment {
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private TabPagerAdapter pagerAdapter;
-    //private LogViewModel logViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setHasOptionsMenu(true);
 
         root = inflater.inflate(R.layout.fragment_log, container, false);
-        /*logViewModel = ViewModelProviders.of(this).get(LogViewModel.class);
-        logViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                //Toast.makeText(getContext(), s, Toast.LENGTH_SHORT).show();
-            }
-        });*/
 
         tabLayout = root.findViewById(R.id.tabLayout_log);
         viewPager = root.findViewById(R.id.viewPager_log) ;

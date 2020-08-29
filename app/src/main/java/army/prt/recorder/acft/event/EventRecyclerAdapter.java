@@ -23,7 +23,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 import army.prt.recorder.R;
-import army.prt.recorder.acft.ACFTFragment;
+import army.prt.recorder.acft.CardioAlter;
+import army.prt.recorder.acft.Level;
 import army.prt.recorder.databinding.DurationpickBinding;
 import army.prt.recorder.databinding.RecyclerviewCountEventBinding;
 import army.prt.recorder.databinding.RecyclerviewDurationEventBinding;
@@ -32,15 +33,13 @@ import static android.text.InputType.TYPE_CLASS_NUMBER;
 import static android.text.InputType.TYPE_NUMBER_FLAG_DECIMAL;
 
 public class EventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private ACFTFragment fragment;
     private Context context;
     private Resources resources;
     public MutableLiveData<ArrayList<Event>> eventList;
 
-    public EventRecyclerAdapter(ACFTFragment fragment, MutableLiveData<ArrayList<Event>> eventList){
-        this.fragment = fragment;
-        context = fragment.getContext();
-        resources = fragment.getResources();
+    public EventRecyclerAdapter(Context context, MutableLiveData<ArrayList<Event>> eventList){
+        this.context = context;
+        resources = context.getResources();
         this.eventList = eventList;
     }
 
@@ -54,22 +53,18 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
         public void afterTextChanged(Editable s) {
             String string = s.toString();
             if(string.length()==0) return;
-            if(event.eventType != Event.SPT){
-                try { updateRawSco(Integer.parseInt(string)); }
-                catch (Exception e){ }
-            }
-            else{
-                try{ updateRawSco((int)(Float.parseFloat(string)*10)); }
-                catch(Exception e){ }
-            }
+            try{
+                if(event.eventType != Event.SPT) updateRawSco(Integer.parseInt(string));
+                else updateRawSco((int)(Float.parseFloat(string)*10));
+            }catch(Exception e){ return; }
         }
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
             if(fromUser) updateRawSco(progress);
         }
         public void onAdjustBtnClick(View v) {
             switch (v.getId()){
-                case R.id.btn_minus_event: updateRawSco(event.raw-1); break;
-                case R.id.btn_plus_event: updateRawSco(event.raw+1); break;
+                case R.id.btn_minus: updateRawSco(event.raw-1); break;
+                case R.id.btn_plus: updateRawSco(event.raw+1); break;
             }
         }
         private void updateRawSco(int rawSco){
@@ -80,13 +75,12 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
             updateEventList(event);
             binding.invalidateAll();
         }
+        public int getPassedColor(boolean isPassed){ return resources.getColor(isPassed ? R.color.passed: R.color.failed); }
         public String setQualifiedLevel(int sco) {
-            int qualifiedLevel;
-            if(sco>=70) qualifiedLevel = Event.HEAVY;
-            else if(sco>=65) qualifiedLevel = Event.SIGNIFICANT;
-            else if(sco>=60) qualifiedLevel = Event.MODERATE;
-            else qualifiedLevel = Event.FAIL;
-            return resources.getStringArray(R.array.Level)[qualifiedLevel];
+            if(sco>=70) return Level.Heavy.toString();
+            else if(sco>=65) return Level.Significant.toString();
+            else if(sco>=60) return Level.Moderate.toString();
+            else return Level.Fail.toString();
         }
     }
 
@@ -121,16 +115,15 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
             });
             builder.create().show();
         }
+        public int getPassedColor(boolean isPassed){ return resources.getColor(isPassed ? R.color.passed: R.color.failed); }
         public String setQualifiedLevel(int sco) {
-            int qualifiedLevel;
-            if(sco>=70) qualifiedLevel = Event.HEAVY;
-            else if(sco>=65) qualifiedLevel = Event.SIGNIFICANT;
-            else if(sco>=60) qualifiedLevel = Event.MODERATE;
-            else qualifiedLevel = Event.FAIL;
-            return resources.getStringArray(R.array.Level)[qualifiedLevel];
+            if(sco>=70) return Level.Heavy.toString();
+            else if(sco>=65) return Level.Significant.toString();
+            else if(sco>=60) return Level.Moderate.toString();
+            else return Level.Fail.toString();
         }
         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-            event.cardioAlter=position;
+            event.cardioAlter= CardioAlter.findById(position);
             event.giveScore();
             updateEventList(event);
             binding.invalidateAll();
@@ -153,7 +146,7 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
             holder.event = (CountEvent) eventList.getValue().get(position);
             holder.binding.setViewholder(holder);
             if(position == Event.SPT)
-                holder.binding.editTextRawEvent.setInputType(TYPE_CLASS_NUMBER | TYPE_NUMBER_FLAG_DECIMAL);
+                holder.binding.editTextRaw.setInputType(TYPE_CLASS_NUMBER | TYPE_NUMBER_FLAG_DECIMAL);
         }
         else if(viewHolder instanceof DurationViewHolder){
             final DurationViewHolder holder = (DurationViewHolder) viewHolder;
@@ -187,7 +180,7 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
         eventList.setValue(list);
     }
 
-    @BindingAdapter("android:selectedItemPosition")
+    @BindingAdapter("android:selection")
     public static void setSelectedItemPosition(AppCompatSpinner spinner, int selection) {
         spinner.setSelection(selection);
     }

@@ -7,7 +7,7 @@
     <data>
         <variable
             name="viewholder"
-            type="army.prt.recorder.acft.event.EventRecyclerAdapter.CountViewHolder" />
+            type="army.prt.recorder.abcp.ItemRecyclerAdapter.ViewHolder" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -22,13 +22,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
-            android:layout_marginEnd="20dp"
             android:textColor="?android:attr/textColorPrimary"
             android:textSize="24sp"
-            android:text="@{viewholder.event.title}"
+            android:text="@{viewholder.item.title}"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/editText_raw"
+            app:layout_constraintBottom_toTopOf="@+id/btn_minus"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
         <EditText
@@ -36,53 +35,22 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:inputType="number"
-            android:text="@{viewholder.event}"
-            android:afterTextChanged="@{viewholder::afterTextChanged}"
+            android:focusable="false"
+            android:text="@{viewholder.item}"
             app:layout_constraintHorizontal_bias="1"
             app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintTop_toBottomOf="@+id/txt_title"
-            app:layout_constraintBottom_toTopOf="@+id/btn_minus"
+            app:layout_constraintBaseline_toBaselineOf="@+id/txt_title"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/txt_unit"/>
+        <!--android:afterTextChanged="@{viewholder::afterTextChanged}"-->
         <TextView
             android:id="@+id/txt_unit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="5dp"
-            android:text="@{viewholder.event.unit}"
+            android:layout_marginStart="3dp"
+            android:text="@{viewholder.item.unit}"
             app:layout_constraintBaseline_toBaselineOf="@+id/editText_raw"
             app:layout_constraintStart_toEndOf="@+id/editText_raw"
-            app:layout_constraintEnd_toStartOf="@+id/editText_sco"/>
-        <EditText
-            android:id="@+id/editText_sco"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:focusable="false"
-            android:text="@{String.valueOf(viewholder.event.sco)}"
-            app:layout_constraintBaseline_toBaselineOf="@+id/txt_unit"
-            app:layout_constraintStart_toEndOf="@+id/txt_unit"
-            app:layout_constraintEnd_toStartOf="@+id/txt_sco"/>
-        <TextView
-            android:id="@+id/txt_sco"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="20dp"
-            android:text="@string/Points"
-            app:layout_constraintBaseline_toBaselineOf="@+id/editText_sco"
-            app:layout_constraintStart_toEndOf="@+id/editText_sco"
-            app:layout_constraintEnd_toStartOf="@+id/txt_level"/>
-        <TextView
-            android:id="@+id/txt_level"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="20dp"
-            android:gravity="center"
-            android:ems="4"
-            android:textColor="@{viewholder.getPassedColor(viewholder.event.sco>=60)}"
-            android:textSize="20sp"
-            android:text="@{viewholder.setQualifiedLevel(viewholder.event.sco)}"
-            app:layout_constraintBaseline_toBaselineOf="@+id/txt_sco"
-            app:layout_constraintStart_toEndOf="@+id/txt_sco"
             app:layout_constraintEnd_toEndOf="parent"/>
         <ImageButton
             android:id="@+id/btn_minus"
@@ -90,7 +58,7 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_remove"
             android:onClick="@{viewholder::onAdjustBtnClick}"
-            app:layout_constraintTop_toBottomOf="@+id/editText_raw"
+            app:layout_constraintTop_toBottomOf="@+id/txt_title"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/seekbar"/>
@@ -98,9 +66,9 @@
             android:id="@+id/seekbar"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:min="0"
-            android:max="@{viewholder.event.max}"
-            android:progress="@{viewholder.event.raw}"
+            app:min="@{viewholder.item.min}"
+            android:max="@{viewholder.item.max}"
+            android:progress="@{viewholder.item.raw}"
             android:onProgressChanged="@{viewholder::onProgressChanged}"
             app:layout_constraintTop_toTopOf="@+id/btn_minus"
             app:layout_constraintBottom_toBottomOf="@+id/btn_minus"
@@ -116,6 +84,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/seekbar"
             app:layout_constraintStart_toEndOf="@+id/seekbar"
             app:layout_constraintEnd_toEndOf="parent"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

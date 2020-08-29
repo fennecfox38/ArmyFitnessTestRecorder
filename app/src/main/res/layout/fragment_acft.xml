@@ -18,12 +18,53 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/layout_abstract_acft"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:padding="16dp"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
             app:layout_constraintTop_toBottomOf="@+id/recyclerView_acft"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
+
+            <RadioGroup
+                android:id="@+id/rGroup_MOS"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:orientation="horizontal"
+                android:onCheckedChanged="@{fragment::onMOSChanged}"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintHorizontal_chainStyle="spread_inside"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/txt_sco_total_header"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:text="@string/MOS"/>
+                <RadioButton
+                    android:id="@+id/rBtn_moderate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:checked="@{fragment.record.mos.ordinal()==0}"
+                    android:text="@string/Moderate"/>
+                <RadioButton
+                    android:id="@+id/rBtn_significant"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:checked="@{fragment.record.mos.ordinal()==1}"
+                    android:text="@string/Significant"/>
+                <RadioButton
+                    android:id="@+id/rBtn_heavy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:checked="@{fragment.record.mos.ordinal()==2}"
+                    android:text="@string/Heavy"/>
+            </RadioGroup>
 
             <TextView
                 android:id="@+id/txt_sco_total_header"
@@ -34,8 +75,8 @@
                 android:text="@string/Score"
                 app:layout_constraintHorizontal_bias="0"
                 app:layout_constraintHorizontal_chainStyle="packed"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toTopOf="@+id/txt_record_date"
+                app:layout_constraintTop_toBottomOf="@+id/rGroup_MOS"
+                app:layout_constraintBottom_toTopOf="@+id/btn_record_date"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/txt_sco_total"/>
             <TextView
@@ -63,19 +104,21 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
+                android:textColor="@{fragment.getPassedColor(fragment.record.isPassed)}"
                 android:textSize="25sp"
-                android:text="@{fragment.getLevelString(fragment.record.qualifiedLevel)}"
+                android:text="@{fragment.record.qualifiedLevel.toString()}"
                 app:layout_constraintBaseline_toBaselineOf="@+id/txt_qualifies"
                 app:layout_constraintStart_toEndOf="@+id/txt_qualifies"
                 app:layout_constraintEnd_toStartOf="@+id/fab"/>
 
-            <TextView
-                android:id="@+id/txt_record_date"
+            <ImageButton
+                android:id="@+id/btn_record_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
-                android:textSize="20sp"
-                android:text="@string/recordDate"
+                android:src="@drawable/ic_calendar"
+                android:background="@android:color/transparent"
+                android:onClick="@{fragment::onDateClick}"
                 app:layout_constraintHorizontal_bias="0"
                 app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintTop_toBottomOf="@+id/txt_sco_total_header"
@@ -90,17 +133,30 @@
                 android:focusable="false"
                 android:text="@{fragment.record.dateToString()}"
                 android:onClick="@{fragment::onDateClick}"
-                app:layout_constraintBaseline_toBaselineOf="@+id/txt_record_date"
-                app:layout_constraintStart_toEndOf="@+id/txt_record_date"
+                app:layout_constraintTop_toTopOf="@+id/btn_record_date"
+                app:layout_constraintBottom_toBottomOf="@+id/btn_record_date"
+                app:layout_constraintStart_toEndOf="@+id/btn_record_date"
+                app:layout_constraintEnd_toStartOf="@+id/fab"/>
+
+            <TextView
+                android:id="@+id/txt_isPassed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:textColor="@{fragment.getPassedColor(fragment.record.isPassed)}"
+                android:textSize="25sp"
+                android:text="@{fragment.getPassed(fragment.record.isPassed)}"
+                app:layout_constraintBaseline_toBaselineOf="@+id/editText_record_date"
+                app:layout_constraintStart_toEndOf="@+id/editText_record_date"
                 app:layout_constraintEnd_toStartOf="@+id/fab"/>
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fab"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="6dp"
                 android:src="@drawable/ic_save"
                 android:onClick="@{fragment::onSaveClick}"
-                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
 

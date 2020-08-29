@@ -16,12 +16,14 @@ import java.util.ArrayList;
 
 import army.prt.recorder.R;
 import army.prt.recorder.acft.ACFTRecord;
+import army.prt.recorder.acft.CardioAlter;
+import army.prt.recorder.acft.Level;
 
 import static army.prt.recorder.log.ACFTDBHelper.DBContract.*;
 
 public class ACFTDBHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = FileProvider.dbName;
-    private static final int DATABASE_VERSION=1;
+    private static final int DATABASE_VERSION=2;
     private Context context;
     private Resources resources;
 
@@ -56,9 +58,11 @@ public class ACFTDBHelper extends SQLiteOpenHelper {
             record.sco[3] = cursor.getInt(cursor.getColumnIndex(COLUMN_SCORE_SDC));
             record.sco[4] = cursor.getInt(cursor.getColumnIndex(COLUMN_SCORE_LTK));
             record.sco[5] = cursor.getInt(cursor.getColumnIndex(COLUMN_SCORE_CARDIO));
-            record.cardioAlter = getIndexOfStringArray(R.array.CardioEvent, cursor.getString(cursor.getColumnIndex(COLUMN_CARDIO_ALTER)));
-            record.qualifiedLevel = getIndexOfStringArray(R.array.Level, cursor.getString(cursor.getColumnIndex(COLUMN_QUALIFIED_LEVEL)));
+            record.cardioAlter = CardioAlter.findByString(cursor.getString(cursor.getColumnIndex(COLUMN_CARDIO_ALTER)));
+            record.qualifiedLevel = Level.valueOf(cursor.getString(cursor.getColumnIndex(COLUMN_QUALIFIED_LEVEL)));
             record.sco_total = cursor.getInt(cursor.getColumnIndex(COLUMN_SCORE_TOTAL));
+            record.mos = ACFTRecord.MOS.valueOf(cursor.getString(cursor.getColumnIndex(COLUMN_MOS_REQUIREMENT)));
+            record.isPassed = (cursor.getInt(cursor.getColumnIndex(COLUMN_IS_PASSED))!=0);
             list.add(record);
         }
 
@@ -101,9 +105,10 @@ public class ACFTDBHelper extends SQLiteOpenHelper {
         sqlExec += sqlWhere(COLUMN_SCORE_MDL,record.sco[0]) + "AND " + sqlWhere(COLUMN_SCORE_SPT,record.sco[1]) + "AND ";
         sqlExec += sqlWhere(COLUMN_SCORE_HPU,record.sco[2]) + "AND " + sqlWhere(COLUMN_SCORE_SDC,record.sco[3]) + "AND ";
         sqlExec += sqlWhere(COLUMN_SCORE_LTK,record.sco[4]) + "AND " + sqlWhere(COLUMN_SCORE_CARDIO,record.sco[5]) + "AND ";
-        sqlExec += sqlWhere(COLUMN_CARDIO_ALTER,resources.getStringArray(R.array.CardioEvent)[record.cardioAlter]) + "AND ";
-        sqlExec += sqlWhere(COLUMN_QUALIFIED_LEVEL,resources.getStringArray(R.array.Level)[record.qualifiedLevel]) + "AND ";
-        sqlExec += sqlWhere(COLUMN_SCORE_TOTAL,record.sco_total);
+        sqlExec += sqlWhere(COLUMN_CARDIO_ALTER,record.cardioAlter.toString()) + "AND ";
+        sqlExec += sqlWhere(COLUMN_QUALIFIED_LEVEL,record.qualifiedLevel.toString()) + "AND ";
+        sqlExec += sqlWhere(COLUMN_SCORE_TOTAL,record.sco_total) + "AND " + sqlWhere(COLUMN_MOS_REQUIREMENT,record.mos.toString()) + "AND ";
+        sqlExec += sqlWhere(COLUMN_IS_PASSED,(record.isPassed?1:0));
         SQLiteDatabase db = getWritableDatabase();
         if(db == null) return;
         try {
@@ -147,6 +152,8 @@ public class ACFTDBHelper extends SQLiteOpenHelper {
         row.createCell(13).setCellValue(COLUMN_CARDIO_ALTER);
         row.createCell(14).setCellValue(COLUMN_QUALIFIED_LEVEL);
         row.createCell(15).setCellValue(COLUMN_SCORE_TOTAL);
+        row.createCell(16).setCellValue(COLUMN_MOS_REQUIREMENT);
+        row.createCell(17).setCellValue(COLUMN_IS_PASSED);
 
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor= db.rawQuery(SQL_SELECT,null);
@@ -172,6 +179,8 @@ public class ACFTDBHelper extends SQLiteOpenHelper {
             row.createCell(14).setCellValue(getIndexOfStringArray(R.array.Level,
                     cursor.getString(cursor.getColumnIndex(COLUMN_QUALIFIED_LEVEL))));
             row.createCell(15).setCellValue(cursor.getInt(cursor.getColumnIndex(COLUMN_SCORE_TOTAL)));
+            row.createCell(16).setCellValue(cursor.getString(cursor.getColumnIndex(COLUMN_MOS_REQUIREMENT)));
+            row.createCell(17).setCellValue(cursor.getInt(cursor.getColumnIndex(COLUMN_IS_PASSED)));
         }
 
         cursor.close();
@@ -197,6 +206,7 @@ public class ACFTDBHelper extends SQLiteOpenHelper {
         public static final String COLUMN_SCORE_MDL = "MDLScore", COLUMN_SCORE_SPT = "SPTScore", COLUMN_SCORE_HPU = "HPUScore";
         public static final String COLUMN_SCORE_SDC = "SDCScore", COLUMN_SCORE_LTK = "LTKScore", COLUMN_SCORE_CARDIO = "CardioScore";
         public static final String COLUMN_CARDIO_ALTER = "CardioAlter", COLUMN_SCORE_TOTAL = "ScoreTotal", COLUMN_QUALIFIED_LEVEL = "QualifiedLevel";
+        public static final String COLUMN_MOS_REQUIREMENT = "MOSRequirement", COLUMN_IS_PASSED = "isPassed";
 
         public static final String SQL_CREATE_TBL="CREATE TABLE IF NOT EXISTS "+ TABLE_NAME +" ("+
                 //_ID+" INTEGER PRIMARY KEY AUTOINCREMENT,"+
@@ -208,7 +218,8 @@ public class ACFTDBHelper extends SQLiteOpenHelper {
                 COLUMN_RAW_LTK+" INTEGER NOT NULL,"+ COLUMN_SCORE_LTK+" INTEGER NOT NULL,"+
                 COLUMN_RAW_CARDIO+" TEXT NOT NULL,"+ COLUMN_SCORE_CARDIO+" INTEGER NOT NULL,"+
                 COLUMN_CARDIO_ALTER+" TEXT NOT NULL,"+ COLUMN_QUALIFIED_LEVEL+" TEXT NOT NULL,"+
-                COLUMN_SCORE_TOTAL+" INTEGER NOT NULL)";
+                COLUMN_SCORE_TOTAL+" INTEGER NOT NULL,"+COLUMN_MOS_REQUIREMENT+" TEXT NOT NULL,"+
+                COLUMN_IS_PASSED+" INTEGER NOT NULL)";
         public static final String SQL_DROP_TBL = "DROP TABLE IF EXISTS "+ TABLE_NAME;
         public static final String SQL_SELECT = "SELECT * FROM " + TABLE_NAME;
         public static final String SQL_INSERT = "INSERT OR REPLACE INTO "+TABLE_NAME+
@@ -216,7 +227,8 @@ public class ACFTDBHelper extends SQLiteOpenHelper {
                 COLUMN_RAW_MDL+", "+COLUMN_SCORE_MDL+", "+ COLUMN_RAW_SPT+", "+COLUMN_SCORE_SPT+", "+
                 COLUMN_RAW_HPU+", "+COLUMN_SCORE_HPU+", "+ COLUMN_RAW_SDC+", "+COLUMN_SCORE_SDC+", "+
                 COLUMN_RAW_LTK+", "+COLUMN_SCORE_LTK+", "+ COLUMN_RAW_CARDIO+", "+COLUMN_SCORE_CARDIO+", "+
-                COLUMN_CARDIO_ALTER+", "+COLUMN_QUALIFIED_LEVEL+", "+COLUMN_SCORE_TOTAL+") VALUES";
+                COLUMN_CARDIO_ALTER+", "+COLUMN_QUALIFIED_LEVEL+", "+COLUMN_SCORE_TOTAL+", "+
+                COLUMN_MOS_REQUIREMENT+", "+COLUMN_IS_PASSED+") VALUES";
         public static final String SQL_DELETE_WHERE = "DELETE FROM " + TABLE_NAME + " WHERE ";
         public static final String SQL_DELETE_ALL = "DELETE FROM " + TABLE_NAME;
     }
