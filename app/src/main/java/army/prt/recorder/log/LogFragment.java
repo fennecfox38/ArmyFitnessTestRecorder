@@ -84,7 +84,8 @@ public class LogFragment extends Fragment {
         ACFTDBHelper acftDBHelper = new ACFTDBHelper(requireContext());
         acftDBHelper.exportExcel(workbook); acftDBHelper.close();
         //apftDBHelper
-        //abcpDBHelper
+        ABCPDBHelper abcpDBHelper = new ABCPDBHelper(requireContext());
+        abcpDBHelper.exportExcel(workbook); abcpDBHelper.close();
         try{
             FileProvider xlsProvider = new FileProvider(requireContext());
             FileOutputStream fileOutputStream = new FileOutputStream(xlsProvider.xls);

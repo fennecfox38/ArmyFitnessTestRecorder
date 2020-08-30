@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import army.prt.recorder.MainActivity;
 import army.prt.recorder.R;
 import army.prt.recorder.databinding.FragmentAbcpBinding;
+import army.prt.recorder.log.ABCPDBHelper;
 
 public class ABCPFragment extends Fragment {
     private MainActivity activity;
@@ -108,13 +109,9 @@ public class ABCPFragment extends Fragment {
     public String getPassed(boolean isPassed){ return getString(isPassed ? R.string.pass: R.string.fail); }
 
     public void onSaveClick(View view) {
-        /*ABCPDBHelper dbHelper = new ABCPDBHelper(requireContext());
+        ABCPDBHelper dbHelper = new ABCPDBHelper(requireContext());
         dbHelper.insertRecord(record);
-        dbHelper.close();*/
-        /*String str = record.dateToString() + "\n";
-        str += record.sex.toString() + "\n";
-        str += record.ageGroup;
-        Toast.makeText(requireContext(),str,Toast.LENGTH_SHORT).show();*/
+        dbHelper.close();
         //Bundle bundle = new Bundle(); bundle.putInt("page",TAB_ABCP);
         Snackbar.make(binding.getRoot(),"Saving is on maintenance", Snackbar.LENGTH_SHORT)
                 .setAction("log", v -> activity.navController.navigate(R.id.navigation_log/*, bundle*/)).show();
@@ -151,7 +148,7 @@ public class ABCPFragment extends Fragment {
 
     public void onAgeSelected(AdapterView<?> parent, View view, int position, long id) {
         record.ageGroup = ABCPRecord.AgeGroup.findById(position);
-        record.invalidate();
+        record.invalidatePass();
         binding.invalidateAll();
     }
 

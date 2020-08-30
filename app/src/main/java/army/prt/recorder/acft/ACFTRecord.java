@@ -1,7 +1,6 @@
 package army.prt.recorder.acft;
 
 import android.content.ContentValues;
-import android.content.res.Resources;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -9,7 +8,8 @@ import java.util.Calendar;
 import army.prt.recorder.acft.event.CountEvent;
 import army.prt.recorder.acft.event.DurationEvent;
 import army.prt.recorder.acft.event.Event;
-import army.prt.recorder.log.ACFTDBHelper;
+
+import static army.prt.recorder.log.ACFTDBHelper.DBContract.*;
 
 public class ACFTRecord{
     public int[] sco = {0, 0, 0, 0, 0, 0};
@@ -91,26 +91,26 @@ public class ACFTRecord{
         return ( (num.length()<2) ? "0"+num : num );
     }
 
-    public ContentValues getContentValues(Resources resources){
+    public ContentValues getContentValues(){
         ContentValues cv = new ContentValues();
-        cv.put(ACFTDBHelper.DBContract.COLUMN_RECORD_DATE,dateToString());
-        cv.put(ACFTDBHelper.DBContract.COLUMN_RAW_MDL,raw_0);
-        cv.put(ACFTDBHelper.DBContract.COLUMN_SCORE_MDL,sco[0]);
-        cv.put(ACFTDBHelper.DBContract.COLUMN_RAW_SPT,raw_1);
-        cv.put(ACFTDBHelper.DBContract.COLUMN_SCORE_SPT,sco[1]);
-        cv.put(ACFTDBHelper.DBContract.COLUMN_RAW_HPU,raw_2);
-        cv.put(ACFTDBHelper.DBContract.COLUMN_SCORE_HPU,sco[2]);
-        cv.put(ACFTDBHelper.DBContract.COLUMN_RAW_SDC,raw_3.toString());
-        cv.put(ACFTDBHelper.DBContract.COLUMN_SCORE_SDC,sco[3]);
-        cv.put(ACFTDBHelper.DBContract.COLUMN_RAW_LTK,raw_4);
-        cv.put(ACFTDBHelper.DBContract.COLUMN_SCORE_LTK,sco[4]);
-        cv.put(ACFTDBHelper.DBContract.COLUMN_RAW_CARDIO,raw_5.toString());
-        cv.put(ACFTDBHelper.DBContract.COLUMN_SCORE_CARDIO,sco[5]);
-        cv.put(ACFTDBHelper.DBContract.COLUMN_CARDIO_ALTER,cardioAlter.toString());
-        cv.put(ACFTDBHelper.DBContract.COLUMN_QUALIFIED_LEVEL,qualifiedLevel.toString());
-        cv.put(ACFTDBHelper.DBContract.COLUMN_SCORE_TOTAL,sco_total);
-        cv.put(ACFTDBHelper.DBContract.COLUMN_MOS_REQUIREMENT,mos.toString());
-        cv.put(ACFTDBHelper.DBContract.COLUMN_IS_PASSED,isPassed);
+        cv.put(COLUMN_RECORD_DATE,dateToString());
+        cv.put(COLUMN_RAW_MDL,raw_0);
+        cv.put(COLUMN_SCORE_MDL,sco[0]);
+        cv.put(COLUMN_RAW_SPT,Math.round(raw_1*10)/10.f);
+        cv.put(COLUMN_SCORE_SPT,sco[1]);
+        cv.put(COLUMN_RAW_HPU,raw_2);
+        cv.put(COLUMN_SCORE_HPU,sco[2]);
+        cv.put(COLUMN_RAW_SDC,raw_3.toString());
+        cv.put(COLUMN_SCORE_SDC,sco[3]);
+        cv.put(COLUMN_RAW_LTK,raw_4);
+        cv.put(COLUMN_SCORE_LTK,sco[4]);
+        cv.put(COLUMN_RAW_CARDIO,raw_5.toString());
+        cv.put(COLUMN_SCORE_CARDIO,sco[5]);
+        cv.put(COLUMN_CARDIO_ALTER,cardioAlter.toString());
+        cv.put(COLUMN_QUALIFIED_LEVEL,qualifiedLevel.toString());
+        cv.put(COLUMN_SCORE_TOTAL,sco_total);
+        cv.put(COLUMN_MOS_REQUIREMENT,mos.toString());
+        cv.put(COLUMN_IS_PASSED,Boolean.toString(isPassed));
         return cv;
     }
 

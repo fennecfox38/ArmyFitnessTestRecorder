@@ -14,7 +14,6 @@ import org.apache.poi.ss.usermodel.Workbook;
 
 import java.util.ArrayList;
 
-import army.prt.recorder.R;
 import army.prt.recorder.acft.ACFTRecord;
 import army.prt.recorder.acft.CardioAlter;
 import army.prt.recorder.acft.Level;
@@ -22,19 +21,24 @@ import army.prt.recorder.acft.Level;
 import static army.prt.recorder.log.ACFTDBHelper.DBContract.*;
 
 public class ACFTDBHelper extends SQLiteOpenHelper {
-    public static final String DATABASE_NAME = FileProvider.dbName;
-    private static final int DATABASE_VERSION=2;
-    private Context context;
-    private Resources resources;
 
     public ACFTDBHelper(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
-        this.context=context; resources = context.getResources();
+        super(context, FileProvider.dbName, null, FileProvider.dbVersion);
     }
 
     @Override public void onCreate(SQLiteDatabase db) { db.execSQL(SQL_CREATE_TBL); }
     @Override public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL(SQL_DROP_TBL); onCreate(db);
+        db.execSQL(SQL_DROP_TBL); db.execSQL(SQL_CREATE_TBL);
+    }
+    @Override public SQLiteDatabase getReadableDatabase() {
+        SQLiteDatabase db = super.getReadableDatabase();
+        db.execSQL(SQL_CREATE_TBL);
+        return db;
+    }
+    @Override public SQLiteDatabase getWritableDatabase() {
+        SQLiteDatabase db = super.getWritableDatabase();
+        db.execSQL(SQL_CREATE_TBL);
+        return db;
     }
 
     public ArrayList<ACFTRecord> getRecordList(){
@@ -62,7 +66,7 @@ public class ACFTDBHelper extends SQLiteOpenHelper {
             record.qualifiedLevel = Level.valueOf(cursor.getString(cursor.getColumnIndex(COLUMN_QUALIFIED_LEVEL)));
             record.sco_total = cursor.getInt(cursor.getColumnIndex(COLUMN_SCORE_TOTAL));
             record.mos = ACFTRecord.MOS.valueOf(cursor.getString(cursor.getColumnIndex(COLUMN_MOS_REQUIREMENT)));
-            record.isPassed = (cursor.getInt(cursor.getColumnIndex(COLUMN_IS_PASSED))!=0);
+            record.isPassed = Boolean.parseBoolean(cursor.getString(cursor.getColumnIndex(COLUMN_IS_PASSED)));
             list.add(record);
         }
 
@@ -78,7 +82,7 @@ public class ACFTDBHelper extends SQLiteOpenHelper {
             db.beginTransaction();          //clear the table first
             db.delete(TABLE_NAME,null,null);
             for(ACFTRecord record : list)   //go through the list and add one by one
-                db.insert(TABLE_NAME, null, record.getContentValues(resources));
+                db.insert(TABLE_NAME, null, record.getContentValues());
             db.setTransactionSuccessful();
         } catch (SQLException e) { e.printStackTrace(); }
         finally { db.endTransaction(); }
@@ -90,7 +94,7 @@ public class ACFTDBHelper extends SQLiteOpenHelper {
         if(db == null) return;
         try {
             db.beginTransaction();  // add one by one
-            db.insert(TABLE_NAME, null, record.getContentValues(resources));
+            db.insert(TABLE_NAME, null, record.getContentValues());
             db.setTransactionSuccessful();
         } catch (SQLException e) { e.printStackTrace(); }
         finally { db.endTransaction(); }
@@ -108,12 +112,15 @@ public class ACFTDBHelper extends SQLiteOpenHelper {
         sqlExec += sqlWhere(COLUMN_CARDIO_ALTER,record.cardioAlter.toString()) + "AND ";
         sqlExec += sqlWhere(COLUMN_QUALIFIED_LEVEL,record.qualifiedLevel.toString()) + "AND ";
         sqlExec += sqlWhere(COLUMN_SCORE_TOTAL,record.sco_total) + "AND " + sqlWhere(COLUMN_MOS_REQUIREMENT,record.mos.toString()) + "AND ";
-        sqlExec += sqlWhere(COLUMN_IS_PASSED,(record.isPassed?1:0));
+        sqlExec += sqlWhere(COLUMN_IS_PASSED,Boolean.toString(record.isPassed));
         SQLiteDatabase db = getWritableDatabase();
+
         if(db == null) return;
         try {
             db.beginTransaction();
             db.execSQL(sqlExec);
+            //db.delete(TABLE_NAME, "ROW_NUMBER()"+"="+ position+1, null);
+            //db.execSQL("DELETE FROM "+TABLE_NAME+" WHERE _id="+String.valueOf(id));
             db.setTransactionSuccessful();
         } catch (SQLException e) { e.printStackTrace(); }
         finally { db.endTransaction(); }
@@ -164,7 +171,7 @@ public class ACFTDBHelper extends SQLiteOpenHelper {
             row.createCell(0).setCellValue(cursor.getString(cursor.getColumnIndex(COLUMN_RECORD_DATE)));
             row.createCell(1).setCellValue(cursor.getInt(cursor.getColumnIndex(COLUMN_RAW_MDL)));
             row.createCell(2).setCellValue(cursor.getInt(cursor.getColumnIndex(COLUMN_SCORE_MDL)));
-            row.createCell(3).setCellValue(cursor.getFloat(cursor.getColumnIndex(COLUMN_RAW_SPT)));
+            row.createCell(3).setCellValue(preciseFloat(cursor.getFloat(cursor.getColumnIndex(COLUMN_RAW_SPT))));
             row.createCell(4).setCellValue(cursor.getInt(cursor.getColumnIndex(COLUMN_SCORE_SPT)));
             row.createCell(5).setCellValue(cursor.getInt(cursor.getColumnIndex(COLUMN_RAW_HPU)));
             row.createCell(6).setCellValue(cursor.getInt(cursor.getColumnIndex(COLUMN_SCORE_HPU)));
@@ -174,13 +181,11 @@ public class ACFTDBHelper extends SQLiteOpenHelper {
             row.createCell(10).setCellValue(cursor.getInt(cursor.getColumnIndex(COLUMN_SCORE_LTK)));
             row.createCell(11).setCellValue(cursor.getString(cursor.getColumnIndex(COLUMN_RAW_CARDIO)));
             row.createCell(12).setCellValue(cursor.getInt(cursor.getColumnIndex(COLUMN_SCORE_CARDIO)));
-            row.createCell(13).setCellValue(getIndexOfStringArray(R.array.CardioEvent,
-                    cursor.getString(cursor.getColumnIndex(COLUMN_CARDIO_ALTER))));
-            row.createCell(14).setCellValue(getIndexOfStringArray(R.array.Level,
-                    cursor.getString(cursor.getColumnIndex(COLUMN_QUALIFIED_LEVEL))));
+            row.createCell(13).setCellValue(cursor.getString(cursor.getColumnIndex(COLUMN_CARDIO_ALTER)));
+            row.createCell(14).setCellValue(cursor.getString(cursor.getColumnIndex(COLUMN_QUALIFIED_LEVEL)));
             row.createCell(15).setCellValue(cursor.getInt(cursor.getColumnIndex(COLUMN_SCORE_TOTAL)));
             row.createCell(16).setCellValue(cursor.getString(cursor.getColumnIndex(COLUMN_MOS_REQUIREMENT)));
-            row.createCell(17).setCellValue(cursor.getInt(cursor.getColumnIndex(COLUMN_IS_PASSED)));
+            row.createCell(17).setCellValue(Boolean.parseBoolean(cursor.getString(cursor.getColumnIndex(COLUMN_IS_PASSED))));
         }
 
         cursor.close();
@@ -189,14 +194,8 @@ public class ACFTDBHelper extends SQLiteOpenHelper {
 
     private static String sqlWhere(String column, String arg){ return (column+"=\""+arg+"\" "); }
     private static String sqlWhere(String column, int arg){ return (column+"="+ arg +" "); }
-    private static String sqlWhere(String column, float arg){ return (column+"="+ arg +" "); }
-
-    public int getIndexOfStringArray(int arrayId, String str){
-        String[] array = resources.getStringArray(arrayId);
-        for(int index = 0; index<array.length; ++index)
-            if(str.equals(array[index])) return index;
-        return -1;
-    }
+    private static String sqlWhere(String column, float arg){ return ("abs("+column+"-"+ arg +")<0.01 "); }
+    private static double preciseFloat(float obj){ return (double)(Math.floor(obj*10)/10); }
 
     public static final class DBContract implements BaseColumns {
         public static final String TABLE_NAME = "ACFTRecord";
@@ -219,7 +218,7 @@ public class ACFTDBHelper extends SQLiteOpenHelper {
                 COLUMN_RAW_CARDIO+" TEXT NOT NULL,"+ COLUMN_SCORE_CARDIO+" INTEGER NOT NULL,"+
                 COLUMN_CARDIO_ALTER+" TEXT NOT NULL,"+ COLUMN_QUALIFIED_LEVEL+" TEXT NOT NULL,"+
                 COLUMN_SCORE_TOTAL+" INTEGER NOT NULL,"+COLUMN_MOS_REQUIREMENT+" TEXT NOT NULL,"+
-                COLUMN_IS_PASSED+" INTEGER NOT NULL)";
+                COLUMN_IS_PASSED+" TEXT NOT NULL)";
         public static final String SQL_DROP_TBL = "DROP TABLE IF EXISTS "+ TABLE_NAME;
         public static final String SQL_SELECT = "SELECT * FROM " + TABLE_NAME;
         public static final String SQL_INSERT = "INSERT OR REPLACE INTO "+TABLE_NAME+

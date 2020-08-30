@@ -1,9 +1,13 @@
 package army.prt.recorder.abcp;
 
+import android.content.ContentValues;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 
 import army.prt.recorder.Standard;
+
+import static army.prt.recorder.log.ABCPDBHelper.DBContract.*;
 
 public class ABCPRecord {
     public Sex sex = Sex.Male; public AgeGroup ageGroup= AgeGroup._17_20;
@@ -28,7 +32,7 @@ public class ABCPRecord {
                 case Item.HIPS: hips = ((item.raw)/2.f + 20); break;
             }
         }
-        invalidate();
+        invalidatePass();
     }
     public void restoreItemList(ArrayList<Item> items){
         for(Item item : items){
@@ -42,7 +46,7 @@ public class ABCPRecord {
         }
     }
 
-    public void invalidate(){
+    public void invalidatePass(){
         height_weight = Standard.ABCP.isHWPassed(sex.ordinal(),ageGroup.ordinal(),height,weight);
         bodyFatPercentage = (sex==Sex.Male ? Standard.ABCP.maleBodyFat(height,neck, abdomen_waist) : Standard.ABCP.femaleBodyFat(height,neck, abdomen_waist,hips));
         bodyFatPass = Standard.ABCP.isBodyFatPassed(sex.ordinal(), ageGroup.ordinal(), bodyFatPercentage);
@@ -66,6 +70,23 @@ public class ABCPRecord {
 
     private String make2digit(String num){ // make number 2 digit by adding 0 at front.
         return ( (num.length()<2) ? "0"+num : num );
+    }
+
+    public ContentValues getContentValues() {
+        ContentValues cv = new ContentValues();
+        cv.put(COLUMN_RECORD_DATE,dateToString());
+        cv.put(COLUMN_SEX,sex.toString());
+        cv.put(COLUMN_AGE_GROUP,ageGroup.toString());
+        cv.put(COLUMN_HEIGHT,height);
+        cv.put(COLUMN_WEIGHT,weight);
+        cv.put(COLUMN_NECK,neck);
+        cv.put(COLUMN_ABDOMEN_WAIST,abdomen_waist);
+        cv.put(COLUMN_HIPS,(sex==Sex.Female?hips:null));
+        cv.put(COLUMN_BODY_FAT_PERCENT,bodyFatPercentage);
+        cv.put(COLUMN_HW_PASSED,Boolean.toString(height_weight));
+        cv.put(COLUMN_BODY_FAT_PASSED,Boolean.toString(bodyFatPass));
+        cv.put(COLUMN_TOTAL_PASSED,Boolean.toString(totalPass));
+        return cv;
     }
 
     public enum Sex{

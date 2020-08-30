@@ -11,8 +11,4 @@ public class Item {
         this.min = min;
         this.max = max;
     }
-
-    protected Item clone(){
-        return new Item(itemType,title,unit,min,max);
-    }
 }

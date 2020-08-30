@@ -47,9 +47,9 @@ public class ACFTLogRecyclerAdapter extends RecyclerView.Adapter<ACFTLogRecycler
                     return false;
                 });
                 menu.add(0,1,1,resources.getString(R.string.delete)).setOnMenuItemClickListener(item -> {
-                    list.remove(getAdapterPosition());  notifyItemRemoved(getAdapterPosition());
                     ACFTDBHelper dbHelper = new ACFTDBHelper(context);
                     dbHelper.deleteRecord(record);  dbHelper.close();
+                    list.remove(getAdapterPosition());  notifyItemRemoved(getAdapterPosition());
                     Snackbar.make(itemView, resources.getString(R.string.recordDeleted), Snackbar.LENGTH_SHORT)
                             .setAction(resources.getString(R.string.undo), view1 -> {
                                 list.add(record);   notifyItemInserted(list.size()-1);
