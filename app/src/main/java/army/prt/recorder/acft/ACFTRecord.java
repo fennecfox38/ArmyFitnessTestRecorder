@@ -6,7 +6,6 @@ import android.content.res.Resources;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-import army.prt.recorder.R;
 import army.prt.recorder.acft.event.CountEvent;
 import army.prt.recorder.acft.event.DurationEvent;
 import army.prt.recorder.acft.event.Event;
@@ -18,7 +17,7 @@ public class ACFTRecord{
     public Duration raw_3 = new Duration(0), raw_5 = new Duration(0);
     public CardioAlter cardioAlter = CardioAlter.RUN;
     public Level qualifiedLevel = Level.Fail;
-    public int sco_total=0;// qualifiedLevel = 0;
+    public int sco_total=0;
     public MOS mos = MOS.Moderate;
     public boolean isPassed=false;
     public int year, month, day;
@@ -45,14 +44,11 @@ public class ACFTRecord{
                     break;
             }
             sco[event.eventType] = event.sco;
-
-            if(sco[event.eventType]<60) qualifiedLevel = Level.Fail;
-            else if(sco[event.eventType]<65){ if(qualifiedLevel.compareTo(Level.Moderate)>0) qualifiedLevel = Level.Moderate; }
-            else if(sco[event.eventType]<70){ if(qualifiedLevel.compareTo(Level.Significant)>0) qualifiedLevel = Level.Significant; }
-            //else // nothing need to do for over 70.
             sco_total += sco[event.eventType];
+
+            if (qualifiedLevel.compareTo(event.level) > 0) qualifiedLevel = event.level;
         }
-        invalidate();
+        invalidateLevel();
     }
 
     public void restoreEventList(ArrayList<Event> eventList){
@@ -69,12 +65,12 @@ public class ACFTRecord{
                     break;
             }
             event.sco = sco[event.eventType];
+            event.giveLevel();
         }
     }
 
-    public void invalidate(){
+    public void invalidateLevel(){
         isPassed = (qualifiedLevel.ordinal()>mos.ordinal()); // qualifiedLevel>=mos.ordinal()+1
-        // Issue! : it should be 'Pass' if it is Cardio Alternative Event.
     }
 
     public String dateToString(){

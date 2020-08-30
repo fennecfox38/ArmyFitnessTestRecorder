@@ -132,7 +132,7 @@ public class ACFTFragment extends Fragment{
             case R.id.rBtn_significant: record.mos = ACFTRecord.MOS.Significant;break;
             case R.id.rBtn_heavy: record.mos = ACFTRecord.MOS.Heavy; break;
         }
-        record.invalidate();
+        record.invalidateLevel();
         binding.invalidateAll();
     }
 

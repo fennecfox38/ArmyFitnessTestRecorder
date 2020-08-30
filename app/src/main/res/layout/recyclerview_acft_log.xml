@@ -116,7 +116,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="@{viewholder.getLevel(viewholder.record.sco[0])}"/>
+                android:text="@{viewholder.getLevel(viewholder.record.sco[0],false)}"/>
         </TableRow>
 
         <TableRow
@@ -164,7 +164,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="@{viewholder.getLevel(viewholder.record.sco[1])}"/>
+                android:text="@{viewholder.getLevel(viewholder.record.sco[1],false)}"/>
         </TableRow>
 
         <TableRow
@@ -214,7 +214,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="@{viewholder.getLevel(viewholder.record.sco[2])}"/>
+                android:text="@{viewholder.getLevel(viewholder.record.sco[2],false)}"/>
         </TableRow>
 
         <TableRow
@@ -252,7 +252,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="@{viewholder.getLevel(viewholder.record.sco[3])}"/>
+                android:text="@{viewholder.getLevel(viewholder.record.sco[3],false)}"/>
         </TableRow>
 
         <TableRow
@@ -300,7 +300,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="@{viewholder.getLevel(viewholder.record.sco[4])}"/>
+                android:text="@{viewholder.getLevel(viewholder.record.sco[4],false)}"/>
         </TableRow>
 
         <TableRow
@@ -338,7 +338,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="@{viewholder.getLevel(viewholder.record.sco[5])}"/>
+                android:text="@{viewholder.getLevel(viewholder.record.sco[5],viewholder.record.cardioAlter.ordinal()!=0)}"/>
         </TableRow>
 
     </TableLayout>

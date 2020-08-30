@@ -10,13 +10,14 @@ public class CountEvent extends Event{
         this.unit = unit;
     }
 
-    public void giveScore(){
+    @Override public void giveScore(){
         switch (eventType){
             case Event.MDL: sco = MDLScore(raw); break;
             case Event.SPT: sco = SPTScore(raw);break;
             case Event.HPU: sco = giveHPUScore(raw); break;
             case Event.LTK: sco = giveLTKScore(raw); break;
         }
+        super.giveScore(); // giveLevel();
     }
 
     public static int MDLScore(int raw){

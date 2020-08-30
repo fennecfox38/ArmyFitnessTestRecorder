@@ -78,9 +78,9 @@
             android:layout_marginEnd="20dp"
             android:gravity="center"
             android:ems="4"
-            android:textColor="@{viewholder.getPassedColor(viewholder.event.sco>=60)}"
+            android:textColor="@{viewholder.getPassedColor(viewholder.event.level.isPassed())}"
             android:textSize="20sp"
-            android:text="@{viewholder.setQualifiedLevel(viewholder.event.sco)}"
+            android:text="@{viewholder.event.level.toString()}"
             app:layout_constraintBaseline_toBaselineOf="@+id/txt_sco"
             app:layout_constraintStart_toEndOf="@+id/txt_sco"
             app:layout_constraintEnd_toEndOf="parent"/>

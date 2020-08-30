@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import army.prt.recorder.R;
 import army.prt.recorder.acft.ACFTRecord;
 import army.prt.recorder.acft.Level;
-import army.prt.recorder.acft.event.Event;
 import army.prt.recorder.databinding.RecyclerviewAcftLogBinding;
 
 public class ACFTLogRecyclerAdapter extends RecyclerView.Adapter<ACFTLogRecyclerAdapter.ACFTLogViewHolder> {
@@ -64,8 +63,9 @@ public class ACFTLogRecyclerAdapter extends RecyclerView.Adapter<ACFTLogRecycler
         }
         public int getPassedColor(boolean isPassed){ return resources.getColor(isPassed ? R.color.passed: R.color.failed); }
         public String getPassed(boolean isPassed){ return resources.getString(isPassed ? R.string.pass: R.string.fail); }
-        public String getLevel(int sco){
-            if(sco<60) return Level.Fail.toString();
+        public String getLevel(int sco, boolean pf){
+            if(pf) return getPassed(sco>=60);
+            else if(sco<60) return Level.Fail.toString();
             else if(sco<65) return Level.Moderate.toString();
             else if(sco<70) return Level.Significant.toString();
             else return Level.Heavy.toString();

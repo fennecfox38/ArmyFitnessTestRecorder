@@ -2,6 +2,7 @@ package army.prt.recorder.acft.event;
 
 import army.prt.recorder.acft.CardioAlter;
 import army.prt.recorder.acft.Duration;
+import army.prt.recorder.acft.Level;
 
 public class DurationEvent extends Event{
     public static final int RUN=0,ROW=1,BIKE=2,SWIM=3;
@@ -13,10 +14,16 @@ public class DurationEvent extends Event{
         duration = new Duration(0,0);
     }
 
-    public void giveScore(){
+    @Override public void giveScore(){
         if(eventType == SDC) sco = SDCScore(duration);
         else if(cardioAlter== CardioAlter.RUN) sco = RUNScore(duration);
         else sco = AlterScore(duration);
+        super.giveScore();
+    }
+
+    @Override public void giveLevel(){
+        if(cardioAlter != CardioAlter.RUN) level = (sco>=60 ? Level.Pass : Level.Fail);
+        else super.giveLevel();
     }
 
     public static int SDCScore(Duration duration){

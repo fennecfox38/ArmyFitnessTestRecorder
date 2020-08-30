@@ -76,12 +76,6 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
             binding.invalidateAll();
         }
         public int getPassedColor(boolean isPassed){ return resources.getColor(isPassed ? R.color.passed: R.color.failed); }
-        public String setQualifiedLevel(int sco) {
-            if(sco>=70) return Level.Heavy.toString();
-            else if(sco>=65) return Level.Significant.toString();
-            else if(sco>=60) return Level.Moderate.toString();
-            else return Level.Fail.toString();
-        }
     }
 
     public class DurationViewHolder extends RecyclerView.ViewHolder{
