@@ -2,6 +2,8 @@ package army.prt.recorder.acft;
 
 import android.content.ContentValues;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -114,6 +116,22 @@ public class ACFTRecord{
         return cv;
     }
 
+    @NotNull @Override public String toString() {
+        return "Record Date: " +dateToString() +
+                "\nMOS Requirement: " + mos.toString() +
+                "\nMDL: " + raw_0 + "lbs / score: "+ sco[0] +
+                "\nSPT: " + raw_1 + "m / score: "+ sco[1] +
+                "\nHPU: " + raw_2 + "reps / score: "+ sco[2] +
+                "\nSDC: " + raw_3.toString() + " / score: "+ sco[3] +
+                "\nLTK: " + raw_4 + "reps / score: "+ sco[4] +
+                "\n"+ cardioAlter.toString() +": " + raw_5.toString() + " / score: "+ sco[5] +
+                "\nQualified: " + qualifiedLevel.toString() +
+                "\nScore Total: " + sco_total +
+                "\n" + getPassed(isPassed);
+    }
+    public static String getPassed(boolean isPassed){ return (isPassed ? "Pass": "Fail"); }
+
+
     public enum MOS{
         Moderate(0,"Moderate"),
         Significant(1,"Significant"),
@@ -121,8 +139,8 @@ public class ACFTRecord{
 
         final private int id; // contains string resources id.
         final private String str; // contains default string.
-        MOS(int id, String str){this.id=id; this.str=str;} // constructor & setter.
-        public String toString(){return str;}
+        MOS(int id, String str){ this.id=id; this.str=str; } // constructor & setter.
+        public String toString(){ return str; }
     }
 
 }

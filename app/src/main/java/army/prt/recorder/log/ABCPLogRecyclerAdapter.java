@@ -14,31 +14,28 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 
 import army.prt.recorder.R;
-import army.prt.recorder.acft.ACFTRecord;
-import army.prt.recorder.acft.Level;
-import army.prt.recorder.databinding.RecyclerviewAcftLogBinding;
+import army.prt.recorder.abcp.ABCPRecord;
+import army.prt.recorder.databinding.RecyclerviewAbcpLogBinding;
 
-public class ACFTLogRecyclerAdapter extends RecyclerView.Adapter<ACFTLogRecyclerAdapter.ACFTLogViewHolder> {
+public class ABCPLogRecyclerAdapter extends RecyclerView.Adapter<ABCPLogRecyclerAdapter.ABCPLogViewHolder> {
     private Context context;
     private Resources resources;
-    private ArrayList<ACFTRecord> list;
+    private ArrayList<ABCPRecord> list;
 
-    public ACFTLogRecyclerAdapter(Context context){
+    public ABCPLogRecyclerAdapter(Context context){
         this.context = context; resources = context.getResources();
-        ACFTDBHelper dbHelper = new ACFTDBHelper(context);
+        ABCPDBHelper dbHelper = new ABCPDBHelper(context);
         list = dbHelper.getRecordList();
         dbHelper.close();
     }
 
-    public class ACFTLogViewHolder extends RecyclerView.ViewHolder{
-        RecyclerviewAcftLogBinding binding;
-        public ACFTRecord record;
-        public ACFTLogViewHolder(@NonNull View itemView) {
+    public class ABCPLogViewHolder extends RecyclerView.ViewHolder {
+        RecyclerviewAbcpLogBinding binding;
+        public ABCPRecord record;
+        public ABCPLogViewHolder(@NonNull View itemView) {
             super(itemView);
             itemView.setOnCreateContextMenuListener((menu, view, menuInfo) -> {
                 menu.setHeaderTitle(resources.getString(R.string.record));
@@ -47,13 +44,13 @@ public class ACFTLogRecyclerAdapter extends RecyclerView.Adapter<ACFTLogRecycler
                     return false;
                 });
                 menu.add(0,1,1,resources.getString(R.string.delete)).setOnMenuItemClickListener(item -> {
-                    ACFTDBHelper dbHelper = new ACFTDBHelper(context);
+                    ABCPDBHelper dbHelper = new ABCPDBHelper(context);
                     dbHelper.deleteRecord(record);  dbHelper.close();
                     list.remove(getAdapterPosition());  notifyItemRemoved(getAdapterPosition());
                     Snackbar.make(itemView, resources.getString(R.string.recordDeleted), Snackbar.LENGTH_SHORT)
                             .setAction(resources.getString(R.string.undo), view1 -> {
                                 list.add(record);   notifyItemInserted(list.size()-1);
-                                ACFTDBHelper dbHelper1 = new ACFTDBHelper(context);
+                                ABCPDBHelper dbHelper1 = new ABCPDBHelper(context);
                                 dbHelper1.insertRecord(record);  dbHelper1.close();
                             }).show();
                     return false;
@@ -63,23 +60,16 @@ public class ACFTLogRecyclerAdapter extends RecyclerView.Adapter<ACFTLogRecycler
         }
         public int getPassedColor(boolean isPassed){ return resources.getColor(isPassed ? R.color.passed: R.color.failed); }
         public String getPassed(boolean isPassed){ return resources.getString(isPassed ? R.string.pass: R.string.fail); }
-        public String getLevel(int sco, boolean pf){
-            if(pf) return getPassed(sco>=60);
-            else if(sco<60) return Level.Fail.toString();
-            else if(sco<65) return Level.Moderate.toString();
-            else if(sco<70) return Level.Significant.toString();
-            else return Level.Heavy.toString();
-        }
-
     }
 
-    @NotNull @Override public ACFTLogRecyclerAdapter.ACFTLogViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    @NonNull @Override
+    public ABCPLogViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = ((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE))
-                .inflate(R.layout.recyclerview_acft_log,parent,false);
-        return (new ACFTLogViewHolder(view));
+                .inflate(R.layout.recyclerview_abcp_log,parent,false);
+        return (new ABCPLogViewHolder(view));
     }
 
-    @Override public void onBindViewHolder(@NonNull ACFTLogViewHolder holder, int position) {
+    @Override public void onBindViewHolder(@NonNull ABCPLogViewHolder holder, int position) {
         holder.record = list.get(position);
         holder.binding.setViewholder(holder);
     }
@@ -87,14 +77,14 @@ public class ACFTLogRecyclerAdapter extends RecyclerView.Adapter<ACFTLogRecycler
     @Override public int getItemCount() { return list.size(); }
 
     public void deleteAllRecord(View root){
-        final ArrayList<ACFTRecord> backup = new ArrayList<>(list);
-        list.clear(); notifyDataSetChanged();
         ACFTDBHelper dbHelper = new ACFTDBHelper(context);
         dbHelper.deleteAll(); dbHelper.close();
+        final ArrayList<ABCPRecord> backup = new ArrayList<>(list);
+        list.clear(); notifyDataSetChanged();
         Snackbar.make(root, resources.getString(R.string.recordDeleted), Snackbar.LENGTH_SHORT)
                 .setAction(resources.getString(R.string.undo), v -> {
                     list = backup;  notifyDataSetChanged();
-                    ACFTDBHelper dbHelper1 = new ACFTDBHelper(context);
+                    ABCPDBHelper dbHelper1 = new ABCPDBHelper(context);
                     dbHelper1.saveRecordList(list);  dbHelper1.close();
                 }).show();
     }

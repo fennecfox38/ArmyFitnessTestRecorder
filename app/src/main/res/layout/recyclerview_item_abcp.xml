@@ -7,7 +7,7 @@
     <data>
         <variable
             name="viewholder"
-            type="army.prt.recorder.abcp.ItemRecyclerAdapter.ViewHolder" />
+            type="army.prt.recorder.abcp.ItemRecyclerAdapter.ItemViewHolder" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

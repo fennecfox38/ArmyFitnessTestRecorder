@@ -2,6 +2,8 @@ package army.prt.recorder.abcp;
 
 import android.content.ContentValues;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -128,4 +130,18 @@ public class ABCPRecord {
             else return null;
         }
     }
+
+    @NotNull @Override public String toString() {
+        return "Record Date: " +dateToString() +
+                "\nSex: " + sex.toString() +
+                "\nAge Group: " + ageGroup.toString() +
+                "\nHeight: " + height + "inches\nWeight: " + weight +
+                "lbs\nNeck: " + neck + "inches\n"+
+                (sex==Sex.Male?"Abdomen: ":"Waist: ")+ abdomen_waist +
+                "inches\nHips: " + hips + "inches\nBody Fat Percentage: " + bodyFatPercentage +
+                "%\nHeight/Weight: " + getPassed(height_weight) +
+                "\nBody Fat: " + getPassed(bodyFatPass) +
+                "\nTotal: " + getPassed(totalPass);
+    }
+    public static String getPassed(boolean isPassed){ return (isPassed ? "Pass": "Fail"); }
 }

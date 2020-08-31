@@ -1,7 +1,6 @@
 package army.prt.recorder.log;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
@@ -25,20 +24,20 @@ public class ACFTDBHelper extends SQLiteOpenHelper {
     public ACFTDBHelper(Context context) {
         super(context, FileProvider.dbName, null, FileProvider.dbVersion);
     }
-
+    // onCreate might be called only when db file is not exist.
     @Override public void onCreate(SQLiteDatabase db) { db.execSQL(SQL_CREATE_TBL); }
     @Override public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL(SQL_DROP_TBL); db.execSQL(SQL_CREATE_TBL);
     }
     @Override public SQLiteDatabase getReadableDatabase() {
         SQLiteDatabase db = super.getReadableDatabase();
-        db.execSQL(SQL_CREATE_TBL);
-        return db;
+        db.execSQL(SQL_CREATE_TBL); // before return readable database,
+        return db; // create table if not exist.
     }
     @Override public SQLiteDatabase getWritableDatabase() {
         SQLiteDatabase db = super.getWritableDatabase();
-        db.execSQL(SQL_CREATE_TBL);
-        return db;
+        db.execSQL(SQL_CREATE_TBL); // before return writable database,
+        return db; // create table if not exist.
     }
 
     public ArrayList<ACFTRecord> getRecordList(){
@@ -51,7 +50,7 @@ public class ACFTDBHelper extends SQLiteOpenHelper {
             record = new ACFTRecord();
             record.stringToDate(cursor.getString(cursor.getColumnIndex(COLUMN_RECORD_DATE)));
             record.raw_0 = cursor.getInt(cursor.getColumnIndex(COLUMN_RAW_MDL));
-            record.raw_1 = cursor.getFloat(cursor.getColumnIndex(COLUMN_RAW_SPT));
+            record.raw_1 = preciseFloat(cursor.getFloat(cursor.getColumnIndex(COLUMN_RAW_SPT)));
             record.raw_2 = cursor.getInt(cursor.getColumnIndex(COLUMN_RAW_HPU));
             record.raw_3.fromString(cursor.getString(cursor.getColumnIndex(COLUMN_RAW_SDC)));
             record.raw_4 = cursor.getInt(cursor.getColumnIndex(COLUMN_RAW_LTK));
@@ -171,7 +170,7 @@ public class ACFTDBHelper extends SQLiteOpenHelper {
             row.createCell(0).setCellValue(cursor.getString(cursor.getColumnIndex(COLUMN_RECORD_DATE)));
             row.createCell(1).setCellValue(cursor.getInt(cursor.getColumnIndex(COLUMN_RAW_MDL)));
             row.createCell(2).setCellValue(cursor.getInt(cursor.getColumnIndex(COLUMN_SCORE_MDL)));
-            row.createCell(3).setCellValue(preciseFloat(cursor.getFloat(cursor.getColumnIndex(COLUMN_RAW_SPT))));
+            row.createCell(3).setCellValue(preciseDouble(cursor.getFloat(cursor.getColumnIndex(COLUMN_RAW_SPT))));
             row.createCell(4).setCellValue(cursor.getInt(cursor.getColumnIndex(COLUMN_SCORE_SPT)));
             row.createCell(5).setCellValue(cursor.getInt(cursor.getColumnIndex(COLUMN_RAW_HPU)));
             row.createCell(6).setCellValue(cursor.getInt(cursor.getColumnIndex(COLUMN_SCORE_HPU)));
@@ -194,8 +193,9 @@ public class ACFTDBHelper extends SQLiteOpenHelper {
 
     private static String sqlWhere(String column, String arg){ return (column+"=\""+arg+"\" "); }
     private static String sqlWhere(String column, int arg){ return (column+"="+ arg +" "); }
-    private static String sqlWhere(String column, float arg){ return ("abs("+column+"-"+ arg +")<0.01 "); }
-    private static double preciseFloat(float obj){ return (double)(Math.floor(obj*10)/10); }
+    private static String sqlWhere(String column, float arg){ return ("abs("+column+"-"+ arg +")<0.1 "); }
+    private static double preciseDouble(float obj){ return (Math.round(obj*10)/10.0); }
+    private static float preciseFloat(float obj){ return (Math.round(obj*10)/10.f); }
 
     public static final class DBContract implements BaseColumns {
         public static final String TABLE_NAME = "ACFTRecord";

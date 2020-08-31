@@ -19,20 +19,24 @@ public class TabPagerAdapter extends PagerAdapter {
     private View[] view;
     private Context context;
     private ACFTLogRecyclerAdapter acftAdapter;
+    private ABCPLogRecyclerAdapter abcpAdapter;
     TabPagerAdapter(Context context){
         view = new View[3];
         this.context = context;
         acftAdapter = new ACFTLogRecyclerAdapter(context);
+        abcpAdapter = new ABCPLogRecyclerAdapter(context);
     }
 
     @NotNull @Override public Object instantiateItem(ViewGroup container, int position) {
         if (context != null) {
             view[position] = ((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE))
                     .inflate(R.layout.layout_container_log, container, false);
-            if(position == TAB_ACFT){
-                RecyclerView recyclerView = view[position].findViewById(R.id.recyclerView_log);
-                recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
-                recyclerView.setAdapter(acftAdapter);
+            RecyclerView recyclerView = view[position].findViewById(R.id.recyclerView_log);
+            recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
+            switch (position){
+                case TAB_ACFT: recyclerView.setAdapter(acftAdapter); break;
+                case TAB_APFT: break;
+                case TAB_ABCP: recyclerView.setAdapter(abcpAdapter);break;
             }
         }
         container.addView(view[position]);
@@ -43,7 +47,7 @@ public class TabPagerAdapter extends PagerAdapter {
         switch (currentPage){
             case TAB_ACFT: acftAdapter.deleteAllRecord(view[TAB_ACFT]); break;
             case TAB_APFT: break;
-            case TAB_ABCP: break;
+            case TAB_ABCP: abcpAdapter.deleteAllRecord(view[TAB_ABCP]); break;
         }
     }
 

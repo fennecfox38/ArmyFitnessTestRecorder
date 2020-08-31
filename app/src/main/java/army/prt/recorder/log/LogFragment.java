@@ -60,12 +60,7 @@ public class LogFragment extends Fragment {
             builder.setTitle(getString(R.string.share)); builder.setIcon(R.drawable.ic_share);
             builder.setItems(new String[]{getString(R.string.shareDB), getString(R.string.shareXLS)}, (dialog, which) -> {
                 switch (which){
-                    case 0:
-                        Intent shareIntent = new Intent(Intent.ACTION_SEND).putExtra(Intent.EXTRA_STREAM,
-                                new FileProvider(requireContext()).getDatabaseUri());
-                        shareIntent.setType("application/vnd.sqlite3"); //shareIntent.setType("application/*");
-                        startActivity(Intent.createChooser(shareIntent, getString(R.string.shareDB)));
-                        break;
+                    case 0: shareDB();break;
                     case 1: shareXLS(); break;
                 }
             });
@@ -79,6 +74,13 @@ public class LogFragment extends Fragment {
         super.onCreateOptionsMenu(menu, inflater);
     }
 
+    public void shareDB(){
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("application/*"); //shareIntent.setType("application/vnd.sqlite3");
+        shareIntent.putExtra(Intent.EXTRA_STREAM, FileProvider.getDatabaseUri(requireContext()));
+        startActivity(Intent.createChooser(shareIntent, getString(R.string.shareDB)));
+    }
+
     public void shareXLS(){
         Workbook workbook = new HSSFWorkbook();
         ACFTDBHelper acftDBHelper = new ACFTDBHelper(requireContext());
@@ -87,14 +89,12 @@ public class LogFragment extends Fragment {
         ABCPDBHelper abcpDBHelper = new ABCPDBHelper(requireContext());
         abcpDBHelper.exportExcel(workbook); abcpDBHelper.close();
         try{
-            FileProvider xlsProvider = new FileProvider(requireContext());
-            FileOutputStream fileOutputStream = new FileOutputStream(xlsProvider.xls);
+            FileOutputStream fileOutputStream = new FileOutputStream(FileProvider.getXLSFile(requireContext()));
             workbook.write(fileOutputStream);
 
-            Uri uri = xlsProvider.getXLSUri();
             Intent shareIntent = new Intent(Intent.ACTION_SEND);
             shareIntent.setType("application/excel"); //shareIntent.setType("application/*");
-            shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
+            shareIntent.putExtra(Intent.EXTRA_STREAM, FileProvider.getXLSUri(requireContext()));
             startActivity(Intent.createChooser(shareIntent, getString(R.string.shareXLS)));
 
         } catch (IOException e){ e.printStackTrace(); }

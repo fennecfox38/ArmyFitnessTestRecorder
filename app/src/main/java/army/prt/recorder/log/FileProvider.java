@@ -10,21 +10,14 @@ public class FileProvider extends androidx.core.content.FileProvider {
     public static final String dbName = "RecordLog.db";
     public static final int dbVersion = 1;
     public static final String xlsName = "RecordLog.xls";
-    private Context context;
-    public File db;
-    public File xls;
 
-    public FileProvider(Context context){
-        this.context = context;
-        db = new File(context.getDatabasePath(dbName),dbName);
-        xls = new File(context.getFilesDir(), xlsName);
+    public static File getDBFile(Context context){ return context.getDatabasePath(dbName); } //new File(context.getDatabasePath(dbName),dbName);
+    public static File getXLSFile(Context context){ return context.getFileStreamPath(xlsName); } //new File(context.getFilesDir(), xlsName);
+
+    public static Uri getDatabaseUri(Context context) {
+        return getUriForFile(context, "army.prt.recorder.log.FileProvider", getDBFile(context));
     }
-
-    public Uri getDatabaseUri() { return getFileUri(db); }
-
-    public Uri getXLSUri() { return getFileUri(xls); }
-
-    public Uri getFileUri(File file){
-        return getUriForFile(context, "army.prt.recorder.log.FileProvider", file);
+    public static Uri getXLSUri(Context context) {
+        return getUriForFile(context, "army.prt.recorder.log.FileProvider", getXLSFile(context));
     }
 }

@@ -1,7 +1,6 @@
 package army.prt.recorder.log;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
@@ -23,20 +22,20 @@ public class ABCPDBHelper extends SQLiteOpenHelper {
     public ABCPDBHelper(Context context) {
         super(context, FileProvider.dbName, null, FileProvider.dbVersion);
     }
-
+    // onCreate might be called only when db file is not exist.
     @Override public void onCreate(SQLiteDatabase db) { db.execSQL(SQL_CREATE_TBL); }
     @Override public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL(SQL_DROP_TBL); db.execSQL(SQL_CREATE_TBL);
     }
     @Override public SQLiteDatabase getReadableDatabase() {
         SQLiteDatabase db = super.getReadableDatabase();
-        db.execSQL(SQL_CREATE_TBL);
-        return db;
+        db.execSQL(SQL_CREATE_TBL); // before return readable database,
+        return db; // create table if not exist.
     }
     @Override public SQLiteDatabase getWritableDatabase() {
         SQLiteDatabase db = super.getWritableDatabase();
-        db.execSQL(SQL_CREATE_TBL);
-        return db;
+        db.execSQL(SQL_CREATE_TBL); // before return writable database,
+        return db; // create table if not exist.
     }
 
     public ArrayList<ABCPRecord> getRecordList(){
@@ -50,14 +49,13 @@ public class ABCPDBHelper extends SQLiteOpenHelper {
             record.stringToDate(cursor.getString(cursor.getColumnIndex(COLUMN_RECORD_DATE)));
             record.sex = ABCPRecord.Sex.valueOf(cursor.getString(cursor.getColumnIndex(COLUMN_SEX)));
             record.ageGroup = ABCPRecord.AgeGroup.findByString(cursor.getString(cursor.getColumnIndex(COLUMN_AGE_GROUP)));
-            record.height = cursor.getFloat(cursor.getColumnIndex(COLUMN_HEIGHT));
+            record.height = preciseFloat(cursor.getFloat(cursor.getColumnIndex(COLUMN_HEIGHT)));
             record.weight = cursor.getInt(cursor.getColumnIndex(COLUMN_WEIGHT));
-            record.neck = cursor.getFloat(cursor.getColumnIndex(COLUMN_NECK));
-            record.abdomen_waist = cursor.getFloat(cursor.getColumnIndex(COLUMN_ABDOMEN_WAIST));
-            float hips = 0.f;
-            try{ hips = cursor.getFloat(cursor.getColumnIndex(COLUMN_HIPS)); } //catch (Exception e){ hips = 0.f; }
-            finally{ record.hips = hips; }
-            record.bodyFatPercentage = cursor.getFloat(cursor.getColumnIndex(COLUMN_BODY_FAT_PERCENT));
+            record.neck = preciseFloat(cursor.getFloat(cursor.getColumnIndex(COLUMN_NECK)));
+            record.abdomen_waist = preciseFloat(cursor.getFloat(cursor.getColumnIndex(COLUMN_ABDOMEN_WAIST)));
+            try{ record.hips = cursor.getFloat(cursor.getColumnIndex(COLUMN_HIPS)); }
+            catch (Exception e){ record.hips = 0.f; }
+            record.bodyFatPercentage = preciseFloat(cursor.getFloat(cursor.getColumnIndex(COLUMN_BODY_FAT_PERCENT)));
             record.height_weight = Boolean.parseBoolean(cursor.getString(cursor.getColumnIndex(COLUMN_HW_PASSED)));
             record.bodyFatPass = Boolean.parseBoolean(cursor.getString(cursor.getColumnIndex(COLUMN_BODY_FAT_PASSED)));
             record.totalPass = Boolean.parseBoolean(cursor.getString(cursor.getColumnIndex(COLUMN_TOTAL_PASSED)));
@@ -100,7 +98,8 @@ public class ABCPDBHelper extends SQLiteOpenHelper {
         sqlExec += sqlWhere(COLUMN_SEX,record.sex.toString()) + "AND " + sqlWhere(COLUMN_AGE_GROUP,record.ageGroup.toString()) + "AND ";
         sqlExec += sqlWhere(COLUMN_HEIGHT,record.height) + "AND " + sqlWhere(COLUMN_WEIGHT,record.weight) + "AND ";
         sqlExec += sqlWhere(COLUMN_NECK,record.neck) + "AND " + sqlWhere(COLUMN_ABDOMEN_WAIST,record.abdomen_waist) + "AND ";
-        sqlExec += sqlWhere(COLUMN_HIPS,record.hips) + "AND " + sqlWhere(COLUMN_BODY_FAT_PERCENT,record.bodyFatPercentage) + "AND ";
+        sqlExec += "("+sqlWhere(COLUMN_HIPS,record.hips)+"OR "+ COLUMN_HIPS + " IS NULL) AND " ;
+        sqlExec += sqlWhere(COLUMN_BODY_FAT_PERCENT,record.bodyFatPercentage) + "AND ";
         sqlExec += sqlWhere(COLUMN_HW_PASSED,Boolean.toString(record.height_weight)) + "AND ";
         sqlExec += sqlWhere(COLUMN_BODY_FAT_PASSED,Boolean.toString(record.bodyFatPass)) + "AND ";
         sqlExec += sqlWhere(COLUMN_TOTAL_PASSED,Boolean.toString(record.totalPass));
@@ -153,14 +152,13 @@ public class ABCPDBHelper extends SQLiteOpenHelper {
             row.createCell(0).setCellValue(cursor.getString(cursor.getColumnIndex(COLUMN_RECORD_DATE)));
             row.createCell(1).setCellValue(cursor.getString(cursor.getColumnIndex(COLUMN_SEX)));
             row.createCell(2).setCellValue(cursor.getString(cursor.getColumnIndex(COLUMN_AGE_GROUP)));
-            row.createCell(3).setCellValue(preciseFloat(cursor.getFloat(cursor.getColumnIndex(COLUMN_HEIGHT))));
+            row.createCell(3).setCellValue(preciseDouble(cursor.getFloat(cursor.getColumnIndex(COLUMN_HEIGHT))));
             row.createCell(4).setCellValue(cursor.getInt(cursor.getColumnIndex(COLUMN_WEIGHT)));
-            row.createCell(5).setCellValue(preciseFloat(cursor.getFloat(cursor.getColumnIndex(COLUMN_NECK))));
-            row.createCell(6).setCellValue(preciseFloat(cursor.getFloat(cursor.getColumnIndex(COLUMN_ABDOMEN_WAIST))));
-            float hips = 0.f;
-            try { hips = cursor.getFloat(cursor.getColumnIndex(COLUMN_HIPS)); } //catch (Exception e){ hips = 0.f; }
-            finally{ row.createCell(7).setCellValue(hips); }
-            row.createCell(8).setCellValue(preciseFloat(cursor.getFloat(cursor.getColumnIndex(COLUMN_BODY_FAT_PERCENT))));
+            row.createCell(5).setCellValue(preciseDouble(cursor.getFloat(cursor.getColumnIndex(COLUMN_NECK))));
+            row.createCell(6).setCellValue(preciseDouble(cursor.getFloat(cursor.getColumnIndex(COLUMN_ABDOMEN_WAIST))));
+            try { row.createCell(7).setCellValue(cursor.getFloat(cursor.getColumnIndex(COLUMN_HIPS))); }
+            catch(Exception e){ row.createCell(7).setCellValue((String) null); }
+            row.createCell(8).setCellValue(preciseDouble(cursor.getFloat(cursor.getColumnIndex(COLUMN_BODY_FAT_PERCENT))));
             row.createCell(9).setCellValue(Boolean.parseBoolean(cursor.getString(cursor.getColumnIndex(COLUMN_HW_PASSED))));
             row.createCell(10).setCellValue(Boolean.parseBoolean(cursor.getString(cursor.getColumnIndex(COLUMN_BODY_FAT_PASSED))));
             row.createCell(11).setCellValue(Boolean.parseBoolean(cursor.getString(cursor.getColumnIndex(COLUMN_TOTAL_PASSED))));
@@ -172,8 +170,9 @@ public class ABCPDBHelper extends SQLiteOpenHelper {
 
     private static String sqlWhere(String column, String arg){ return (column+"=\""+arg+"\" "); }
     private static String sqlWhere(String column, int arg){ return (column+"="+ arg +" "); }
-    private static String sqlWhere(String column, float arg){ return ("abs("+column+"-"+ arg +")<0.01 "); }
-    private static double preciseFloat(float obj){ return (double)(Math.floor(obj*10)/10); }
+    private static String sqlWhere(String column, float arg){ return ("abs("+column+"-"+ arg +")<0.1 "); }
+    private static double preciseDouble(float obj){ return (Math.round(obj*10)/10.0); }
+    private static float preciseFloat(float obj){ return (Math.round(obj*10)/10.f); }
 
     public static final class DBContract implements BaseColumns {
         public static final String TABLE_NAME = "ABCPRecord";

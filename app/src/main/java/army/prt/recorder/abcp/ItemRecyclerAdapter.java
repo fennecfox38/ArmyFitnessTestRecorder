@@ -16,9 +16,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 import army.prt.recorder.R;
-import army.prt.recorder.databinding.RecyclerviewAbcpBinding;
+import army.prt.recorder.databinding.RecyclerviewItemAbcpBinding;
 
-public class ItemRecyclerAdapter extends RecyclerView.Adapter<ItemRecyclerAdapter.ViewHolder> {
+public class ItemRecyclerAdapter extends RecyclerView.Adapter<ItemRecyclerAdapter.ItemViewHolder> {
     private Context context;
     public MutableLiveData<ArrayList<Item>> itemList;
 
@@ -27,10 +27,10 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter<ItemRecyclerAdapte
         this.itemList = itemList;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        private RecyclerviewAbcpBinding binding;
+    public class ItemViewHolder extends RecyclerView.ViewHolder {
+        private RecyclerviewItemAbcpBinding binding;
         public Item item = null; // It will be assigned in 'onBindViewHolder'
-        public ViewHolder(@NonNull View itemView) {
+        public ItemViewHolder(@NonNull View itemView) {
             super(itemView);
             binding = DataBindingUtil.bind(itemView);
         }
@@ -67,12 +67,12 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter<ItemRecyclerAdapte
         }
     }
 
-    @NonNull @Override public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    @NonNull @Override public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater =  (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        return (new ItemRecyclerAdapter.ViewHolder(inflater.inflate(R.layout.recyclerview_abcp,parent,false)));
+        return (new ItemViewHolder(inflater.inflate(R.layout.recyclerview_item_abcp,parent,false)));
     }
 
-    @Override public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    @Override public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
         holder.binding.setViewholder(holder);
         holder.item = itemList.getValue().get(position);
     }
