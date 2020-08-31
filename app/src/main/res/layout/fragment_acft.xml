@@ -3,12 +3,12 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".acft.ACFTFragment">
+    tools:context="mil.army.fitnesstest.recorder.acft.ACFTFragment">
 
     <data>
         <variable
             name="fragment"
-            type="army.fitnesstest.recorder.acft.ACFTFragment" />
+            type="mil.army.fitnesstest.recorder.acft.ACFTFragment" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -8,7 +8,7 @@
         <import type="android.view.View" />
         <variable
             name="viewholder"
-            type="army.fitnesstest.recorder.log.ABCPLogRecyclerAdapter.ABCPLogViewHolder" />
+            type="mil.army.fitnesstest.recorder.log.ABCPLogRecyclerAdapter.ABCPLogViewHolder" />
     </data>
 
     <TableLayout

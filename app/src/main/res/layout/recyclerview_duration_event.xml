@@ -6,10 +6,10 @@
 
     <data>
         <import type="android.view.View" />
-        <import type="army.fitnesstest.recorder.acft.event.Event" />
+        <import type="mil.army.fitnesstest.recorder.acft.event.Event" />
         <variable
             name="viewholder"
-            type="army.fitnesstest.recorder.acft.event.EventRecyclerAdapter.DurationViewHolder" />
+            type="mil.army.fitnesstest.recorder.acft.EventRecyclerAdapter.DurationViewHolder" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

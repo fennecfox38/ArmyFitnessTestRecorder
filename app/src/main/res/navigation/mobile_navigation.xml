@@ -8,25 +8,25 @@
 
     <fragment
         android:id="@+id/navigation_acft"
-        android:name="army.fitnesstest.recorder.acft.ACFTFragment"
+        android:name="mil.army.fitnesstest.recorder.acft.ACFTFragment"
         android:label="@string/title_long_acft"
         tools:layout="@layout/fragment_acft" />
 
     <fragment
         android:id="@+id/navigation_apft"
-        android:name="army.fitnesstest.recorder.apft.APFTFragment"
+        android:name="mil.army.fitnesstest.recorder.apft.APFTFragment"
         android:label="@string/title_long_apft"
         tools:layout="@layout/fragment_apft" />
 
     <fragment
         android:id="@+id/navigation_abcp"
-        android:name="army.fitnesstest.recorder.abcp.ABCPFragment"
+        android:name="mil.army.fitnesstest.recorder.abcp.ABCPFragment"
         android:label="@string/title_long_abcp"
         tools:layout="@layout/fragment_abcp" />
 
     <fragment
         android:id="@+id/navigation_log"
-        android:name="army.fitnesstest.recorder.log.LogFragment"
+        android:name="mil.army.fitnesstest.recorder.log.LogFragment"
         android:label="@string/title_log"
         tools:layout="@layout/fragment_log" />
 

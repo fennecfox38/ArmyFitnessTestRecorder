@@ -7,7 +7,7 @@
     <data>
         <variable
             name="viewholder"
-            type="army.fitnesstest.recorder.abcp.ItemRecyclerAdapter.ItemViewHolder" />
+            type="mil.army.fitnesstest.recorder.abcp.ItemRecyclerAdapter.ItemViewHolder" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
