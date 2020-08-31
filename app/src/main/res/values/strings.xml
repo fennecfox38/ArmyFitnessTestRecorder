@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Army PRT Recorder</string>
+    <string name="app_name">Army Fitness Test Recorder</string>
     <string name="title_acft">ACFT</string>
     <string name="title_long_acft">Combat Fitness Test</string>
     <string name="title_apft">APFT</string>

@@ -8,7 +8,7 @@
         <import type="android.view.View" />
         <variable
             name="viewholder"
-            type="army.prt.recorder.log.ABCPLogRecyclerAdapter.ABCPLogViewHolder" />
+            type="army.fitnesstest.recorder.log.ABCPLogRecyclerAdapter.ABCPLogViewHolder" />
     </data>
 
     <TableLayout
@@ -45,9 +45,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:textColor="@{viewholder.getPassedColor(viewholder.record.totalPass)}"
+                android:textColor="@{viewholder.getPassedColor(viewholder.record.isPassed)}"
                 android:textSize="20sp"
-                android:text="@{viewholder.getPassed(viewholder.record.totalPass)}"/>
+                android:text="@{viewholder.getPassed(viewholder.record.isPassed)}"/>
         </TableRow>
 
         <View

@@ -8,7 +8,7 @@
     <data>
         <variable
             name="fragment"
-            type="army.prt.recorder.abcp.ABCPFragment" />
+            type="army.fitnesstest.recorder.abcp.ABCPFragment" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -34,7 +34,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
-
             <RadioGroup
                 android:id="@+id/rGroup_sex"
                 android:layout_width="wrap_content"
@@ -95,8 +94,7 @@
                 android:onItemSelected="@{fragment::onAgeSelected}"
                 app:layout_constraintTop_toTopOf="@+id/txt_age_group"
                 app:layout_constraintBottom_toBottomOf="@+id/txt_age_group"
-                app:layout_constraintStart_toEndOf="@+id/txt_age_group"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintStart_toEndOf="@+id/txt_age_group"/>
 
             <TextView
                 android:id="@+id/txt_HW_header"
@@ -149,9 +147,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
+                android:onClick="@{fragment::onDateClick}"
                 android:src="@drawable/ic_calendar"
                 android:background="@android:color/transparent"
-                android:onClick="@{fragment::onDateClick}"
                 app:layout_constraintHorizontal_bias="0"
                 app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintTop_toBottomOf="@+id/txt_HW_header"
@@ -165,8 +163,8 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
                 android:focusable="false"
-                android:text="@{fragment.record.dateToString()}"
                 android:onClick="@{fragment::onDateClick}"
+                android:text="@{fragment.record.dateToString()}"
                 app:layout_constraintTop_toTopOf="@+id/btn_record_date"
                 app:layout_constraintBottom_toBottomOf="@+id/btn_record_date"
                 app:layout_constraintStart_toEndOf="@+id/btn_record_date"
@@ -177,9 +175,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
-                android:textColor="@{fragment.getPassedColor(fragment.record.totalPass)}"
+                android:textColor="@{fragment.getPassedColor(fragment.record.isPassed)}"
                 android:textSize="25sp"
-                android:text="@{fragment.getPassed(fragment.record.totalPass)}"
+                android:text="@{fragment.getPassed(fragment.record.isPassed)}"
                 app:layout_constraintBaseline_toBaselineOf="@+id/editText_record_date"
                 app:layout_constraintStart_toEndOf="@+id/editText_record_date"
                 app:layout_constraintEnd_toStartOf="@+id/fab"/>

@@ -1,2 +1,2 @@
-# Army PRT Recorder
-Army PRT Recorder Application
+# Army Fitness Test Recorder
+Army Fitness Test Recorder Application

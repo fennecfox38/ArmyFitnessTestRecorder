@@ -8,7 +8,7 @@
     <data>
         <variable
             name="fragment"
-            type="army.prt.recorder.acft.ACFTFragment" />
+            type="army.fitnesstest.recorder.acft.ACFTFragment" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -116,9 +116,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
+                android:onClick="@{fragment::onDateClick}"
                 android:src="@drawable/ic_calendar"
                 android:background="@android:color/transparent"
-                android:onClick="@{fragment::onDateClick}"
                 app:layout_constraintHorizontal_bias="0"
                 app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintTop_toBottomOf="@+id/txt_sco_total_header"
@@ -131,8 +131,8 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
                 android:focusable="false"
-                android:text="@{fragment.record.dateToString()}"
                 android:onClick="@{fragment::onDateClick}"
+                android:text="@{fragment.record.dateToString()}"
                 app:layout_constraintTop_toTopOf="@+id/btn_record_date"
                 app:layout_constraintBottom_toBottomOf="@+id/btn_record_date"
                 app:layout_constraintStart_toEndOf="@+id/btn_record_date"
@@ -174,3 +174,5 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
+    <!--android:onClick="@{fragment::onDateClick}"-->
+    <!--android:onClick="@{fragment::onSaveClick}"-->
