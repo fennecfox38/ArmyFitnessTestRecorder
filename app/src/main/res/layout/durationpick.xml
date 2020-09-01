@@ -7,7 +7,7 @@
     <data>
         <variable
             name="duration"
-            type="mil.army.fitnesstest.recorder.acft.Duration" />
+            type="mil.army.fitnesstest.recorder.Duration" />
     </data>
 
     <LinearLayout

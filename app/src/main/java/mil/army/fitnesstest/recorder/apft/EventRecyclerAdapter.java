@@ -1,4 +1,4 @@
-package mil.army.fitnesstest.recorder.acft;
+package mil.army.fitnesstest.recorder.apft;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -23,16 +23,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 import mil.army.fitnesstest.R;
-import mil.army.fitnesstest.recorder.acft.event.CardioAlter;
-import mil.army.fitnesstest.recorder.acft.event.CountEvent;
-import mil.army.fitnesstest.recorder.acft.event.Event;
-import mil.army.fitnesstest.recorder.acft.event.DurationEvent;
 import mil.army.fitnesstest.databinding.DurationpickBinding;
-import mil.army.fitnesstest.databinding.RecyclerviewCountEventAcftBinding;
-import mil.army.fitnesstest.databinding.RecyclerviewDurationEventAcftBinding;
-
-import static android.text.InputType.TYPE_CLASS_NUMBER;
-import static android.text.InputType.TYPE_NUMBER_FLAG_DECIMAL;
+import mil.army.fitnesstest.databinding.RecyclerviewCountEventApftBinding;
+import mil.army.fitnesstest.databinding.RecyclerviewDurationEventApftBinding;
+import mil.army.fitnesstest.recorder.apft.event.CardioAlter;
+import mil.army.fitnesstest.recorder.apft.event.CountEvent;
+import mil.army.fitnesstest.recorder.apft.event.DurationEvent;
+import mil.army.fitnesstest.recorder.apft.event.Event;
 
 public class EventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context context;
@@ -44,10 +41,10 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
         resources = context.getResources();
         this.eventList = eventList;
     }
-
-    public class CountViewHolder extends RecyclerView.ViewHolder{
-        private RecyclerviewCountEventAcftBinding binding;
+    public class CountViewHolder extends RecyclerView.ViewHolder {
+        private RecyclerviewCountEventApftBinding binding;
         public CountEvent event = null; // It will be assigned in 'onBindViewHolder'
+
         public CountViewHolder(@NonNull View itemView) {
             super(itemView);
             binding = DataBindingUtil.bind(itemView);
@@ -55,10 +52,8 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
         public void afterTextChanged(Editable s) {
             String string = s.toString();
             if(string.length()==0) return;
-            try{
-                if(event.eventType != Event.SPT) updateRawSco(Integer.parseInt(string));
-                else updateRawSco((int)(Float.parseFloat(string)*10));
-            }catch(Exception e){ return; }
+            try{ updateRawSco(Integer.parseInt(string)); }
+            catch(Exception e){ return; }
         }
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
             if(fromUser) updateRawSco(progress);
@@ -81,7 +76,7 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
     }
 
     public class DurationViewHolder extends RecyclerView.ViewHolder{
-        RecyclerviewDurationEventAcftBinding binding;
+        RecyclerviewDurationEventApftBinding binding;
         public DurationEvent event = null; // It will be assigned in 'onBindViewHolder'
         public DurationViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -116,30 +111,23 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
         }
     }
 
-    @NonNull @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    @NonNull @Override public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater =  (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        switch (viewType){
-            case Event.SDC: case Event.CARDIO:
-                return (new EventRecyclerAdapter.DurationViewHolder(inflater.inflate(R.layout.recyclerview_duration_event_acft,parent,false)));
-            default: // case for CountEvent such as MDL, SPT, HPU, LTK
-                return (new EventRecyclerAdapter.CountViewHolder(inflater.inflate(R.layout.recyclerview_count_event_acft,parent,false)));
-        }
+        if(viewType==Event.CARDIO) return (new DurationViewHolder(inflater.inflate(R.layout.recyclerview_duration_event_apft,parent,false)));
+        else return (new CountViewHolder(inflater.inflate(R.layout.recyclerview_count_event_apft,parent,false)));
     }
+
     @Override public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
         if(viewHolder instanceof CountViewHolder){
             CountViewHolder holder = (CountViewHolder) viewHolder;
             holder.event = (CountEvent) eventList.getValue().get(position);
             holder.binding.setViewholder(holder);
-            if(position == Event.SPT)
-                holder.binding.editTextRaw.setInputType(TYPE_CLASS_NUMBER | TYPE_NUMBER_FLAG_DECIMAL);
         }
         else if(viewHolder instanceof DurationViewHolder){
             DurationViewHolder holder = (DurationViewHolder) viewHolder;
             holder.event = (DurationEvent) eventList.getValue().get(position);
             holder.binding.setViewholder(holder);
         }
-
     }
 
     @Override public int getItemViewType(int position) { return position; }
@@ -153,27 +141,14 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     @BindingAdapter("android:text")
     public static void setText(EditText editText, CountEvent event) {
-        if(event.eventType!= Event.SPT){
-            try{ if(event.raw == Integer.parseInt(editText.getText().toString())) return; }
-            catch (NumberFormatException e){e.printStackTrace();}
-            editText.setText(String.valueOf(event.raw));
-        }
-        else{ // for SPT event. In order to convert float to int or reverse.
-            try{ if(event.raw == (int)((Float.parseFloat(editText.getText().toString()))*10)) return; }
-            catch (NumberFormatException e){e.printStackTrace();}
-            editText.setText(String.valueOf((event.raw)/10.0f));
-        }
+        try{ if(event.raw == Integer.parseInt(editText.getText().toString())) return; }
+        catch (NumberFormatException e){e.printStackTrace();}
+        editText.setText(String.valueOf(event.raw));
         editText.setSelection(editText.length());
     }
-
     @BindingAdapter("android:selectedItemPosition")
     public static void setSelectedItemPosition(AppCompatSpinner spinner, int selection) {
         spinner.setSelection(selection);
     }
-    @InverseBindingAdapter(attribute = "android:selection")
-    public static int getSelectedItemPosition(AppCompatSpinner spinner) {
-        return spinner.getSelectedItemPosition();
-    }
 
 }
-

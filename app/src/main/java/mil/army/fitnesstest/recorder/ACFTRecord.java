@@ -6,8 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
-import mil.army.fitnesstest.recorder.acft.CardioAlter;
-import mil.army.fitnesstest.recorder.acft.Duration;
+import mil.army.fitnesstest.recorder.acft.event.CardioAlter;
 import mil.army.fitnesstest.recorder.acft.Level;
 import mil.army.fitnesstest.recorder.acft.event.CountEvent;
 import mil.army.fitnesstest.recorder.acft.event.DurationEvent;
@@ -15,7 +14,7 @@ import mil.army.fitnesstest.recorder.acft.event.Event;
 
 import static mil.army.fitnesstest.recorder.ACFTDBHelper.DBContract.*;
 
-public class ACFTRecord extends Record {
+public class ACFTRecord<T extends Event> extends Record<T> {
     public int[] sco = {0, 0, 0, 0, 0, 0};
     public int raw_0 = 0, raw_2 = 0, raw_4 = 0; public float raw_1 = 0;
     public Duration raw_3 = new Duration(0), raw_5 = new Duration(0);
@@ -26,9 +25,9 @@ public class ACFTRecord extends Record {
 
     public ACFTRecord(){ super(); }
 
-    public void updateRecord(ArrayList<Event> eventList){
+    public void updateRecord(ArrayList<T> eventList){
         sco_total = 0; qualifiedLevel = Level.Heavy;
-        for(Event event : eventList){
+        for(T event : eventList){
             switch (event.eventType){
                 case Event.MDL: raw_0 = ((CountEvent) event).raw; break;
                 case Event.SPT: raw_1 = (((CountEvent) event).raw/10.0f); break;
@@ -45,11 +44,10 @@ public class ACFTRecord extends Record {
 
             if (qualifiedLevel.compareTo(event.level) > 0) qualifiedLevel = event.level;
         }
-        invalidateLevel();
     }
 
-    public void restoreEventList(ArrayList<Event> eventList){
-        for(Event event : eventList){
+    public void restoreList(ArrayList<T> eventList){
+        for(T event : eventList){
             switch (event.eventType){
                 case Event.MDL: ((CountEvent)event).raw = raw_0; break;
                 case Event.SPT: ((CountEvent)event).raw = ((int)(raw_1*10)); break;
@@ -66,7 +64,8 @@ public class ACFTRecord extends Record {
         }
     }
 
-    public void invalidateLevel(){
+    public void validate(ArrayList<T> eventList){
+        if(eventList!=null) updateRecord(eventList);
         isPassed = (qualifiedLevel.ordinal()>mos.ordinal()); // qualifiedLevel>=mos.ordinal()+1
     }
 
@@ -116,7 +115,7 @@ public class ACFTRecord extends Record {
         final private int id; // contains string resources id.
         final private String str; // contains default string.
         MOS(int id, String str){ this.id=id; this.str=str; } // constructor & setter.
-        public String toString(){ return str; }
+        @NotNull public String toString(){ return str; }
     }
 
 }

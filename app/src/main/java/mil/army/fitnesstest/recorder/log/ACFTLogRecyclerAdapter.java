@@ -22,11 +22,12 @@ import mil.army.fitnesstest.recorder.ACFTDBHelper;
 import mil.army.fitnesstest.recorder.ACFTRecord;
 import mil.army.fitnesstest.recorder.acft.Level;
 import mil.army.fitnesstest.databinding.RecyclerviewAcftLogBinding;
+import mil.army.fitnesstest.recorder.acft.event.Event;
 
 public class ACFTLogRecyclerAdapter extends RecyclerView.Adapter<ACFTLogRecyclerAdapter.ACFTLogViewHolder> {
     private Context context;
     private Resources resources;
-    private ArrayList<ACFTRecord> list;
+    private ArrayList<ACFTRecord<Event>> list;
 
     public ACFTLogRecyclerAdapter(Context context){
         this.context = context; resources = context.getResources();
@@ -37,7 +38,7 @@ public class ACFTLogRecyclerAdapter extends RecyclerView.Adapter<ACFTLogRecycler
 
     public class ACFTLogViewHolder extends RecyclerView.ViewHolder{
         RecyclerviewAcftLogBinding binding;
-        public ACFTRecord record;
+        public ACFTRecord<Event> record;
         public ACFTLogViewHolder(@NonNull View itemView) {
             super(itemView);
             itemView.setOnCreateContextMenuListener((menu, view, menuInfo) -> {
@@ -87,7 +88,7 @@ public class ACFTLogRecyclerAdapter extends RecyclerView.Adapter<ACFTLogRecycler
     @Override public int getItemCount() { return list.size(); }
 
     public void deleteAllRecord(View root){
-        final ArrayList<ACFTRecord> backup = new ArrayList<>(list);
+        final ArrayList<ACFTRecord<Event>> backup = new ArrayList<>(list);
         list.clear(); notifyDataSetChanged();
         ACFTDBHelper dbHelper = new ACFTDBHelper(context);
         dbHelper.deleteAll(); dbHelper.close();

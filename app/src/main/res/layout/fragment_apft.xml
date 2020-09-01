@@ -1,15 +1,170 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     tools:context="mil.army.fitnesstest.recorder.apft.APFTFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <data>
+        <variable
+            name="fragment"
+            type="mil.army.fitnesstest.recorder.apft.APFTFragment" />
+    </data>
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="@string/hello_apft_fragment" />
+        android:layout_height="match_parent">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_abstract_apft"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            app:layout_constraintTop_toBottomOf="@+id/recyclerView_apft"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+            <RadioGroup
+                android:id="@+id/rGroup_sex"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:orientation="horizontal"
+                android:onCheckedChanged="@{fragment::onSexChanged}"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintHorizontal_chainStyle="spread_inside"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/btn_record_date"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/txt_age_group">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:text="@string/sex"/>
+                <RadioButton
+                    android:id="@+id/rBtn_male"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:checked="@{fragment.record.sex.ordinal()==0}"
+                    android:text="@string/male"/>
+                <RadioButton
+                    android:id="@+id/rBtn_female"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginEnd="8dp"
+                    android:checked="@{fragment.record.sex.ordinal()==1}"
+                    android:text="@string/female"/>
+            </RadioGroup>
 
-</FrameLayout>
+            <TextView
+                android:id="@+id/txt_age_group"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:textSize="20sp"
+                android:text="@string/agegroup"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintTop_toTopOf="@+id/rGroup_sex"
+                app:layout_constraintBottom_toBottomOf="@+id/rGroup_sex"
+                app:layout_constraintStart_toEndOf="@+id/rGroup_sex"
+                app:layout_constraintEnd_toStartOf="@+id/spinner_age_group"/>
+
+            <androidx.appcompat.widget.AppCompatSpinner
+                android:id="@+id/spinner_age_group"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:spinnerMode="dropdown"
+                android:entries="@array/ageGroupAPFT"
+                android:selection="@{fragment.record.ageGroup.ordinal()}"
+                android:onItemSelected="@{fragment::onAgeSelected}"
+                app:layout_constraintTop_toTopOf="@+id/txt_age_group"
+                app:layout_constraintBottom_toBottomOf="@+id/txt_age_group"
+                app:layout_constraintStart_toEndOf="@+id/txt_age_group"/>
+
+            <ImageButton
+                android:id="@+id/btn_record_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:onClick="@{fragment::onDateClick}"
+                android:src="@drawable/ic_calendar"
+                android:background="@android:color/transparent"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintTop_toBottomOf="@+id/rGroup_sex"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/editText_record_date"/>
+
+            <EditText
+                android:id="@+id/editText_record_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:focusable="false"
+                android:onClick="@{fragment::onDateClick}"
+                android:text="@{fragment.record.dateToString()}"
+                app:layout_constraintTop_toTopOf="@+id/btn_record_date"
+                app:layout_constraintBottom_toBottomOf="@+id/btn_record_date"
+                app:layout_constraintStart_toEndOf="@+id/btn_record_date"
+                app:layout_constraintEnd_toStartOf="@+id/fab"/>
+
+            <TextView
+                android:id="@+id/txt_sco_total_header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:textSize="20sp"
+                android:text="@string/Score"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintBaseline_toBaselineOf="@+id/editText_record_date"
+                app:layout_constraintStart_toEndOf="@+id/editText_record_date"
+                app:layout_constraintEnd_toStartOf="@+id/txt_sco_total"/>
+            <TextView
+                android:id="@+id/txt_sco_total"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:textSize="25sp"
+                android:text="@{String.valueOf(fragment.record.sco_total)}"
+                app:layout_constraintBaseline_toBaselineOf="@+id/txt_sco_total_header"
+                app:layout_constraintStart_toEndOf="@+id/txt_sco_total_header"
+                app:layout_constraintEnd_toStartOf="@+id/txt_isPassed"/>
+
+            <TextView
+                android:id="@+id/txt_isPassed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:textColor="@{fragment.getPassedColor(fragment.record.isPassed)}"
+                android:textSize="25sp"
+                android:text="@{fragment.getPassed(fragment.record.isPassed)}"
+                app:layout_constraintBaseline_toBaselineOf="@+id/txt_sco_total"
+                app:layout_constraintStart_toEndOf="@+id/txt_sco_total"
+                app:layout_constraintEnd_toStartOf="@+id/fab"/>
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="6dp"
+                android:src="@drawable/ic_save"
+                android:onClick="@{fragment::onSaveClick}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView_apft"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/layout_abstract_apft"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

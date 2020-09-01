@@ -29,10 +29,11 @@ import mil.army.fitnesstest.recorder.MainActivity;
 import mil.army.fitnesstest.R;
 import mil.army.fitnesstest.databinding.FragmentAbcpBinding;
 import mil.army.fitnesstest.recorder.ABCPDBHelper;
+import mil.army.fitnesstest.recorder.Sex;
 
 public class ABCPFragment extends Fragment {
     private MainActivity activity;
-    public ABCPRecord record = new ABCPRecord();
+    public ABCPRecord<Item> record = new ABCPRecord<>();
     public MutableLiveData<ArrayList<Item>> itemList = new MutableLiveData<>(null);
     private ItemRecyclerAdapter adapter;
     public FragmentAbcpBinding binding;
@@ -57,7 +58,7 @@ public class ABCPFragment extends Fragment {
         binding.recyclerViewAbcp.setAdapter(adapter);
 
         itemList.observe(getViewLifecycleOwner(), items -> {
-            record.updateRecord(items);
+            record.validate(items);
             adapter.notifyDataSetChanged();
             binding.invalidateAll();
         });
@@ -70,23 +71,23 @@ public class ABCPFragment extends Fragment {
         super.onDestroyView();
     }
 
-    private void loadData(ABCPRecord record, ArrayList<Item> list){
+    private void loadData(ABCPRecord<Item> record, ArrayList<Item> list){
         SharedPreferences sharedPreferences = activity.getSharedPreferences("ABCPRecord", Activity.MODE_PRIVATE);
-        record.sex = ABCPRecord.Sex.valueOf(sharedPreferences.getInt("Sex", 0));
+        record.sex = Sex.valueOf(sharedPreferences.getInt("Sex", 0));
         record.ageGroup = ABCPRecord.AgeGroup.findById(sharedPreferences.getInt("AgeGroup",0));
         record.height = sharedPreferences.getFloat("Height",58.f);
         record.weight = sharedPreferences.getInt("Weight",90);
         record.neck = sharedPreferences.getFloat("Neck",10.f);
         record.abdomen_waist = sharedPreferences.getFloat("Abdomen_Waist",20.f);
-        if(record.sex == ABCPRecord.Sex.Female){
+        if(record.sex == Sex.Female){
             record.hips = sharedPreferences.getFloat("Hips",20.f);
             list.get(Item.ABDOMEN_WAIST).title = getString(R.string.waist);
             list.add(HIPS);
         }
-        record.restoreItemList(list);
+        record.restoreList(list);
     }
 
-    private void saveData(ABCPRecord record){
+    private void saveData(ABCPRecord<Item> record){
         SharedPreferences.Editor editor = activity.getSharedPreferences("ABCPRecord", Activity.MODE_PRIVATE).edit();
         editor.clear();
 
@@ -96,7 +97,7 @@ public class ABCPFragment extends Fragment {
         editor.putInt("Weight",record.weight);
         editor.putFloat("Neck",record.neck);
         editor.putFloat("Abdomen_Waist",record.abdomen_waist);
-        if(record.sex == ABCPRecord.Sex.Female)
+        if(record.sex == Sex.Female)
             editor.putFloat("Hips",record.hips);
         editor.putBoolean("HeightWeightPassed",record.height_weight);
         editor.putFloat("BodyFatPercentage",record.bodyFatPercentage);
@@ -132,24 +133,24 @@ public class ABCPFragment extends Fragment {
         ArrayList<Item> list = itemList.getValue();
         switch (checkedId){
             case R.id.rBtn_male:
-                record.sex = ABCPRecord.Sex.Male;
+                record.sex = Sex.Male;
                 list.remove(Item.HIPS);
                 list.get(Item.ABDOMEN_WAIST).title = getString(R.string.abdomen);
                 break;
             case R.id.rBtn_female:
-                record.sex = ABCPRecord.Sex.Female;
+                record.sex = Sex.Female;
                 list.get(Item.ABDOMEN_WAIST).title = getString(R.string.waist);
                 list.add(HIPS);
             break;
         } // Attach and Detach Hips item
         itemList.setValue(list);
-        record.updateRecord(list);//record.invalidate();
+        record.validate(list);//record.validate();
         binding.invalidateAll();
     }
 
     public void onAgeSelected(AdapterView<?> parent, View view, int position, long id) {
         record.ageGroup = ABCPRecord.AgeGroup.findById(position);
-        record.invalidatePass();
+        record.validate(null);
         binding.invalidateAll();
     }
 

@@ -20,11 +20,12 @@ import mil.army.fitnesstest.recorder.ABCPDBHelper;
 import mil.army.fitnesstest.recorder.ABCPRecord;
 import mil.army.fitnesstest.databinding.RecyclerviewAbcpLogBinding;
 import mil.army.fitnesstest.recorder.ACFTDBHelper;
+import mil.army.fitnesstest.recorder.abcp.Item;
 
 public class ABCPLogRecyclerAdapter extends RecyclerView.Adapter<ABCPLogRecyclerAdapter.ABCPLogViewHolder> {
     private Context context;
     private Resources resources;
-    private ArrayList<ABCPRecord> list;
+    private ArrayList<ABCPRecord<Item>> list;
 
     public ABCPLogRecyclerAdapter(Context context){
         this.context = context; resources = context.getResources();
@@ -35,7 +36,7 @@ public class ABCPLogRecyclerAdapter extends RecyclerView.Adapter<ABCPLogRecycler
 
     public class ABCPLogViewHolder extends RecyclerView.ViewHolder {
         RecyclerviewAbcpLogBinding binding;
-        public ABCPRecord record;
+        public ABCPRecord<Item> record;
         public ABCPLogViewHolder(@NonNull View itemView) {
             super(itemView);
             itemView.setOnCreateContextMenuListener((menu, view, menuInfo) -> {
@@ -80,7 +81,7 @@ public class ABCPLogRecyclerAdapter extends RecyclerView.Adapter<ABCPLogRecycler
     public void deleteAllRecord(View root){
         ACFTDBHelper dbHelper = new ACFTDBHelper(context);
         dbHelper.deleteAll(); dbHelper.close();
-        final ArrayList<ABCPRecord> backup = new ArrayList<>(list);
+        final ArrayList<ABCPRecord<Item>> backup = new ArrayList<>(list);
         list.clear(); notifyDataSetChanged();
         Snackbar.make(root, resources.getString(R.string.recordDeleted), Snackbar.LENGTH_SHORT)
                 .setAction(resources.getString(R.string.undo), v -> {

@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import mil.army.fitnesstest.recorder.ACFTRecord;
 import mil.army.fitnesstest.recorder.MainActivity;
 import mil.army.fitnesstest.R;
+import mil.army.fitnesstest.recorder.acft.event.CardioAlter;
 import mil.army.fitnesstest.recorder.acft.event.CountEvent;
 import mil.army.fitnesstest.recorder.acft.event.DurationEvent;
 import mil.army.fitnesstest.recorder.acft.event.Event;
@@ -30,7 +31,7 @@ import mil.army.fitnesstest.recorder.ACFTDBHelper;
 
 public class ACFTFragment extends Fragment{
     private MainActivity activity;
-    public ACFTRecord record = new ACFTRecord();
+    public ACFTRecord<Event> record = new ACFTRecord<>();
     public MutableLiveData<ArrayList<Event>> eventList = new MutableLiveData<>(null);
     public FragmentAcftBinding binding;
 
@@ -55,7 +56,7 @@ public class ACFTFragment extends Fragment{
         binding.recyclerViewAcft.setAdapter(adapter);
 
         eventList.observe(getViewLifecycleOwner(), events -> {
-            record.updateRecord(events);
+            record.validate(events);
             binding.invalidateAll();
         });
 
@@ -68,7 +69,7 @@ public class ACFTFragment extends Fragment{
         super.onDestroyView();
     }
 
-    private void loadData(ACFTRecord record, ArrayList<Event> list){
+    private void loadData(ACFTRecord<Event> record, ArrayList<Event> list){
         SharedPreferences sharedPreferences = activity.getSharedPreferences("ACFTRecord", Activity.MODE_PRIVATE);
 
         record.raw_0 = sharedPreferences.getInt("raw_0",0);
@@ -85,9 +86,9 @@ public class ACFTFragment extends Fragment{
         record.qualifiedLevel = Level.findById(sharedPreferences.getInt("qualifiedLevel", 0));
         record.mos = ACFTRecord.MOS.valueOf(sharedPreferences.getString("MOS", ACFTRecord.MOS.Moderate.toString()));
         record.isPassed = sharedPreferences.getBoolean("isPassed",false);
-        record.restoreEventList(list);
+        record.restoreList(list);
     }
-    private void saveData(ACFTRecord record){
+    private void saveData(ACFTRecord<Event> record){
         SharedPreferences.Editor editor = activity.getSharedPreferences("ACFTRecord", Activity.MODE_PRIVATE).edit();
 
         editor.putInt("raw_0", record.raw_0);
@@ -132,7 +133,7 @@ public class ACFTFragment extends Fragment{
             case R.id.rBtn_significant: record.mos = ACFTRecord.MOS.Significant;break;
             case R.id.rBtn_heavy: record.mos = ACFTRecord.MOS.Heavy; break;
         }
-        record.invalidateLevel();
+        record.validate(null);
         binding.invalidateAll();
     }
 

@@ -7,11 +7,18 @@
         <item>@string/Heavy</item>
     </string-array>
 
-    <string-array name="CardioEvent">
+    <string-array name="ACFTCardioEvent">
         <item>@string/Run</item>
-        <item>@string/Row</item>
-        <item>@string/Bike</item>
-        <item>@string/Swim</item>
+        <item>@string/Row_ACFT</item>
+        <item>@string/Bike_ACFT</item>
+        <item>@string/Swim_ACFT</item>
+    </string-array>
+
+    <string-array name="APFTCardioEvent">
+        <item>@string/Run</item>
+        <item>@string/Walk_APFT</item>
+        <item>@string/Bike_APFT</item>
+        <item>@string/Swim_APFT</item>
     </string-array>
 
     <string-array name="ageGroupABCP">
@@ -19,6 +26,17 @@
         <item>21–27</item>
         <item>28–39</item>
         <item>40+</item>
+    </string-array>
+
+    <string-array name="ageGroupAPFT">
+        <item>17–21</item>
+        <item>22–26</item>
+        <item>27–31</item>
+        <item>32–36</item>
+        <item>37–41</item>
+        <item>42–46</item>
+        <item>47–51</item>
+        <item>52–56</item>
     </string-array>
 
 </resources>

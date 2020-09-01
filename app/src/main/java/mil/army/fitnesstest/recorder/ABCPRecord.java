@@ -11,15 +11,15 @@ import mil.army.fitnesstest.recorder.abcp.Item;
 
 import static mil.army.fitnesstest.recorder.ABCPDBHelper.DBContract.*;
 
-public class ABCPRecord extends Record {
+public class ABCPRecord<T extends Item> extends Record<T> {
     public Sex sex = Sex.Male; public AgeGroup ageGroup= AgeGroup._17_20;
     public float height=58.0f, neck=10.0f, abdomen_waist =20.0f, hips=20.0f, bodyFatPercentage; public int weight=90;
     public boolean height_weight = false, bodyFatPass = true;
 
     public ABCPRecord(){ super(); }
 
-    public void updateRecord(ArrayList<Item> items){
-        for(Item item : items){
+    public void updateRecord(ArrayList<T> items){
+        for(T item : items){
             switch(item.itemType){
                 case Item.HEIGHT: height = ((item.raw)/2.f + 58); break;
                 case Item.WEIGHT: weight = (item.raw+90); break;
@@ -28,10 +28,9 @@ public class ABCPRecord extends Record {
                 case Item.HIPS: hips = ((item.raw)/2.f + 20); break;
             }
         }
-        invalidatePass();
     }
-    public void restoreItemList(ArrayList<Item> items){
-        for(Item item : items){
+    public void restoreList(ArrayList<T> items){
+        for(T item : items){
             switch(item.itemType){
                 case Item.HEIGHT: item.raw = ((int) (height-58)*2); break;
                 case Item.WEIGHT: item.raw = (weight-90); break;
@@ -42,7 +41,8 @@ public class ABCPRecord extends Record {
         }
     }
 
-    public void invalidatePass(){
+    public void validate(ArrayList<T> items){
+        if(items!=null) updateRecord(items);
         height_weight = Standard.ABCP.isHWPassed(sex.ordinal(),ageGroup.ordinal(),height,weight);
         bodyFatPercentage = (sex==Sex.Male ? Standard.ABCP.maleBodyFat(height,neck, abdomen_waist) : Standard.ABCP.femaleBodyFat(height,neck, abdomen_waist,hips));
         bodyFatPass = Standard.ABCP.isBodyFatPassed(sex.ordinal(), ageGroup.ordinal(), bodyFatPercentage);
@@ -67,17 +67,6 @@ public class ABCPRecord extends Record {
         return cv;
     }
 
-    public enum Sex{
-        Male(0,"Male"),
-        Female(1,"Female");
-
-        private int id; // contains id.
-        private String str; // contains default string.
-        Sex(int id, String str){this.id=id; this.str=str;} // constructor & setter.
-        public String toString(){return str;}
-
-        public static Sex valueOf(int id){ return (id==0 ? Male : Female); }
-    }
     public enum AgeGroup{
         _17_20(0,"17-20"),
         _21_27(1,"21-27"),
@@ -87,7 +76,7 @@ public class ABCPRecord extends Record {
         private int id; // contains id.
         private String str; // contains default string.
         AgeGroup(int id, String str){this.id=id; this.str=str;} // constructor & setter.
-        public String toString(){return str;}
+        @NotNull public String toString(){return str;}
 
         public static AgeGroup findById(int id){
             switch(id){

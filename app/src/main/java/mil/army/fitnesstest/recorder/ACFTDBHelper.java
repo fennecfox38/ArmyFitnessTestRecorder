@@ -13,8 +13,9 @@ import org.apache.poi.ss.usermodel.Workbook;
 
 import java.util.ArrayList;
 
-import mil.army.fitnesstest.recorder.acft.CardioAlter;
+import mil.army.fitnesstest.recorder.acft.event.CardioAlter;
 import mil.army.fitnesstest.recorder.acft.Level;
+import mil.army.fitnesstest.recorder.acft.event.Event;
 
 import static mil.army.fitnesstest.recorder.ACFTDBHelper.DBContract.*;
 
@@ -39,14 +40,14 @@ public class ACFTDBHelper extends SQLiteOpenHelper {
         return db; // create table if not exist.
     }
 
-    public ArrayList<ACFTRecord> getRecordList(){
-        ArrayList<ACFTRecord> list = new ArrayList<>();
+    public ArrayList<ACFTRecord<Event>> getRecordList(){
+        ArrayList<ACFTRecord<Event>> list = new ArrayList<>();
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor= db.rawQuery(SQL_SELECT,null);
 
-        ACFTRecord record;
+        ACFTRecord<Event> record;
         for(boolean haveItem = cursor.moveToFirst(); haveItem; haveItem=cursor.moveToNext()){
-            record = new ACFTRecord();
+            record = new ACFTRecord<Event>();
             record.stringToDate(cursor.getString(cursor.getColumnIndex(COLUMN_RECORD_DATE)));
             record.raw_0 = cursor.getInt(cursor.getColumnIndex(COLUMN_RAW_MDL));
             record.raw_1 = preciseFloat(cursor.getFloat(cursor.getColumnIndex(COLUMN_RAW_SPT)));
@@ -73,13 +74,13 @@ public class ACFTDBHelper extends SQLiteOpenHelper {
         return list;
     }
 
-    public void saveRecordList(ArrayList<ACFTRecord> list){
+    public void saveRecordList(ArrayList<ACFTRecord<Event>> list){
         SQLiteDatabase db = getWritableDatabase();
         if(db == null) return;
         try {
             db.beginTransaction();          //clear the table first
             db.delete(TABLE_NAME,null,null);
-            for(ACFTRecord record : list)   //go through the list and add one by one
+            for(ACFTRecord<Event> record : list)   //go through the list and add one by one
                 db.insert(TABLE_NAME, null, record.getContentValues());
             db.setTransactionSuccessful();
         } catch (SQLException e) { e.printStackTrace(); }
@@ -87,7 +88,7 @@ public class ACFTDBHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void insertRecord(ACFTRecord record){
+    public void insertRecord(ACFTRecord<Event> record){
         SQLiteDatabase db = getWritableDatabase();
         if(db == null) return;
         try {
@@ -99,7 +100,7 @@ public class ACFTDBHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void deleteRecord(ACFTRecord record){
+    public void deleteRecord(ACFTRecord<Event> record){
         String sqlExec = SQL_DELETE_WHERE + sqlWhere(COLUMN_RECORD_DATE,record.dateToString()) + "AND ";
         sqlExec += sqlWhere(COLUMN_RAW_MDL,record.raw_0) + "AND " + sqlWhere(COLUMN_RAW_SPT,record.raw_1) + "AND ";
         sqlExec += sqlWhere(COLUMN_RAW_HPU,record.raw_2) + "AND " + sqlWhere(COLUMN_RAW_SDC,record.raw_3.toString()) + "AND ";
@@ -117,8 +118,6 @@ public class ACFTDBHelper extends SQLiteOpenHelper {
         try {
             db.beginTransaction();
             db.execSQL(sqlExec);
-            //db.delete(TABLE_NAME, "ROW_NUMBER()"+"="+ position+1, null);
-            //db.execSQL("DELETE FROM "+TABLE_NAME+" WHERE _id="+String.valueOf(id));
             db.setTransactionSuccessful();
         } catch (SQLException e) { e.printStackTrace(); }
         finally { db.endTransaction(); }

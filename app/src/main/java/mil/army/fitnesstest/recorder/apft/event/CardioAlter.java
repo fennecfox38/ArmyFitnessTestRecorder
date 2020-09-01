@@ -1,10 +1,10 @@
-package mil.army.fitnesstest.recorder.acft;
+package mil.army.fitnesstest.recorder.apft.event;
 
 public enum CardioAlter {
     RUN(0,"2 Mile Run"),
-    ROW(1,"5000 M Row"),
-    BIKE(2,"15000 M Bike"),
-    SWIM(3,"1000 M Swim");
+    WALK(1,"2.5 Mile Walk"),
+    BIKE(2,"6.2 Mile Bike"),
+    SWIM(3,"800 Yard Swim");
 
     private int id; // contains id.
     private String str; // contains default string.
@@ -14,7 +14,7 @@ public enum CardioAlter {
     public static CardioAlter findById(int id){
         switch(id){
             case 0: return RUN;
-            case 1: return ROW;
+            case 1: return WALK;
             case 2: return BIKE;
             case 3: return SWIM;
         }
@@ -22,7 +22,7 @@ public enum CardioAlter {
     }
     public static CardioAlter findByString(String str){
         if(str.equals(RUN.str)) return RUN;
-        else if(str.equals(ROW.str)) return ROW;
+        else if(str.equals(WALK.str)) return WALK;
         else if(str.equals(BIKE.str)) return BIKE;
         else if(str.equals(SWIM.str)) return SWIM;
         else return null;

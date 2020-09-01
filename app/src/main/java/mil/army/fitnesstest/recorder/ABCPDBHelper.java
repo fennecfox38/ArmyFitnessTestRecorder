@@ -13,6 +13,8 @@ import org.apache.poi.ss.usermodel.Workbook;
 
 import java.util.ArrayList;
 
+import mil.army.fitnesstest.recorder.abcp.Item;
+
 import static mil.army.fitnesstest.recorder.ABCPDBHelper.DBContract.*;
 
 public class ABCPDBHelper extends SQLiteOpenHelper {
@@ -36,16 +38,16 @@ public class ABCPDBHelper extends SQLiteOpenHelper {
         return db; // create table if not exist.
     }
 
-    public ArrayList<ABCPRecord> getRecordList(){
-        ArrayList<ABCPRecord> list = new ArrayList<>();
+    public ArrayList<ABCPRecord<Item>> getRecordList(){
+        ArrayList<ABCPRecord<Item>> list = new ArrayList<>();
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor= db.rawQuery(SQL_SELECT,null);
 
-        ABCPRecord record;
+        ABCPRecord<Item> record;
         for(boolean haveItem = cursor.moveToFirst(); haveItem; haveItem=cursor.moveToNext()){
-            record = new ABCPRecord();
+            record = new ABCPRecord<Item>();
             record.stringToDate(cursor.getString(cursor.getColumnIndex(COLUMN_RECORD_DATE)));
-            record.sex = ABCPRecord.Sex.valueOf(cursor.getString(cursor.getColumnIndex(COLUMN_SEX)));
+            record.sex = Sex.valueOf(cursor.getString(cursor.getColumnIndex(COLUMN_SEX)));
             record.ageGroup = ABCPRecord.AgeGroup.findByString(cursor.getString(cursor.getColumnIndex(COLUMN_AGE_GROUP)));
             record.height = preciseFloat(cursor.getFloat(cursor.getColumnIndex(COLUMN_HEIGHT)));
             record.weight = cursor.getInt(cursor.getColumnIndex(COLUMN_WEIGHT));
@@ -65,13 +67,13 @@ public class ABCPDBHelper extends SQLiteOpenHelper {
         return list;
     }
 
-    public void saveRecordList(ArrayList<ABCPRecord> list){
+    public void saveRecordList(ArrayList<ABCPRecord<Item>> list){
         SQLiteDatabase db = getWritableDatabase();
         if(db == null) return;
         try {
             db.beginTransaction();          //clear the table first
             db.delete(TABLE_NAME,null,null);
-            for(ABCPRecord record : list)   //go through the list and add one by one
+            for(ABCPRecord<Item> record : list)   //go through the list and add one by one
                 db.insert(TABLE_NAME, null, record.getContentValues());
             db.setTransactionSuccessful();
         } catch (SQLException e) { e.printStackTrace(); }
@@ -79,7 +81,7 @@ public class ABCPDBHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void insertRecord(ABCPRecord record){
+    public void insertRecord(ABCPRecord<Item> record){
         SQLiteDatabase db = getWritableDatabase();
         if(db == null) return;
         try {
@@ -91,7 +93,7 @@ public class ABCPDBHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void deleteRecord(ABCPRecord record){
+    public void deleteRecord(ABCPRecord<Item> record){
         String sqlExec = SQL_DELETE_WHERE + sqlWhere(COLUMN_RECORD_DATE,record.dateToString()) + "AND ";
         sqlExec += sqlWhere(COLUMN_SEX,record.sex.toString()) + "AND " + sqlWhere(COLUMN_AGE_GROUP,record.ageGroup.toString()) + "AND ";
         sqlExec += sqlWhere(COLUMN_HEIGHT,record.height) + "AND " + sqlWhere(COLUMN_WEIGHT,record.weight) + "AND ";

@@ -2,7 +2,7 @@ package mil.army.fitnesstest.recorder.acft.event;
 
 import mil.army.fitnesstest.recorder.acft.Level;
 
-public class Event {
+public abstract class Event {
     public final static int MDL=0, SPT=1, HPU=2, SDC=3, LTK=4, CARDIO=5;
     public String title; public Level level = Level.Fail;
     public int eventType, max, sco = 0;
@@ -13,10 +13,7 @@ public class Event {
         this.max = max;
     }
 
-    public void giveScore(){
-        //Giving Score Logic needs to be placed here.
-        giveLevel();
-    }
+    public abstract void giveScore();
 
     public void giveLevel() {
         if(sco>=70) level = Level.Heavy;

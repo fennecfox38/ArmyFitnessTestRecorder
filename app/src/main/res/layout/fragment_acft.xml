@@ -174,5 +174,3 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
-    <!--android:onClick="@{fragment::onDateClick}"-->
-    <!--android:onClick="@{fragment::onSaveClick}"-->

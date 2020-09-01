@@ -1,4 +1,4 @@
-package mil.army.fitnesstest.recorder.acft;
+package mil.army.fitnesstest.recorder;
 
 import androidx.annotation.NonNull;
 
