@@ -54,7 +54,7 @@ public class ABCPRecord<T extends Item> extends Record<T> {
     public ContentValues getContentValues() {
         ContentValues cv = new ContentValues();
         cv.put(COLUMN_RECORD_DATE,dateToString());
-        cv.put(COLUMN_SEX,sex.toString());
+        cv.put(COLUMN_SEX,sex.name());
         cv.put(COLUMN_AGE_GROUP,ageGroup.toString());
         cv.put(COLUMN_HEIGHT,height);
         cv.put(COLUMN_WEIGHT,weight);
@@ -69,37 +69,30 @@ public class ABCPRecord<T extends Item> extends Record<T> {
     }
 
     public enum AgeGroup{
-        _17_20(0,"17-20"),
-        _21_27(1,"21-27"),
-        _28_39(2,"28-39"),
-        _40_(3,"40+");
+        _17_20("17-20"),
+        _21_27("21-27"),
+        _28_39("28-39"),
+        _40_("40+");
 
-        private int id; // contains id.
         private String str; // contains default string.
-        AgeGroup(int id, String str){this.id=id; this.str=str;} // constructor & setter.
+        AgeGroup(String str){this.str=str;} // constructor & setter.
         @NotNull public String toString(){return str;}
 
-        public static AgeGroup findById(int id){
-            switch(id){
-                case 0: return _17_20;
-                case 1: return _21_27;
-                case 2: return _28_39;
-                case 3: return _40_;
-            }
-            return null;
-        }
+        public static AgeGroup valueOf(int ordinal){ return values()[ordinal]; }
         public static AgeGroup findByString(String str){
-            if(str.equals(_17_20.str)) return _17_20;
-            else if(str.equals(_21_27.str)) return _21_27;
-            else if(str.equals(_28_39.str)) return _28_39;
-            else if(str.equals(_40_.str)) return _40_;
-            else return null;
+            switch (str){
+                case "17-20": return _17_20;
+                case "21_27": return _21_27;
+                case "28_39": return _28_39;
+                case "40+": return _40_;
+                default: return null;
+            }
         }
     }
 
     @NotNull @Override public String toString() {
         return "Record Date: " +dateToString() +
-                "\nSex: " + sex.toString() +
+                "\nSex: " + sex.name() +
                 "\nAge Group: " + ageGroup.toString() +
                 "\nHeight: " + height + "inches\nWeight: " + weight +
                 "lbs\nNeck: " + neck + "inches\n"+

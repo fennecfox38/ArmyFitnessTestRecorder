@@ -96,7 +96,7 @@ public class ABCPDBHelper extends SQLiteOpenHelper {
 
     public void deleteRecord(ABCPRecord<Item> record){
         String sqlExec = SQL_DELETE_WHERE + sqlWhere(COLUMN_RECORD_DATE,record.dateToString()) + "AND ";
-        sqlExec += sqlWhere(COLUMN_SEX,record.sex.toString()) + "AND " + sqlWhere(COLUMN_AGE_GROUP,record.ageGroup.toString()) + "AND ";
+        sqlExec += sqlWhere(COLUMN_SEX,record.sex.name()) + "AND " + sqlWhere(COLUMN_AGE_GROUP,record.ageGroup.toString()) + "AND ";
         sqlExec += sqlWhere(COLUMN_HEIGHT,record.height) + "AND " + sqlWhere(COLUMN_WEIGHT,record.weight) + "AND ";
         sqlExec += sqlWhere(COLUMN_NECK,record.neck) + "AND " + sqlWhere(COLUMN_ABDOMEN_WAIST,record.abdomen_waist) + "AND ";
         sqlExec += "("+sqlWhere(COLUMN_HIPS,record.hips)+"OR "+ COLUMN_HIPS + " IS NULL) AND " ;

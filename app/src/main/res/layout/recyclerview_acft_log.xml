@@ -62,7 +62,7 @@
                 android:layout_gravity="center"
                 android:textColor="@{viewholder.getPassedColor(viewholder.record.isPassed)}"
                 android:textSize="20sp"
-                android:text="@{viewholder.record.qualifiedLevel.toString()}"/>
+                android:text="@{viewholder.record.qualifiedLevel.name()}"/>
         </TableRow>
 
         <View

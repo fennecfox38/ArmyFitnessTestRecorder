@@ -22,12 +22,12 @@ import mil.army.fitnesstest.recorder.acft.ACFTDBHelper;
 import mil.army.fitnesstest.recorder.acft.ACFTRecord;
 import mil.army.fitnesstest.recorder.acft.Level;
 import mil.army.fitnesstest.databinding.RecyclerviewAcftLogBinding;
-import mil.army.fitnesstest.recorder.acft.event.Event;
+import mil.army.fitnesstest.recorder.acft.event.ACFTEvent;
 
 public class ACFTLogRecyclerAdapter extends RecyclerView.Adapter<ACFTLogRecyclerAdapter.ACFTLogViewHolder> {
     private Context context;
     private Resources resources;
-    private ArrayList<ACFTRecord<Event>> list;
+    private ArrayList<ACFTRecord<ACFTEvent>> list;
 
     public ACFTLogRecyclerAdapter(Context context){
         this.context = context; resources = context.getResources();
@@ -38,7 +38,7 @@ public class ACFTLogRecyclerAdapter extends RecyclerView.Adapter<ACFTLogRecycler
 
     public class ACFTLogViewHolder extends RecyclerView.ViewHolder{
         RecyclerviewAcftLogBinding binding;
-        public ACFTRecord<Event> record;
+        public ACFTRecord<ACFTEvent> record;
         public ACFTLogViewHolder(@NonNull View itemView) {
             super(itemView);
             itemView.setOnCreateContextMenuListener((menu, view, menuInfo) -> {
@@ -66,10 +66,10 @@ public class ACFTLogRecyclerAdapter extends RecyclerView.Adapter<ACFTLogRecycler
         public String getPassed(boolean isPassed){ return resources.getString(isPassed ? R.string.pass: R.string.fail); }
         public String getLevel(int sco, boolean pf){
             if(pf) return getPassed(sco>=60);
-            else if(sco<60) return Level.Fail.toString();
-            else if(sco<65) return Level.Moderate.toString();
-            else if(sco<70) return Level.Significant.toString();
-            else return Level.Heavy.toString();
+            else if(sco<60) return Level.Fail.name();
+            else if(sco<65) return Level.Moderate.name();
+            else if(sco<70) return Level.Significant.name();
+            else return Level.Heavy.name();
         }
 
     }
@@ -88,7 +88,7 @@ public class ACFTLogRecyclerAdapter extends RecyclerView.Adapter<ACFTLogRecycler
     @Override public int getItemCount() { return list.size(); }
 
     public void deleteAllRecord(View root){
-        final ArrayList<ACFTRecord<Event>> backup = new ArrayList<>(list);
+        final ArrayList<ACFTRecord<ACFTEvent>> backup = new ArrayList<>(list);
         list.clear(); notifyDataSetChanged();
         ACFTDBHelper dbHelper = new ACFTDBHelper(context);
         dbHelper.deleteAll(); dbHelper.close();

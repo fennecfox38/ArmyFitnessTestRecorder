@@ -14,8 +14,8 @@ import org.apache.poi.ss.usermodel.Workbook;
 import java.util.ArrayList;
 
 import mil.army.fitnesstest.recorder.FileProvider;
-import mil.army.fitnesstest.recorder.acft.event.CardioAlter;
-import mil.army.fitnesstest.recorder.acft.event.Event;
+import mil.army.fitnesstest.recorder.acft.event.ACFTCardioAlter;
+import mil.army.fitnesstest.recorder.acft.event.ACFTEvent;
 
 import static mil.army.fitnesstest.recorder.acft.ACFTDBHelper.DBContract.*;
 
@@ -40,14 +40,14 @@ public class ACFTDBHelper extends SQLiteOpenHelper {
         return db; // create table if not exist.
     }
 
-    public ArrayList<ACFTRecord<Event>> getRecordList(){
-        ArrayList<ACFTRecord<Event>> list = new ArrayList<>();
+    public ArrayList<ACFTRecord<ACFTEvent>> getRecordList(){
+        ArrayList<ACFTRecord<ACFTEvent>> list = new ArrayList<>();
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor= db.rawQuery(SQL_SELECT,null);
 
-        ACFTRecord<Event> record;
+        ACFTRecord<ACFTEvent> record;
         for(boolean haveItem = cursor.moveToFirst(); haveItem; haveItem=cursor.moveToNext()){
-            record = new ACFTRecord<Event>();
+            record = new ACFTRecord<ACFTEvent>();
             record.stringToDate(cursor.getString(cursor.getColumnIndex(COLUMN_RECORD_DATE)));
             record.raw_0 = cursor.getInt(cursor.getColumnIndex(COLUMN_RAW_MDL));
             record.raw_1 = preciseFloat(cursor.getFloat(cursor.getColumnIndex(COLUMN_RAW_SPT)));
@@ -61,7 +61,7 @@ public class ACFTDBHelper extends SQLiteOpenHelper {
             record.sco[3] = cursor.getInt(cursor.getColumnIndex(COLUMN_SCORE_SDC));
             record.sco[4] = cursor.getInt(cursor.getColumnIndex(COLUMN_SCORE_LTK));
             record.sco[5] = cursor.getInt(cursor.getColumnIndex(COLUMN_SCORE_CARDIO));
-            record.cardioAlter = CardioAlter.findByString(cursor.getString(cursor.getColumnIndex(COLUMN_CARDIO_ALTER)));
+            record.cardioAlter = ACFTCardioAlter.findByString(cursor.getString(cursor.getColumnIndex(COLUMN_CARDIO_ALTER)));
             record.qualifiedLevel = Level.valueOf(cursor.getString(cursor.getColumnIndex(COLUMN_QUALIFIED_LEVEL)));
             record.sco_total = cursor.getInt(cursor.getColumnIndex(COLUMN_SCORE_TOTAL));
             record.mos = ACFTRecord.MOS.valueOf(cursor.getString(cursor.getColumnIndex(COLUMN_MOS_REQUIREMENT)));
@@ -74,13 +74,13 @@ public class ACFTDBHelper extends SQLiteOpenHelper {
         return list;
     }
 
-    public void saveRecordList(ArrayList<ACFTRecord<Event>> list){
+    public void saveRecordList(ArrayList<ACFTRecord<ACFTEvent>> list){
         SQLiteDatabase db = getWritableDatabase();
         if(db == null) return;
         try {
             db.beginTransaction();          //clear the table first
             db.delete(TABLE_NAME,null,null);
-            for(ACFTRecord<Event> record : list)   //go through the list and add one by one
+            for(ACFTRecord<ACFTEvent> record : list)   //go through the list and add one by one
                 db.insert(TABLE_NAME, null, record.getContentValues());
             db.setTransactionSuccessful();
         } catch (SQLException e) { e.printStackTrace(); }
@@ -88,7 +88,7 @@ public class ACFTDBHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void insertRecord(ACFTRecord<Event> record){
+    public void insertRecord(ACFTRecord<ACFTEvent> record){
         SQLiteDatabase db = getWritableDatabase();
         if(db == null) return;
         try {
@@ -100,7 +100,7 @@ public class ACFTDBHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void deleteRecord(ACFTRecord<Event> record){
+    public void deleteRecord(ACFTRecord<ACFTEvent> record){
         String sqlExec = SQL_DELETE_WHERE + sqlWhere(COLUMN_RECORD_DATE,record.dateToString()) + "AND ";
         sqlExec += sqlWhere(COLUMN_RAW_MDL,record.raw_0) + "AND " + sqlWhere(COLUMN_RAW_SPT,record.raw_1) + "AND ";
         sqlExec += sqlWhere(COLUMN_RAW_HPU,record.raw_2) + "AND " + sqlWhere(COLUMN_RAW_SDC,record.raw_3.toString()) + "AND ";
@@ -109,8 +109,8 @@ public class ACFTDBHelper extends SQLiteOpenHelper {
         sqlExec += sqlWhere(COLUMN_SCORE_HPU,record.sco[2]) + "AND " + sqlWhere(COLUMN_SCORE_SDC,record.sco[3]) + "AND ";
         sqlExec += sqlWhere(COLUMN_SCORE_LTK,record.sco[4]) + "AND " + sqlWhere(COLUMN_SCORE_CARDIO,record.sco[5]) + "AND ";
         sqlExec += sqlWhere(COLUMN_CARDIO_ALTER,record.cardioAlter.toString()) + "AND ";
-        sqlExec += sqlWhere(COLUMN_QUALIFIED_LEVEL,record.qualifiedLevel.toString()) + "AND ";
-        sqlExec += sqlWhere(COLUMN_SCORE_TOTAL,record.sco_total) + "AND " + sqlWhere(COLUMN_MOS_REQUIREMENT,record.mos.toString()) + "AND ";
+        sqlExec += sqlWhere(COLUMN_QUALIFIED_LEVEL,record.qualifiedLevel.name()) + "AND ";
+        sqlExec += sqlWhere(COLUMN_SCORE_TOTAL,record.sco_total) + "AND " + sqlWhere(COLUMN_MOS_REQUIREMENT,record.mos.name()) + "AND ";
         sqlExec += sqlWhere(COLUMN_IS_PASSED,Boolean.toString(record.isPassed));
         SQLiteDatabase db = getWritableDatabase();
 

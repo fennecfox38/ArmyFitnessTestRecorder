@@ -2,10 +2,10 @@ package mil.army.fitnesstest.recorder.apft.event;
 
 import mil.army.fitnesstest.Standard;
 
-public class CountEvent extends Event {
+public class CountAPFTEvent extends APFTEvent {
     public int raw = 0;
 
-    public CountEvent(int eventType, String title, int max) {
+    public CountAPFTEvent(int eventType, String title, int max) {
         super(eventType, title, max);
     }
 

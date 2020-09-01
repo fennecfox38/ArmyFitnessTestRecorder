@@ -1,7 +1,6 @@
 package mil.army.fitnesstest.recorder.acft;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.text.Editable;
 import android.view.LayoutInflater;
@@ -23,10 +22,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 import mil.army.fitnesstest.R;
-import mil.army.fitnesstest.recorder.acft.event.CardioAlter;
-import mil.army.fitnesstest.recorder.acft.event.CountEvent;
-import mil.army.fitnesstest.recorder.acft.event.Event;
-import mil.army.fitnesstest.recorder.acft.event.DurationEvent;
+import mil.army.fitnesstest.recorder.acft.event.ACFTCardioAlter;
+import mil.army.fitnesstest.recorder.acft.event.ACFTEvent;
+import mil.army.fitnesstest.recorder.acft.event.CountACFTEvent;
+import mil.army.fitnesstest.recorder.acft.event.DurationACFTEvent;
 import mil.army.fitnesstest.databinding.DurationpickBinding;
 import mil.army.fitnesstest.databinding.RecyclerviewCountEventAcftBinding;
 import mil.army.fitnesstest.databinding.RecyclerviewDurationEventAcftBinding;
@@ -34,12 +33,12 @@ import mil.army.fitnesstest.databinding.RecyclerviewDurationEventAcftBinding;
 import static android.text.InputType.TYPE_CLASS_NUMBER;
 import static android.text.InputType.TYPE_NUMBER_FLAG_DECIMAL;
 
-public class EventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class ACFTEventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context context;
     private Resources resources;
-    public MutableLiveData<ArrayList<Event>> eventList;
+    public MutableLiveData<ArrayList<ACFTEvent>> eventList;
 
-    public EventRecyclerAdapter(Context context, MutableLiveData<ArrayList<Event>> eventList){
+    public ACFTEventRecyclerAdapter(Context context, MutableLiveData<ArrayList<ACFTEvent>> eventList){
         this.context = context;
         resources = context.getResources();
         this.eventList = eventList;
@@ -47,7 +46,7 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     public class CountViewHolder extends RecyclerView.ViewHolder{
         private RecyclerviewCountEventAcftBinding binding;
-        public CountEvent event = null; // It will be assigned in 'onBindViewHolder'
+        public CountACFTEvent event = null; // It will be assigned in 'onBindViewHolder'
         public CountViewHolder(@NonNull View itemView) {
             super(itemView);
             binding = DataBindingUtil.bind(itemView);
@@ -56,7 +55,7 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
             String string = s.toString();
             if(string.length()==0) return;
             try{
-                if(event.eventType != Event.SPT) updateRawSco(Integer.parseInt(string));
+                if(event.eventType != ACFTEvent.SPT) updateRawSco(Integer.parseInt(string));
                 else updateRawSco((int)(Float.parseFloat(string)*10));
             }catch(Exception e){ return; }
         }
@@ -82,7 +81,7 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     public class DurationViewHolder extends RecyclerView.ViewHolder{
         RecyclerviewDurationEventAcftBinding binding;
-        public DurationEvent event = null; // It will be assigned in 'onBindViewHolder'
+        public DurationACFTEvent event = null; // It will be assigned in 'onBindViewHolder'
         public DurationViewHolder(@NonNull View itemView) {
             super(itemView);
             binding = DataBindingUtil.bind(itemView);
@@ -109,7 +108,7 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
         }
         public int getPassedColor(boolean isPassed){ return resources.getColor(isPassed ? R.color.passed: R.color.failed); }
         public void onAlterSelected(AdapterView<?> parent, View view, int position, long id) {
-            event.cardioAlter= CardioAlter.findById(position);
+            event.cardioAlter= ACFTCardioAlter.valueOf(position);
             event.giveScore();
             updateEventList(event);
             binding.invalidateAll();
@@ -120,23 +119,23 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater =  (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         switch (viewType){
-            case Event.SDC: case Event.CARDIO:
-                return (new EventRecyclerAdapter.DurationViewHolder(inflater.inflate(R.layout.recyclerview_duration_event_acft,parent,false)));
+            case ACFTEvent.SDC: case ACFTEvent.CARDIO:
+                return (new ACFTEventRecyclerAdapter.DurationViewHolder(inflater.inflate(R.layout.recyclerview_duration_event_acft,parent,false)));
             default: // case for CountEvent such as MDL, SPT, HPU, LTK
-                return (new EventRecyclerAdapter.CountViewHolder(inflater.inflate(R.layout.recyclerview_count_event_acft,parent,false)));
+                return (new ACFTEventRecyclerAdapter.CountViewHolder(inflater.inflate(R.layout.recyclerview_count_event_acft,parent,false)));
         }
     }
     @Override public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
         if(viewHolder instanceof CountViewHolder){
             CountViewHolder holder = (CountViewHolder) viewHolder;
-            holder.event = (CountEvent) eventList.getValue().get(position);
+            holder.event = (CountACFTEvent) eventList.getValue().get(position);
             holder.binding.setViewholder(holder);
-            if(position == Event.SPT)
+            if(position == ACFTEvent.SPT)
                 holder.binding.editTextRaw.setInputType(TYPE_CLASS_NUMBER | TYPE_NUMBER_FLAG_DECIMAL);
         }
         else if(viewHolder instanceof DurationViewHolder){
             DurationViewHolder holder = (DurationViewHolder) viewHolder;
-            holder.event = (DurationEvent) eventList.getValue().get(position);
+            holder.event = (DurationACFTEvent) eventList.getValue().get(position);
             holder.binding.setViewholder(holder);
         }
 
@@ -145,15 +144,15 @@ public class EventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.View
     @Override public int getItemViewType(int position) { return position; }
     @Override public int getItemCount() { return eventList.getValue().size(); }
 
-    private void updateEventList(Event event){
-        ArrayList<Event> list = eventList.getValue();
+    private void updateEventList(ACFTEvent event){
+        ArrayList<ACFTEvent> list = eventList.getValue();
         list.set(event.eventType,event);
         eventList.setValue(list);
     }
 
     @BindingAdapter("android:text")
-    public static void setText(EditText editText, CountEvent event) {
-        if(event.eventType!= Event.SPT){
+    public static void setText(EditText editText, CountACFTEvent event) {
+        if(event.eventType!= ACFTEvent.SPT){
             try{ if(event.raw == Integer.parseInt(editText.getText().toString())) return; }
             catch (NumberFormatException e){e.printStackTrace();}
             editText.setText(String.valueOf(event.raw));

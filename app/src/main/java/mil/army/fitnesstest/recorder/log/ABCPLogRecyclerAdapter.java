@@ -19,7 +19,6 @@ import mil.army.fitnesstest.R;
 import mil.army.fitnesstest.recorder.abcp.ABCPDBHelper;
 import mil.army.fitnesstest.recorder.abcp.ABCPRecord;
 import mil.army.fitnesstest.databinding.RecyclerviewAbcpLogBinding;
-import mil.army.fitnesstest.recorder.acft.ACFTDBHelper;
 import mil.army.fitnesstest.recorder.abcp.Item;
 
 public class ABCPLogRecyclerAdapter extends RecyclerView.Adapter<ABCPLogRecyclerAdapter.ABCPLogViewHolder> {
@@ -79,7 +78,7 @@ public class ABCPLogRecyclerAdapter extends RecyclerView.Adapter<ABCPLogRecycler
     @Override public int getItemCount() { return list.size(); }
 
     public void deleteAllRecord(View root){
-        ACFTDBHelper dbHelper = new ACFTDBHelper(context);
+        ABCPDBHelper dbHelper = new ABCPDBHelper(context);
         dbHelper.deleteAll(); dbHelper.close();
         final ArrayList<ABCPRecord<Item>> backup = new ArrayList<>(list);
         list.clear(); notifyDataSetChanged();

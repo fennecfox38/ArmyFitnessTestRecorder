@@ -4,11 +4,11 @@ import mil.army.fitnesstest.Standard;
 import mil.army.fitnesstest.recorder.Duration;
 import mil.army.fitnesstest.recorder.acft.Level;
 
-public class DurationEvent extends Event {
+public class DurationACFTEvent extends ACFTEvent {
     public Duration duration;
-    public CardioAlter cardioAlter = CardioAlter.RUN;
+    public ACFTCardioAlter cardioAlter = ACFTCardioAlter.RUN;
 
-    public DurationEvent(int eventType, String title, int max){
+    public DurationACFTEvent(int eventType, String title, int max){
         super(eventType, title, max);
         duration = new Duration(0,0);
     }
@@ -16,14 +16,14 @@ public class DurationEvent extends Event {
     @Override public void giveScore(){
         if(eventType == SDC)
             sco = Standard.ACFT.SDCScore(duration);
-        else if(cardioAlter== CardioAlter.RUN)
+        else if(cardioAlter== ACFTCardioAlter.RUN)
             sco = Standard.ACFT.RUNScore(duration);
         else sco = AlterScore(duration);
         giveLevel();
     }
 
     @Override public void giveLevel(){
-        if(cardioAlter == CardioAlter.RUN) super.giveLevel();
+        if(cardioAlter == ACFTCardioAlter.RUN) super.giveLevel();
         else level = (sco>=60 ? Level.Pass : Level.Fail);
     }
 

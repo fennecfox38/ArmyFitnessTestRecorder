@@ -7,7 +7,7 @@
     <data>
         <variable
             name="viewholder"
-            type="mil.army.fitnesstest.recorder.acft.EventRecyclerAdapter.CountViewHolder" />
+            type="mil.army.fitnesstest.recorder.acft.ACFTEventRecyclerAdapter.CountViewHolder" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -39,7 +39,7 @@
             android:gravity="end"
             android:textColor="@{viewholder.getPassedColor(viewholder.event.level.isPassed())}"
             android:textSize="20sp"
-            android:text="@{viewholder.event.level.toString()}"
+            android:text="@{viewholder.event.level.name()}"
             app:layout_constraintBaseline_toBaselineOf="@+id/txt_title"
             app:layout_constraintEnd_toEndOf="parent"/>
 

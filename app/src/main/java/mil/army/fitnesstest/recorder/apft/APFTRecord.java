@@ -11,15 +11,17 @@ import java.util.ArrayList;
 import mil.army.fitnesstest.recorder.Duration;
 import mil.army.fitnesstest.recorder.Record;
 import mil.army.fitnesstest.recorder.Sex;
-import mil.army.fitnesstest.recorder.apft.event.CardioAlter;
-import mil.army.fitnesstest.recorder.apft.event.CountEvent;
-import mil.army.fitnesstest.recorder.apft.event.DurationEvent;
-import mil.army.fitnesstest.recorder.apft.event.Event;
+import mil.army.fitnesstest.recorder.apft.event.APFTCardioAlter;
+import mil.army.fitnesstest.recorder.apft.event.APFTEvent;
+import mil.army.fitnesstest.recorder.apft.event.CountAPFTEvent;
+import mil.army.fitnesstest.recorder.apft.event.DurationAPFTEvent;
 
-public class APFTRecord<T extends Event> extends Record<T> {
+import static mil.army.fitnesstest.recorder.apft.APFTDBHelper.DBContract.*;
+
+public class APFTRecord<T extends APFTEvent> extends Record<T> {
     public Sex sex = Sex.Male; public AgeGroup ageGroup = AgeGroup._17_21;
     public int raw_PU=0, raw_SU=0; public Duration raw_Cardio = new Duration(0,0);
-    public int[] sco = {0,0,0}; public CardioAlter cardioAlter;
+    public int[] sco = {0,0,0}; public APFTCardioAlter cardioAlter;
     public int sco_total=0;
 
     public APFTRecord(){ super(); }
@@ -28,11 +30,11 @@ public class APFTRecord<T extends Event> extends Record<T> {
         sco_total=0;
         for(T event : eventList){
             switch (event.eventType){
-                case Event.PU: raw_PU = ((CountEvent)event).raw; break;
-                case Event.SU: raw_SU = ((CountEvent)event).raw; break;
-                case Event.CARDIO:
-                    raw_Cardio = ((DurationEvent)event).duration;
-                    cardioAlter = ((DurationEvent)event).cardioAlter;
+                case APFTEvent.PU: raw_PU = ((CountAPFTEvent)event).raw; break;
+                case APFTEvent.SU: raw_SU = ((CountAPFTEvent)event).raw; break;
+                case APFTEvent.CARDIO:
+                    raw_Cardio = ((DurationAPFTEvent)event).duration;
+                    cardioAlter = ((DurationAPFTEvent)event).cardioAlter;
                     break;
             }
             sco[event.eventType] = event.sco;
@@ -45,11 +47,11 @@ public class APFTRecord<T extends Event> extends Record<T> {
             event.sex = sex;
             event.ageGroup = ageGroup;
             switch (event.eventType){
-                case Event.PU: ((CountEvent)event).raw = raw_PU; break;
-                case Event.SU: ((CountEvent)event).raw = raw_SU; break;
-                case Event.CARDIO:
-                    ((DurationEvent)event).duration = raw_Cardio;
-                    ((DurationEvent)event).cardioAlter = cardioAlter;
+                case APFTEvent.PU: ((CountAPFTEvent)event).raw = raw_PU; break;
+                case APFTEvent.SU: ((CountAPFTEvent)event).raw = raw_SU; break;
+                case APFTEvent.CARDIO:
+                    ((DurationAPFTEvent)event).duration = raw_Cardio;
+                    ((DurationAPFTEvent)event).cardioAlter = cardioAlter;
                     break;
             }
             event.sco = sco[event.eventType];
@@ -73,6 +75,18 @@ public class APFTRecord<T extends Event> extends Record<T> {
 
     @Override public ContentValues getContentValues() {
         ContentValues cv = new ContentValues();
+        cv.put(COLUMN_RECORD_DATE,dateToString());
+        cv.put(COLUMN_RAW_PU,raw_PU);
+        cv.put(COLUMN_SCORE_PU,sco[0]);
+        cv.put(COLUMN_RAW_SU,raw_SU);
+        cv.put(COLUMN_SCORE_SU,sco[1]);
+        cv.put(COLUMN_RAW_CARDIO,raw_Cardio.toString());
+        cv.put(COLUMN_SCORE_CARDIO,sco[2]);
+        cv.put(COLUMN_CARDIO_ALTER,cardioAlter.toString());
+        cv.put(COLUMN_SEX,sex.name());
+        cv.put(COLUMN_AGE_GROUP,ageGroup.toString());
+        cv.put(COLUMN_SCORE_TOTAL,sco_total);
+        cv.put(COLUMN_IS_PASSED,Boolean.toString(isPassed));
         return cv;
     }
 
@@ -82,39 +96,32 @@ public class APFTRecord<T extends Event> extends Record<T> {
 
 
     public enum AgeGroup{
-        _17_21(0,"17-21"),
-        _22_26(1,"22-26"),
-        _27_31(2,"27-31"),
-        _32_36(3,"32-36"),
-        _37_41(4,"37-41"),
-        _42_46(5,"42-46"),
-        _47_51(6,"47-51"),
-        _52_56(7,"52-56");
+        _17_21("17-21"),
+        _22_26("22-26"),
+        _27_31("27-31"),
+        _32_36("32-36"),
+        _37_41("37-41"),
+        _42_46("42-46"),
+        _47_51("47-51"),
+        _52_56("52-56");
 
-        private int id; // contains id.
         private String str; // contains default string.
-        AgeGroup(int id, String str){this.id=id; this.str=str;} // constructor & setter.
+        AgeGroup(String str){this.str=str;} // constructor & setter.
         @NotNull public String toString(){return str;}
 
-        public static AgeGroup findById(int id){
-            switch(id){
-                case 0: return _17_21; case 1: return _22_26;
-                case 2: return _27_31; case 3: return _32_36;
-                case 4: return _37_41; case 5: return _42_46;
-                case 6: return _47_51; case 7: return _52_56;
-            }
-            return null;
-        }
+        public static AgeGroup findById(int ordinal){ return values()[ordinal]; }
         public static AgeGroup findByString(String str){
-            if(str.equals(_17_21.str)) return _17_21;
-            else if(str.equals(_22_26.str)) return _22_26;
-            else if(str.equals(_27_31.str)) return _27_31;
-            else if(str.equals(_32_36.str)) return _32_36;
-            else if(str.equals(_37_41.str)) return _37_41;
-            else if(str.equals(_42_46.str)) return _42_46;
-            else if(str.equals(_47_51.str)) return _47_51;
-            else if(str.equals(_52_56.str)) return _52_56;
-            else return null;
+            switch (str){
+                case "17-21": return _17_21;
+                case "22-26": return _22_26;
+                case "27-31": return _27_31;
+                case "32-36": return _32_36;
+                case "37-41": return _37_41;
+                case "42-46": return _42_46;
+                case "47-51": return _47_51;
+                case "52-56": return _52_56;
+                default: return null;
+            }
         }
     }
 }

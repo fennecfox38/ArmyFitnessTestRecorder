@@ -6,10 +6,10 @@
 
     <data>
         <import type="android.view.View" />
-        <import type="mil.army.fitnesstest.recorder.acft.event.Event" />
+        <import type="mil.army.fitnesstest.recorder.acft.event.ACFTEvent" />
         <variable
             name="viewholder"
-            type="mil.army.fitnesstest.recorder.acft.EventRecyclerAdapter.DurationViewHolder" />
+            type="mil.army.fitnesstest.recorder.acft.ACFTEventRecyclerAdapter.DurationViewHolder" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -38,7 +38,7 @@
             android:id="@+id/spinner_cardio_alter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="@{(viewholder.event.eventType == Event.CARDIO) ? View.VISIBLE : View.GONE}"
+            android:visibility="@{(viewholder.event.eventType == ACFTEvent.CARDIO) ? View.VISIBLE : View.GONE}"
             android:spinnerMode="dropdown"
             android:entries="@array/ACFTCardioEvent"
             android:selectedItemPosition="@{viewholder.event.cardioAlter.ordinal()}"
@@ -54,7 +54,7 @@
             android:gravity="end"
             android:textColor="@{viewholder.getPassedColor(viewholder.event.level.isPassed())}"
             android:textSize="20sp"
-            android:text="@{viewholder.event.level.toString()}"
+            android:text="@{viewholder.event.level.name()}"
             app:layout_constraintBaseline_toBaselineOf="@+id/txt_title"
             app:layout_constraintEnd_toEndOf="parent"/>
 

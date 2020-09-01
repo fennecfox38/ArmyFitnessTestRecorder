@@ -21,16 +21,16 @@ import java.util.ArrayList;
 
 import mil.army.fitnesstest.recorder.MainActivity;
 import mil.army.fitnesstest.R;
-import mil.army.fitnesstest.recorder.acft.event.CardioAlter;
-import mil.army.fitnesstest.recorder.acft.event.CountEvent;
-import mil.army.fitnesstest.recorder.acft.event.DurationEvent;
-import mil.army.fitnesstest.recorder.acft.event.Event;
+import mil.army.fitnesstest.recorder.acft.event.ACFTCardioAlter;
+import mil.army.fitnesstest.recorder.acft.event.ACFTEvent;
+import mil.army.fitnesstest.recorder.acft.event.CountACFTEvent;
+import mil.army.fitnesstest.recorder.acft.event.DurationACFTEvent;
 import mil.army.fitnesstest.databinding.FragmentAcftBinding;
 
 public class ACFTFragment extends Fragment{
     private MainActivity activity;
-    public ACFTRecord<Event> record = new ACFTRecord<>();
-    public MutableLiveData<ArrayList<Event>> eventList = new MutableLiveData<>(null);
+    public ACFTRecord<ACFTEvent> record = new ACFTRecord<>();
+    public MutableLiveData<ArrayList<ACFTEvent>> eventList = new MutableLiveData<>(null);
     public FragmentAcftBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState){
@@ -38,18 +38,18 @@ public class ACFTFragment extends Fragment{
         binding = DataBindingUtil.inflate(inflater,R.layout.fragment_acft,container,false);
 
         if(eventList.getValue()==null){
-            ArrayList<Event> list = new ArrayList<>();
-            list.add(new CountEvent(Event.MDL,getString(R.string.MDL),700,getString(R.string.lbs)));
-            list.add(new CountEvent(Event.SPT,getString(R.string.SPT),150,getString(R.string.m)));
-            list.add(new CountEvent(Event.HPU,getString(R.string.HPU),100,getString(R.string.reps)));
-            list.add(new DurationEvent(Event.SDC,getString(R.string.SDC),5));
-            list.add(new CountEvent(Event.LTK,getString(R.string.LTK),40,getString(R.string.reps)));
-            list.add(new DurationEvent(Event.CARDIO,getString(R.string.Cardio),26));
+            ArrayList<ACFTEvent> list = new ArrayList<>();
+            list.add(new CountACFTEvent(ACFTEvent.MDL,getString(R.string.MDL),700,getString(R.string.lbs)));
+            list.add(new CountACFTEvent(ACFTEvent.SPT,getString(R.string.SPT),150,getString(R.string.m)));
+            list.add(new CountACFTEvent(ACFTEvent.HPU,getString(R.string.HPU),100,getString(R.string.reps)));
+            list.add(new DurationACFTEvent(ACFTEvent.SDC,getString(R.string.SDC),5));
+            list.add(new CountACFTEvent(ACFTEvent.LTK,getString(R.string.LTK),40,getString(R.string.reps)));
+            list.add(new DurationACFTEvent(ACFTEvent.CARDIO,getString(R.string.Cardio),26));
             loadData(record,list);
             eventList.setValue(list);
         }
 
-        EventRecyclerAdapter adapter = new EventRecyclerAdapter(requireContext(), eventList);
+        ACFTEventRecyclerAdapter adapter = new ACFTEventRecyclerAdapter(requireContext(), eventList);
         binding.recyclerViewAcft.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)) ;
         binding.recyclerViewAcft.setAdapter(adapter);
 
@@ -67,7 +67,7 @@ public class ACFTFragment extends Fragment{
         super.onDestroyView();
     }
 
-    private void loadData(ACFTRecord<Event> record, ArrayList<Event> list){
+    private void loadData(ACFTRecord<ACFTEvent> record, ArrayList<ACFTEvent> list){
         SharedPreferences sharedPreferences = activity.getSharedPreferences("ACFTRecord", Activity.MODE_PRIVATE);
 
         record.raw_0 = sharedPreferences.getInt("raw_0",0);
@@ -79,14 +79,14 @@ public class ACFTFragment extends Fragment{
 
         for(int i=0; i<6; ++i) record.sco[i] = sharedPreferences.getInt("sco_"+i,0);
 
-        record.cardioAlter = CardioAlter.findById(sharedPreferences.getInt("cardio_Alter",0));
+        record.cardioAlter = ACFTCardioAlter.valueOf(sharedPreferences.getInt("cardioAlter",0));
         record.sco_total = sharedPreferences.getInt("sco_total", 0);
-        record.qualifiedLevel = Level.findById(sharedPreferences.getInt("qualifiedLevel", 0));
-        record.mos = ACFTRecord.MOS.valueOf(sharedPreferences.getString("MOS", ACFTRecord.MOS.Moderate.toString()));
+        record.qualifiedLevel = Level.valueOf(sharedPreferences.getInt("qualifiedLevel", 0));
+        record.mos = ACFTRecord.MOS.valueOf(sharedPreferences.getString("MOS", ACFTRecord.MOS.Moderate.name()));
         record.isPassed = sharedPreferences.getBoolean("isPassed",false);
         record.restoreList(list);
     }
-    private void saveData(ACFTRecord<Event> record){
+    private void saveData(ACFTRecord<ACFTEvent> record){
         SharedPreferences.Editor editor = activity.getSharedPreferences("ACFTRecord", Activity.MODE_PRIVATE).edit();
 
         editor.putInt("raw_0", record.raw_0);
@@ -97,10 +97,10 @@ public class ACFTFragment extends Fragment{
         editor.putInt("raw_5", record.raw_5.getTotalInSec());
         for(int i=0; i<6; ++i) editor.putInt("sco_"+ i, record.sco[i]);
 
-        editor.putInt("cardio_Alter", record.cardioAlter.ordinal());
+        editor.putInt("cardioAlter", record.cardioAlter.ordinal());
         editor.putInt("sco_total", record.sco_total);
         editor.putInt("qualifiedLevel", record.qualifiedLevel.ordinal());
-        editor.putString("MOS",record.mos.toString());
+        editor.putString("MOS",record.mos.name());
         editor.putBoolean("isPassed",record.isPassed);
         editor.commit();
     }

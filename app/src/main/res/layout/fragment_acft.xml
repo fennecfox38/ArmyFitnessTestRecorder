@@ -106,7 +106,7 @@
                 android:layout_margin="4dp"
                 android:textColor="@{fragment.getPassedColor(fragment.record.isPassed)}"
                 android:textSize="25sp"
-                android:text="@{fragment.record.qualifiedLevel.toString()}"
+                android:text="@{fragment.record.qualifiedLevel.name()}"
                 app:layout_constraintBaseline_toBaselineOf="@+id/txt_qualifies"
                 app:layout_constraintStart_toEndOf="@+id/txt_qualifies"
                 app:layout_constraintEnd_toStartOf="@+id/fab"/>

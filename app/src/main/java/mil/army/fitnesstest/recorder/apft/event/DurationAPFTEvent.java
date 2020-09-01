@@ -3,11 +3,11 @@ package mil.army.fitnesstest.recorder.apft.event;
 import mil.army.fitnesstest.Standard;
 import mil.army.fitnesstest.recorder.Duration;
 
-public class DurationEvent extends Event {
+public class DurationAPFTEvent extends APFTEvent {
     public Duration duration;
-    public CardioAlter cardioAlter = CardioAlter.RUN;
+    public APFTCardioAlter cardioAlter = APFTCardioAlter.RUN;
 
-    public DurationEvent(int eventType, String title, int max) {
+    public DurationAPFTEvent(int eventType, String title, int max) {
         super(eventType, title, max);
         duration = new Duration(0,0);
     }

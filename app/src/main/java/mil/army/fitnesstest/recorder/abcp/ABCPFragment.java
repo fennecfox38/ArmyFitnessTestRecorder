@@ -72,7 +72,7 @@ public class ABCPFragment extends Fragment {
     private void loadData(ABCPRecord<Item> record, ArrayList<Item> list){
         SharedPreferences sharedPreferences = activity.getSharedPreferences("ABCPRecord", Activity.MODE_PRIVATE);
         record.sex = Sex.valueOf(sharedPreferences.getInt("Sex", 0));
-        record.ageGroup = ABCPRecord.AgeGroup.findById(sharedPreferences.getInt("AgeGroup",0));
+        record.ageGroup = ABCPRecord.AgeGroup.valueOf(sharedPreferences.getInt("AgeGroup",0));
         record.height = sharedPreferences.getFloat("Height",58.f);
         record.weight = sharedPreferences.getInt("Weight",90);
         record.neck = sharedPreferences.getFloat("Neck",10.f);
@@ -147,7 +147,7 @@ public class ABCPFragment extends Fragment {
     }
 
     public void onAgeSelected(AdapterView<?> parent, View view, int position, long id) {
-        record.ageGroup = ABCPRecord.AgeGroup.findById(position);
+        record.ageGroup = ABCPRecord.AgeGroup.valueOf(position);
         record.invalidate(null);
         binding.invalidateAll();
     }
