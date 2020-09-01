@@ -1,6 +1,6 @@
 package mil.army.fitnesstest.recorder.apft.event;
 
-import mil.army.fitnesstest.recorder.APFTRecord;
+import mil.army.fitnesstest.recorder.apft.APFTRecord;
 import mil.army.fitnesstest.recorder.Sex;
 
 public abstract class Event {

@@ -1,4 +1,4 @@
-package mil.army.fitnesstest.recorder;
+package mil.army.fitnesstest.recorder.apft;
 
 import android.content.ContentValues;
 
@@ -8,6 +8,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
+import mil.army.fitnesstest.recorder.Duration;
+import mil.army.fitnesstest.recorder.Record;
+import mil.army.fitnesstest.recorder.Sex;
 import mil.army.fitnesstest.recorder.apft.event.CardioAlter;
 import mil.army.fitnesstest.recorder.apft.event.CountEvent;
 import mil.army.fitnesstest.recorder.apft.event.DurationEvent;
@@ -53,7 +56,7 @@ public class APFTRecord<T extends Event> extends Record<T> {
         }
     }
 
-    @Override public void validate(ArrayList<T> eventList) {
+    @Override public void invalidate(ArrayList<T> eventList) {
         if(eventList!=null) updateRecord(eventList);
         isPassed=(sco[0]>=60 && sco[1]>=60 && sco[2]>=60);
     }

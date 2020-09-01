@@ -2,7 +2,7 @@ package mil.army.fitnesstest;
 
 import java.util.HashMap;
 
-import mil.army.fitnesstest.recorder.APFTRecord;
+import mil.army.fitnesstest.recorder.apft.APFTRecord;
 import mil.army.fitnesstest.recorder.Duration;
 import mil.army.fitnesstest.recorder.Sex;
 

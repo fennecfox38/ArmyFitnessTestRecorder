@@ -28,8 +28,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import mil.army.fitnesstest.R;
-import mil.army.fitnesstest.recorder.ABCPDBHelper;
-import mil.army.fitnesstest.recorder.ACFTDBHelper;
+import mil.army.fitnesstest.recorder.abcp.ABCPDBHelper;
+import mil.army.fitnesstest.recorder.acft.ACFTDBHelper;
 import mil.army.fitnesstest.recorder.FileProvider;
 
 public class LogFragment extends Fragment{
@@ -81,7 +81,7 @@ public class LogFragment extends Fragment{
 
     public void shareDB(){
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
-        shareIntent.setType("application/*"); //shareIntent.setType("application/vnd.sqlite3");
+        shareIntent.setType("application/vnd.sqlite3"); //shareIntent.setType("application/*");
         shareIntent.putExtra(Intent.EXTRA_STREAM, FileProvider.getDatabaseUri(requireContext()));
         startActivity(Intent.createChooser(shareIntent, getString(R.string.shareDB)));
     }

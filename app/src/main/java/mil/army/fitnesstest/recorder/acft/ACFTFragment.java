@@ -19,7 +19,6 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 
-import mil.army.fitnesstest.recorder.ACFTRecord;
 import mil.army.fitnesstest.recorder.MainActivity;
 import mil.army.fitnesstest.R;
 import mil.army.fitnesstest.recorder.acft.event.CardioAlter;
@@ -27,7 +26,6 @@ import mil.army.fitnesstest.recorder.acft.event.CountEvent;
 import mil.army.fitnesstest.recorder.acft.event.DurationEvent;
 import mil.army.fitnesstest.recorder.acft.event.Event;
 import mil.army.fitnesstest.databinding.FragmentAcftBinding;
-import mil.army.fitnesstest.recorder.ACFTDBHelper;
 
 public class ACFTFragment extends Fragment{
     private MainActivity activity;
@@ -56,7 +54,7 @@ public class ACFTFragment extends Fragment{
         binding.recyclerViewAcft.setAdapter(adapter);
 
         eventList.observe(getViewLifecycleOwner(), events -> {
-            record.validate(events);
+            record.invalidate(events);
             binding.invalidateAll();
         });
 
@@ -133,7 +131,7 @@ public class ACFTFragment extends Fragment{
             case R.id.rBtn_significant: record.mos = ACFTRecord.MOS.Significant;break;
             case R.id.rBtn_heavy: record.mos = ACFTRecord.MOS.Heavy; break;
         }
-        record.validate(null);
+        record.invalidate(null);
         binding.invalidateAll();
     }
 

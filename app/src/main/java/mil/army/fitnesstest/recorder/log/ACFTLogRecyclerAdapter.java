@@ -18,8 +18,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 import mil.army.fitnesstest.R;
-import mil.army.fitnesstest.recorder.ACFTDBHelper;
-import mil.army.fitnesstest.recorder.ACFTRecord;
+import mil.army.fitnesstest.recorder.acft.ACFTDBHelper;
+import mil.army.fitnesstest.recorder.acft.ACFTRecord;
 import mil.army.fitnesstest.recorder.acft.Level;
 import mil.army.fitnesstest.databinding.RecyclerviewAcftLogBinding;
 import mil.army.fitnesstest.recorder.acft.event.Event;

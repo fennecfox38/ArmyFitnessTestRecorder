@@ -1,4 +1,4 @@
-package mil.army.fitnesstest.recorder;
+package mil.army.fitnesstest.recorder.abcp;
 
 import android.content.ContentValues;
 
@@ -7,9 +7,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 import mil.army.fitnesstest.Standard;
-import mil.army.fitnesstest.recorder.abcp.Item;
+import mil.army.fitnesstest.recorder.Record;
+import mil.army.fitnesstest.recorder.Sex;
 
-import static mil.army.fitnesstest.recorder.ABCPDBHelper.DBContract.*;
+import static mil.army.fitnesstest.recorder.abcp.ABCPDBHelper.DBContract.*;
 
 public class ABCPRecord<T extends Item> extends Record<T> {
     public Sex sex = Sex.Male; public AgeGroup ageGroup= AgeGroup._17_20;
@@ -41,7 +42,7 @@ public class ABCPRecord<T extends Item> extends Record<T> {
         }
     }
 
-    public void validate(ArrayList<T> items){
+    public void invalidate(ArrayList<T> items){
         if(items!=null) updateRecord(items);
         height_weight = Standard.ABCP.isHWPassed(sex.ordinal(),ageGroup.ordinal(),height,weight);
         bodyFatPercentage = (sex==Sex.Male ? Standard.ABCP.maleBodyFat(height,neck, abdomen_waist) : Standard.ABCP.femaleBodyFat(height,neck, abdomen_waist,hips));

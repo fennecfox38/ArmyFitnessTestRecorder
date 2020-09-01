@@ -1,4 +1,4 @@
-package mil.army.fitnesstest.recorder;
+package mil.army.fitnesstest.recorder.acft;
 
 import android.content.ContentValues;
 
@@ -6,13 +6,14 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
+import mil.army.fitnesstest.recorder.Duration;
+import mil.army.fitnesstest.recorder.Record;
 import mil.army.fitnesstest.recorder.acft.event.CardioAlter;
-import mil.army.fitnesstest.recorder.acft.Level;
 import mil.army.fitnesstest.recorder.acft.event.CountEvent;
 import mil.army.fitnesstest.recorder.acft.event.DurationEvent;
 import mil.army.fitnesstest.recorder.acft.event.Event;
 
-import static mil.army.fitnesstest.recorder.ACFTDBHelper.DBContract.*;
+import static mil.army.fitnesstest.recorder.acft.ACFTDBHelper.DBContract.*;
 
 public class ACFTRecord<T extends Event> extends Record<T> {
     public int[] sco = {0, 0, 0, 0, 0, 0};
@@ -64,7 +65,7 @@ public class ACFTRecord<T extends Event> extends Record<T> {
         }
     }
 
-    public void validate(ArrayList<T> eventList){
+    public void invalidate(ArrayList<T> eventList){
         if(eventList!=null) updateRecord(eventList);
         isPassed = (qualifiedLevel.ordinal()>mos.ordinal()); // qualifiedLevel>=mos.ordinal()+1
     }

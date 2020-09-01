@@ -19,7 +19,6 @@ import java.util.ArrayList;
 
 import mil.army.fitnesstest.R;
 import mil.army.fitnesstest.databinding.FragmentApftBinding;
-import mil.army.fitnesstest.recorder.APFTRecord;
 import mil.army.fitnesstest.recorder.MainActivity;
 import mil.army.fitnesstest.recorder.Sex;
 import mil.army.fitnesstest.recorder.apft.event.CountEvent;
@@ -51,7 +50,7 @@ public class APFTFragment extends Fragment {
         binding.recyclerViewApft.setAdapter(adapter);
 
         eventList.observe(getViewLifecycleOwner(), events -> {
-            record.validate(events);
+            record.invalidate(events);
             binding.invalidateAll();
         });
 

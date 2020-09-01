@@ -20,7 +20,7 @@ public abstract class Record<T> {
 
     public abstract void updateRecord(ArrayList<T> list);
     public abstract void restoreList(ArrayList<T> list);
-    public abstract void validate(ArrayList<T> list);
+    public abstract void invalidate(ArrayList<T> list);
     public abstract ContentValues getContentValues();
 
     public String dateToString(){

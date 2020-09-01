@@ -1,4 +1,4 @@
-package mil.army.fitnesstest.recorder;
+package mil.army.fitnesstest.recorder.acft;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -13,11 +13,11 @@ import org.apache.poi.ss.usermodel.Workbook;
 
 import java.util.ArrayList;
 
+import mil.army.fitnesstest.recorder.FileProvider;
 import mil.army.fitnesstest.recorder.acft.event.CardioAlter;
-import mil.army.fitnesstest.recorder.acft.Level;
 import mil.army.fitnesstest.recorder.acft.event.Event;
 
-import static mil.army.fitnesstest.recorder.ACFTDBHelper.DBContract.*;
+import static mil.army.fitnesstest.recorder.acft.ACFTDBHelper.DBContract.*;
 
 public class ACFTDBHelper extends SQLiteOpenHelper {
 

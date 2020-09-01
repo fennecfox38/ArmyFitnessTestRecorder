@@ -24,11 +24,9 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 
-import mil.army.fitnesstest.recorder.ABCPRecord;
 import mil.army.fitnesstest.recorder.MainActivity;
 import mil.army.fitnesstest.R;
 import mil.army.fitnesstest.databinding.FragmentAbcpBinding;
-import mil.army.fitnesstest.recorder.ABCPDBHelper;
 import mil.army.fitnesstest.recorder.Sex;
 
 public class ABCPFragment extends Fragment {
@@ -58,7 +56,7 @@ public class ABCPFragment extends Fragment {
         binding.recyclerViewAbcp.setAdapter(adapter);
 
         itemList.observe(getViewLifecycleOwner(), items -> {
-            record.validate(items);
+            record.invalidate(items);
             adapter.notifyDataSetChanged();
             binding.invalidateAll();
         });
@@ -144,13 +142,13 @@ public class ABCPFragment extends Fragment {
             break;
         } // Attach and Detach Hips item
         itemList.setValue(list);
-        record.validate(list);//record.validate();
+        record.invalidate(list);//record.validate();
         binding.invalidateAll();
     }
 
     public void onAgeSelected(AdapterView<?> parent, View view, int position, long id) {
         record.ageGroup = ABCPRecord.AgeGroup.findById(position);
-        record.validate(null);
+        record.invalidate(null);
         binding.invalidateAll();
     }
 

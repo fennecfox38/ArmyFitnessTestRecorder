@@ -16,10 +16,10 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 
 import mil.army.fitnesstest.R;
-import mil.army.fitnesstest.recorder.ABCPDBHelper;
-import mil.army.fitnesstest.recorder.ABCPRecord;
+import mil.army.fitnesstest.recorder.abcp.ABCPDBHelper;
+import mil.army.fitnesstest.recorder.abcp.ABCPRecord;
 import mil.army.fitnesstest.databinding.RecyclerviewAbcpLogBinding;
-import mil.army.fitnesstest.recorder.ACFTDBHelper;
+import mil.army.fitnesstest.recorder.acft.ACFTDBHelper;
 import mil.army.fitnesstest.recorder.abcp.Item;
 
 public class ABCPLogRecyclerAdapter extends RecyclerView.Adapter<ABCPLogRecyclerAdapter.ABCPLogViewHolder> {
