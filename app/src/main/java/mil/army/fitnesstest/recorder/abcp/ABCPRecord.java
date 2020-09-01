@@ -10,7 +10,7 @@ import mil.army.fitnesstest.Standard;
 import mil.army.fitnesstest.recorder.Record;
 import mil.army.fitnesstest.recorder.Sex;
 
-import static mil.army.fitnesstest.recorder.abcp.ABCPDBHelper.DBContract.*;
+import static mil.army.fitnesstest.recorder.abcp.ABCPDBContract.*;
 
 public class ABCPRecord<T extends Item> extends Record<T> {
     public Sex sex = Sex.Male; public AgeGroup ageGroup= AgeGroup._17_20;
@@ -69,21 +69,21 @@ public class ABCPRecord<T extends Item> extends Record<T> {
     }
 
     public enum AgeGroup{
-        _17_20("17-20"),
-        _21_27("21-27"),
-        _28_39("28-39"),
+        _17_20("17–20"),
+        _21_27("21–27"),
+        _28_39("28–39"),
         _40_("40+");
 
         private String str; // contains default string.
         AgeGroup(String str){this.str=str;} // constructor & setter.
-        @NotNull public String toString(){return str;}
+        public String toString(){ return str; }
 
         public static AgeGroup valueOf(int ordinal){ return values()[ordinal]; }
         public static AgeGroup findByString(String str){
             switch (str){
-                case "17-20": return _17_20;
-                case "21_27": return _21_27;
-                case "28_39": return _28_39;
+                case "17–20": return _17_20;
+                case "21–27": return _21_27;
+                case "28–39": return _28_39;
                 case "40+": return _40_;
                 default: return null;
             }

@@ -13,7 +13,7 @@ import mil.army.fitnesstest.recorder.acft.event.ACFTEvent;
 import mil.army.fitnesstest.recorder.acft.event.CountACFTEvent;
 import mil.army.fitnesstest.recorder.acft.event.DurationACFTEvent;
 
-import static mil.army.fitnesstest.recorder.acft.ACFTDBHelper.DBContract.*;
+import static mil.army.fitnesstest.recorder.acft.ACFTDBContract.*;
 
 public class ACFTRecord<T extends ACFTEvent> extends Record<T> {
     public int[] sco = {0, 0, 0, 0, 0, 0};

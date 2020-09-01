@@ -16,7 +16,7 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 
 import mil.army.fitnesstest.R;
-import mil.army.fitnesstest.recorder.abcp.ABCPDBHelper;
+import mil.army.fitnesstest.recorder.abcp.ABCPDBHandler;
 import mil.army.fitnesstest.recorder.abcp.ABCPRecord;
 import mil.army.fitnesstest.databinding.RecyclerviewAbcpLogBinding;
 import mil.army.fitnesstest.recorder.abcp.Item;
@@ -28,9 +28,7 @@ public class ABCPLogRecyclerAdapter extends RecyclerView.Adapter<ABCPLogRecycler
 
     public ABCPLogRecyclerAdapter(Context context){
         this.context = context; resources = context.getResources();
-        ABCPDBHelper dbHelper = new ABCPDBHelper(context);
-        list = dbHelper.getRecordList();
-        dbHelper.close();
+        list = ABCPDBHandler.getRecordList(context);
     }
 
     public class ABCPLogViewHolder extends RecyclerView.ViewHolder {
@@ -45,14 +43,12 @@ public class ABCPLogRecyclerAdapter extends RecyclerView.Adapter<ABCPLogRecycler
                     return false;
                 });
                 menu.add(0,1,1,resources.getString(R.string.delete)).setOnMenuItemClickListener(item -> {
-                    ABCPDBHelper dbHelper = new ABCPDBHelper(context);
-                    dbHelper.deleteRecord(record);  dbHelper.close();
+                    ABCPDBHandler.deleteRecord(context, record);
                     list.remove(getAdapterPosition());  notifyItemRemoved(getAdapterPosition());
                     Snackbar.make(itemView, resources.getString(R.string.recordDeleted), Snackbar.LENGTH_SHORT)
                             .setAction(resources.getString(R.string.undo), view1 -> {
                                 list.add(record);   notifyItemInserted(list.size()-1);
-                                ABCPDBHelper dbHelper1 = new ABCPDBHelper(context);
-                                dbHelper1.insertRecord(record);  dbHelper1.close();
+                                ABCPDBHandler.insertRecord(context, record);
                             }).show();
                     return false;
                 });
@@ -78,15 +74,13 @@ public class ABCPLogRecyclerAdapter extends RecyclerView.Adapter<ABCPLogRecycler
     @Override public int getItemCount() { return list.size(); }
 
     public void deleteAllRecord(View root){
-        ABCPDBHelper dbHelper = new ABCPDBHelper(context);
-        dbHelper.deleteAll(); dbHelper.close();
+        ABCPDBHandler.deleteAll(context);
         final ArrayList<ABCPRecord<Item>> backup = new ArrayList<>(list);
         list.clear(); notifyDataSetChanged();
         Snackbar.make(root, resources.getString(R.string.recordDeleted), Snackbar.LENGTH_SHORT)
                 .setAction(resources.getString(R.string.undo), v -> {
                     list = backup;  notifyDataSetChanged();
-                    ABCPDBHelper dbHelper1 = new ABCPDBHelper(context);
-                    dbHelper1.saveRecordList(list);  dbHelper1.close();
+                    ABCPDBHandler.saveRecordList(context, list);
                 }).show();
     }
 

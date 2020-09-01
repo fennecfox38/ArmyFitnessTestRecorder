@@ -28,8 +28,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import mil.army.fitnesstest.R;
-import mil.army.fitnesstest.recorder.abcp.ABCPDBHelper;
-import mil.army.fitnesstest.recorder.acft.ACFTDBHelper;
+import mil.army.fitnesstest.recorder.DBHelper;
 import mil.army.fitnesstest.recorder.FileProvider;
 
 public class LogFragment extends Fragment{
@@ -88,22 +87,19 @@ public class LogFragment extends Fragment{
 
     public void shareXLS(){
         Workbook workbook = new HSSFWorkbook();
-        ACFTDBHelper acftDBHelper = new ACFTDBHelper(requireContext());
-        acftDBHelper.exportExcel(workbook); acftDBHelper.close();
-        //apftDBHelper
-        ABCPDBHelper abcpDBHelper = new ABCPDBHelper(requireContext());
-        abcpDBHelper.exportExcel(workbook); abcpDBHelper.close();
+        DBHelper dbHelper = new DBHelper(requireContext());
+        dbHelper.exportExcel(workbook); dbHelper.close();
         try{
-            workbook.write(new FileOutputStream(FileProvider.getXLSFile(requireContext())));
+            FileOutputStream fileOutputStream = new FileOutputStream(FileProvider.getXLSFile(requireContext()));
+            workbook.write(fileOutputStream);
+            workbook.close();
 
             Intent shareIntent = new Intent(Intent.ACTION_SEND);
             shareIntent.setType("application/excel"); //shareIntent.setType("application/*");
             shareIntent.putExtra(Intent.EXTRA_STREAM, FileProvider.getXLSUri(requireContext()));
             startActivity(Intent.createChooser(shareIntent, getString(R.string.shareXLS)));
-
         } catch (IOException e){ e.printStackTrace(); }
     }
-
 
     private class TabPagerAdapter extends PagerAdapter {
         public static final int TAB_ACFT=0, TAB_APFT=1, TAB_ABCP=2;

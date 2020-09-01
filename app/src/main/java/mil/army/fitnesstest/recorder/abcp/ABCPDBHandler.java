@@ -4,8 +4,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
-import android.provider.BaseColumns;
 
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -13,37 +11,19 @@ import org.apache.poi.ss.usermodel.Workbook;
 
 import java.util.ArrayList;
 
-import mil.army.fitnesstest.recorder.FileProvider;
+import mil.army.fitnesstest.recorder.DBHelper;
 import mil.army.fitnesstest.recorder.Sex;
 
-import static mil.army.fitnesstest.recorder.abcp.ABCPDBHelper.DBContract.*;
+import static mil.army.fitnesstest.recorder.abcp.ABCPDBContract.*;
 
-public class ABCPDBHelper extends SQLiteOpenHelper {
+public class ABCPDBHandler{
 
-    public ABCPDBHelper(Context context) {
-        super(context, FileProvider.dbName, null, FileProvider.dbVersion);
-    }
-    // onCreate might be called only when db file is not exist.
-    @Override public void onCreate(SQLiteDatabase db) { db.execSQL(SQL_CREATE_TBL); }
-    @Override public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL(SQL_DROP_TBL); db.execSQL(SQL_CREATE_TBL);
-    }
-    @Override public SQLiteDatabase getReadableDatabase() {
-        SQLiteDatabase db = super.getReadableDatabase();
-        db.execSQL(SQL_CREATE_TBL); // before return readable database,
-        return db; // create table if not exist.
-    }
-    @Override public SQLiteDatabase getWritableDatabase() {
-        SQLiteDatabase db = super.getWritableDatabase();
-        db.execSQL(SQL_CREATE_TBL); // before return writable database,
-        return db; // create table if not exist.
-    }
-
-    public ArrayList<ABCPRecord<Item>> getRecordList(){
-        ArrayList<ABCPRecord<Item>> list = new ArrayList<>();
-        SQLiteDatabase db = getReadableDatabase();
+    public static ArrayList<ABCPRecord<Item>> getRecordList(Context context){
+        DBHelper dbHelper = new DBHelper(context);
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor cursor= db.rawQuery(SQL_SELECT,null);
 
+        ArrayList<ABCPRecord<Item>> list = new ArrayList<>();
         ABCPRecord<Item> record;
         for(boolean haveItem = cursor.moveToFirst(); haveItem; haveItem=cursor.moveToNext()){
             record = new ABCPRecord<Item>();
@@ -65,11 +45,13 @@ public class ABCPDBHelper extends SQLiteOpenHelper {
 
         cursor.close();
         db.close();
+        dbHelper.close();
         return list;
     }
 
-    public void saveRecordList(ArrayList<ABCPRecord<Item>> list){
-        SQLiteDatabase db = getWritableDatabase();
+    public static void saveRecordList(Context context, ArrayList<ABCPRecord<Item>> list){
+        DBHelper dbHelper = new DBHelper(context);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
         if(db == null) return;
         try {
             db.beginTransaction();          //clear the table first
@@ -80,10 +62,12 @@ public class ABCPDBHelper extends SQLiteOpenHelper {
         } catch (SQLException e) { e.printStackTrace(); }
         finally { db.endTransaction(); }
         db.close();
+        dbHelper.close();
     }
 
-    public void insertRecord(ABCPRecord<Item> record){
-        SQLiteDatabase db = getWritableDatabase();
+    public static void insertRecord(Context context, ABCPRecord<Item> record){
+        DBHelper dbHelper = new DBHelper(context);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
         if(db == null) return;
         try {
             db.beginTransaction();  // add one by one
@@ -92,9 +76,24 @@ public class ABCPDBHelper extends SQLiteOpenHelper {
         } catch (SQLException e) { e.printStackTrace(); }
         finally { db.endTransaction(); }
         db.close();
+        dbHelper.close();
     }
 
-    public void deleteRecord(ABCPRecord<Item> record){
+    public static void deleteAll(Context context){
+        DBHelper dbHelper = new DBHelper(context);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        if(db == null) return;
+        try {
+            db.beginTransaction();
+            db.execSQL(SQL_DELETE_ALL);
+            db.setTransactionSuccessful();
+        } catch (SQLException e) { e.printStackTrace(); }
+        finally { db.endTransaction(); }
+        db.close();
+        dbHelper.close();
+    }
+
+    public static void deleteRecord(Context context, ABCPRecord<Item> record){
         String sqlExec = SQL_DELETE_WHERE + sqlWhere(COLUMN_RECORD_DATE,record.dateToString()) + "AND ";
         sqlExec += sqlWhere(COLUMN_SEX,record.sex.name()) + "AND " + sqlWhere(COLUMN_AGE_GROUP,record.ageGroup.toString()) + "AND ";
         sqlExec += sqlWhere(COLUMN_HEIGHT,record.height) + "AND " + sqlWhere(COLUMN_WEIGHT,record.weight) + "AND ";
@@ -104,7 +103,9 @@ public class ABCPDBHelper extends SQLiteOpenHelper {
         sqlExec += sqlWhere(COLUMN_HW_PASSED,Boolean.toString(record.height_weight)) + "AND ";
         sqlExec += sqlWhere(COLUMN_BODY_FAT_PASSED,Boolean.toString(record.bodyFatPass)) + "AND ";
         sqlExec += sqlWhere(COLUMN_TOTAL_PASSED,Boolean.toString(record.isPassed));
-        SQLiteDatabase db = getWritableDatabase();
+
+        DBHelper dbHelper = new DBHelper(context);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
         if(db == null) return;
         try {
             db.beginTransaction();
@@ -113,21 +114,10 @@ public class ABCPDBHelper extends SQLiteOpenHelper {
         } catch (SQLException e) { e.printStackTrace(); }
         finally { db.endTransaction(); }
         db.close();
+        dbHelper.close();
     }
 
-    public void deleteAll(){
-        SQLiteDatabase db = getWritableDatabase();
-        if(db == null) return;
-        try {
-            db.beginTransaction();
-            db.execSQL(SQL_DELETE_ALL);
-            db.setTransactionSuccessful();
-        } catch (SQLException e) { e.printStackTrace(); }
-        finally { db.endTransaction(); }
-        db.close();
-    }
-
-    public void exportExcel(Workbook workbook){
+    public static void exportExcel(SQLiteDatabase db, Workbook workbook){
         Sheet sheet = workbook.createSheet(TABLE_NAME);
 
         Row row = sheet.createRow(0);
@@ -144,7 +134,6 @@ public class ABCPDBHelper extends SQLiteOpenHelper {
         row.createCell(10).setCellValue(COLUMN_BODY_FAT_PASSED);
         row.createCell(11).setCellValue(COLUMN_TOTAL_PASSED);
 
-        SQLiteDatabase db = getReadableDatabase();
         Cursor cursor= db.rawQuery(SQL_SELECT,null);
 
         int rowIndex = 1;
@@ -166,7 +155,6 @@ public class ABCPDBHelper extends SQLiteOpenHelper {
         }
 
         cursor.close();
-        db.close();
     }
 
     private static String sqlWhere(String column, String arg){ return (column+"=\""+arg+"\" "); }
@@ -174,32 +162,5 @@ public class ABCPDBHelper extends SQLiteOpenHelper {
     private static String sqlWhere(String column, float arg){ return ("abs("+column+"-"+ arg +")<0.1 "); }
     private static double preciseDouble(float obj){ return (Math.round(obj*10)/10.0); }
     private static float preciseFloat(float obj){ return (Math.round(obj*10)/10.f); }
-
-    public static final class DBContract implements BaseColumns {
-        public static final String TABLE_NAME = "ABCPRecord";
-        public static final String COLUMN_RECORD_DATE = "RecordDate", COLUMN_SEX = "Sex", COLUMN_AGE_GROUP = "AgeGroup";
-        public static final String COLUMN_HEIGHT = "Height", COLUMN_WEIGHT = "Weight", COLUMN_NECK = "Neck";
-        public static final String COLUMN_ABDOMEN_WAIST = "Abdomen_Waist", COLUMN_HIPS = "Hips", COLUMN_BODY_FAT_PERCENT = "BodyFatPercentage";
-        public static final String COLUMN_HW_PASSED = "HeightWeightPassed", COLUMN_BODY_FAT_PASSED = "BodyFatPassed", COLUMN_TOTAL_PASSED = "TotalPassed";
-
-        public static final String SQL_CREATE_TBL="CREATE TABLE IF NOT EXISTS "+ TABLE_NAME +" ("+
-                //_ID+" INTEGER PRIMARY KEY AUTOINCREMENT,"+
-                COLUMN_RECORD_DATE+" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,"+
-                COLUMN_SEX+" TEXT NOT NULL,"+ COLUMN_AGE_GROUP+" TEXT NOT NULL,"+
-                COLUMN_HEIGHT+" FLOAT NOT NULL,"+ COLUMN_WEIGHT+" INTEGER NOT NULL,"+
-                COLUMN_NECK+" FLOAT NOT NULL,"+ COLUMN_ABDOMEN_WAIST+" FLOAT NOT NULL,"+
-                COLUMN_HIPS+" FLOAT,"+ COLUMN_BODY_FAT_PERCENT+" FLOAT NOT NULL,"+
-                COLUMN_HW_PASSED+" TEXT NOT NULL,"+ COLUMN_BODY_FAT_PASSED+" TEXT NOT NULL,"+
-                COLUMN_TOTAL_PASSED+" TEXT NOT NULL)";
-        public static final String SQL_DROP_TBL = "DROP TABLE IF EXISTS "+ TABLE_NAME;
-        public static final String SQL_SELECT = "SELECT * FROM " + TABLE_NAME;
-        public static final String SQL_INSERT = "INSERT OR REPLACE INTO "+TABLE_NAME+
-                "("+COLUMN_RECORD_DATE+", "+
-                COLUMN_SEX+", "+COLUMN_AGE_GROUP+", "+ COLUMN_HEIGHT+", "+COLUMN_WEIGHT+", "+
-                COLUMN_NECK+", "+COLUMN_ABDOMEN_WAIST+", "+ COLUMN_HIPS+", "+COLUMN_BODY_FAT_PERCENT+", "+
-                COLUMN_HW_PASSED+", "+COLUMN_BODY_FAT_PASSED+", "+ COLUMN_TOTAL_PASSED+") VALUES";
-        public static final String SQL_DELETE_WHERE = "DELETE FROM " + TABLE_NAME + " WHERE ";
-        public static final String SQL_DELETE_ALL = "DELETE FROM " + TABLE_NAME;
-    }
 
 }

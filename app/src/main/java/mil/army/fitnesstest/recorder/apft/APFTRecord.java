@@ -16,7 +16,7 @@ import mil.army.fitnesstest.recorder.apft.event.APFTEvent;
 import mil.army.fitnesstest.recorder.apft.event.CountAPFTEvent;
 import mil.army.fitnesstest.recorder.apft.event.DurationAPFTEvent;
 
-import static mil.army.fitnesstest.recorder.apft.APFTDBHelper.DBContract.*;
+import static mil.army.fitnesstest.recorder.apft.APFTDBContract.*;
 
 public class APFTRecord<T extends APFTEvent> extends Record<T> {
     public Sex sex = Sex.Male; public AgeGroup ageGroup = AgeGroup._17_21;
@@ -96,14 +96,14 @@ public class APFTRecord<T extends APFTEvent> extends Record<T> {
 
 
     public enum AgeGroup{
-        _17_21("17-21"),
-        _22_26("22-26"),
-        _27_31("27-31"),
-        _32_36("32-36"),
-        _37_41("37-41"),
-        _42_46("42-46"),
-        _47_51("47-51"),
-        _52_56("52-56");
+        _17_21("17–21"),
+        _22_26("22–26"),
+        _27_31("27–31"),
+        _32_36("32–36"),
+        _37_41("37–41"),
+        _42_46("42–46"),
+        _47_51("47–51"),
+        _52_56("52–56");
 
         private String str; // contains default string.
         AgeGroup(String str){this.str=str;} // constructor & setter.
@@ -112,14 +112,14 @@ public class APFTRecord<T extends APFTEvent> extends Record<T> {
         public static AgeGroup findById(int ordinal){ return values()[ordinal]; }
         public static AgeGroup findByString(String str){
             switch (str){
-                case "17-21": return _17_21;
-                case "22-26": return _22_26;
-                case "27-31": return _27_31;
-                case "32-36": return _32_36;
-                case "37-41": return _37_41;
-                case "42-46": return _42_46;
-                case "47-51": return _47_51;
-                case "52-56": return _52_56;
+                case "17–21": return _17_21;
+                case "22–26": return _22_26;
+                case "27–31": return _27_31;
+                case "32–36": return _32_36;
+                case "37–41": return _37_41;
+                case "42–46": return _42_46;
+                case "47–51": return _47_51;
+                case "52–56": return _52_56;
                 default: return null;
             }
         }

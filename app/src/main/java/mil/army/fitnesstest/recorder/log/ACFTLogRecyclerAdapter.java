@@ -18,7 +18,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 import mil.army.fitnesstest.R;
-import mil.army.fitnesstest.recorder.acft.ACFTDBHelper;
+import mil.army.fitnesstest.recorder.acft.ACFTDBHandler;
 import mil.army.fitnesstest.recorder.acft.ACFTRecord;
 import mil.army.fitnesstest.recorder.acft.Level;
 import mil.army.fitnesstest.databinding.RecyclerviewAcftLogBinding;
@@ -31,9 +31,7 @@ public class ACFTLogRecyclerAdapter extends RecyclerView.Adapter<ACFTLogRecycler
 
     public ACFTLogRecyclerAdapter(Context context){
         this.context = context; resources = context.getResources();
-        ACFTDBHelper dbHelper = new ACFTDBHelper(context);
-        list = dbHelper.getRecordList();
-        dbHelper.close();
+        list = ACFTDBHandler.getRecordList(context);
     }
 
     public class ACFTLogViewHolder extends RecyclerView.ViewHolder{
@@ -48,14 +46,12 @@ public class ACFTLogRecyclerAdapter extends RecyclerView.Adapter<ACFTLogRecycler
                     return false;
                 });
                 menu.add(0,1,1,resources.getString(R.string.delete)).setOnMenuItemClickListener(item -> {
-                    ACFTDBHelper dbHelper = new ACFTDBHelper(context);
-                    dbHelper.deleteRecord(record);  dbHelper.close();
+                    ACFTDBHandler.deleteRecord(context, record);
                     list.remove(getAdapterPosition());  notifyItemRemoved(getAdapterPosition());
                     Snackbar.make(itemView, resources.getString(R.string.recordDeleted), Snackbar.LENGTH_SHORT)
                             .setAction(resources.getString(R.string.undo), view1 -> {
                                 list.add(record);   notifyItemInserted(list.size()-1);
-                                ACFTDBHelper dbHelper1 = new ACFTDBHelper(context);
-                                dbHelper1.insertRecord(record);  dbHelper1.close();
+                                ACFTDBHandler.insertRecord(context,record);
                             }).show();
                     return false;
                 });
@@ -90,13 +86,11 @@ public class ACFTLogRecyclerAdapter extends RecyclerView.Adapter<ACFTLogRecycler
     public void deleteAllRecord(View root){
         final ArrayList<ACFTRecord<ACFTEvent>> backup = new ArrayList<>(list);
         list.clear(); notifyDataSetChanged();
-        ACFTDBHelper dbHelper = new ACFTDBHelper(context);
-        dbHelper.deleteAll(); dbHelper.close();
+        ACFTDBHandler.deleteAll(context);
         Snackbar.make(root, resources.getString(R.string.recordDeleted), Snackbar.LENGTH_SHORT)
                 .setAction(resources.getString(R.string.undo), v -> {
                     list = backup;  notifyDataSetChanged();
-                    ACFTDBHelper dbHelper1 = new ACFTDBHelper(context);
-                    dbHelper1.saveRecordList(list);  dbHelper1.close();
+                    ACFTDBHandler.saveRecordList(context, list);
                 }).show();
     }
 

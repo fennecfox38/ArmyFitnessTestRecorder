@@ -104,9 +104,7 @@ public class APFTFragment extends Fragment {
     public String getPassed(boolean isPassed){ return getString(isPassed ? R.string.pass: R.string.fail); }
 
     public void onSaveClick(View view) {
-        APFTDBHelper dbHelper = new APFTDBHelper(requireContext());
-        dbHelper.insertRecord(record);
-        dbHelper.close();
+        APFTDBHandler.insertRecord(requireContext(), record);
         Snackbar.make(binding.getRoot(),"Saved on log.", Snackbar.LENGTH_SHORT)
                 .setAction("log", v -> activity.navController.navigate(R.id.navigation_log)).show();
     }

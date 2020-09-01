@@ -109,9 +109,7 @@ public class ABCPFragment extends Fragment {
     public String getPassed(boolean isPassed){ return getString(isPassed ? R.string.pass: R.string.fail); }
 
     public void onSaveClick(View view) {
-        ABCPDBHelper dbHelper = new ABCPDBHelper(requireContext());
-        dbHelper.insertRecord(record);
-        dbHelper.close();
+        ABCPDBHandler.insertRecord(requireContext(), record);
         //Bundle bundle = new Bundle(); bundle.putInt("page",TAB_ABCP);
         Snackbar.make(binding.getRoot(),"Saving is on maintenance", Snackbar.LENGTH_SHORT)
                 .setAction("log", v -> activity.navController.navigate(R.id.navigation_log)).show();

@@ -108,9 +108,7 @@ public class ACFTFragment extends Fragment{
     public String getPassed(boolean isPassed){ return getString(isPassed ? R.string.pass: R.string.fail); }
 
     public void onSaveClick(View view) {
-        ACFTDBHelper dbHelper = new ACFTDBHelper(requireContext());
-        dbHelper.insertRecord(record);
-        dbHelper.close();
+        ACFTDBHandler.insertRecord(requireContext(), record);
         Snackbar.make(binding.getRoot(),"Saved on log.", Snackbar.LENGTH_SHORT)
                 .setAction("log", v -> activity.navController.navigate(R.id.navigation_log)).show();
     }

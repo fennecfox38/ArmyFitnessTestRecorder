@@ -4,7 +4,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 
 import org.apache.poi.ss.usermodel.Row;
@@ -13,39 +12,21 @@ import org.apache.poi.ss.usermodel.Workbook;
 
 import java.util.ArrayList;
 
-import mil.army.fitnesstest.recorder.FileProvider;
+import mil.army.fitnesstest.recorder.DBHelper;
 import mil.army.fitnesstest.recorder.Sex;
 import mil.army.fitnesstest.recorder.apft.event.APFTCardioAlter;
 import mil.army.fitnesstest.recorder.apft.event.APFTEvent;
 
-import static mil.army.fitnesstest.recorder.apft.APFTDBHelper.DBContract.*;
+import static mil.army.fitnesstest.recorder.apft.APFTDBContract.*;
 
+public class APFTDBHandler{
 
-public class APFTDBHelper extends SQLiteOpenHelper {
-    public APFTDBHelper(Context context) {
-        super(context, FileProvider.dbName, null, FileProvider.dbVersion);
-    }
-    // onCreate might be called only when db file is not exist.
-    @Override public void onCreate(SQLiteDatabase db) { db.execSQL(SQL_CREATE_TBL); }
-    @Override public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL(SQL_DROP_TBL); db.execSQL(SQL_CREATE_TBL);
-    }
-    @Override public SQLiteDatabase getReadableDatabase() {
-        SQLiteDatabase db = super.getReadableDatabase();
-        db.execSQL(SQL_CREATE_TBL); // before return readable database,
-        return db; // create table if not exist.
-    }
-    @Override public SQLiteDatabase getWritableDatabase() {
-        SQLiteDatabase db = super.getWritableDatabase();
-        db.execSQL(SQL_CREATE_TBL); // before return writable database,
-        return db; // create table if not exist.
-    }
-
-    public ArrayList<APFTRecord<APFTEvent>> getRecordList(){
-        ArrayList<APFTRecord<APFTEvent>> list = new ArrayList<>();
-        SQLiteDatabase db = getReadableDatabase();
+    public static ArrayList<APFTRecord<APFTEvent>> getRecordList(Context context){
+        DBHelper dbHelper = new DBHelper(context);
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor cursor= db.rawQuery(SQL_SELECT,null);
 
+        ArrayList<APFTRecord<APFTEvent>> list = new ArrayList<>();
         APFTRecord<APFTEvent> record;
         for(boolean haveItem = cursor.moveToFirst(); haveItem; haveItem=cursor.moveToNext()){
             record = new APFTRecord<APFTEvent>();
@@ -66,11 +47,13 @@ public class APFTDBHelper extends SQLiteOpenHelper {
 
         cursor.close();
         db.close();
+        dbHelper.close();
         return list;
     }
 
-    public void saveRecordList(ArrayList<APFTRecord<APFTEvent>> list){
-        SQLiteDatabase db = getWritableDatabase();
+    public static void saveRecordList(Context context, ArrayList<APFTRecord<APFTEvent>> list){
+        DBHelper dbHelper = new DBHelper(context);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
         if(db==null) return;
         try{
             db.beginTransaction();
@@ -80,10 +63,12 @@ public class APFTDBHelper extends SQLiteOpenHelper {
         } catch (SQLException e) { e.printStackTrace(); }
         finally { db.endTransaction(); }
         db.close();
+        dbHelper.close();
     }
 
-    public void insertRecord(APFTRecord<APFTEvent> record){
-        SQLiteDatabase db = getWritableDatabase();
+    public static void insertRecord(Context context, APFTRecord<APFTEvent> record){
+        DBHelper dbHelper = new DBHelper(context);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
         if(db==null) return;
         try{
             db.beginTransaction();  // add one by one
@@ -92,9 +77,10 @@ public class APFTDBHelper extends SQLiteOpenHelper {
         } catch (SQLException e) { e.printStackTrace(); }
         finally { db.endTransaction(); }
         db.close();
+        dbHelper.close();
     }
 
-    public void deleteRecord(APFTRecord<APFTEvent> record){
+    public static void deleteRecord(Context context, APFTRecord<APFTEvent> record){
         String sqlExec = SQL_DELETE_WHERE + sqlWhere(COLUMN_RECORD_DATE,record.dateToString()) + "AND ";
         sqlExec += sqlWhere(COLUMN_RAW_PU,record.raw_PU) + "AND " + sqlWhere(COLUMN_SCORE_PU,record.sco[0]) + "AND ";
         sqlExec += sqlWhere(COLUMN_RAW_SU,record.raw_SU) + "AND " + sqlWhere(COLUMN_SCORE_SU,record.sco[1]) + "AND ";
@@ -103,7 +89,8 @@ public class APFTDBHelper extends SQLiteOpenHelper {
         sqlExec += sqlWhere(COLUMN_SEX,record.sex.name()) + "AND " + sqlWhere(COLUMN_AGE_GROUP,record.ageGroup.toString()) + "AND ";
         sqlExec += sqlWhere(COLUMN_SCORE_TOTAL,record.sco_total) + "AND " + sqlWhere(COLUMN_IS_PASSED,Boolean.toString(record.isPassed));
 
-        SQLiteDatabase db = getWritableDatabase();
+        DBHelper dbHelper = new DBHelper(context);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
         if(db == null) return;
         try {
             db.beginTransaction();
@@ -112,10 +99,12 @@ public class APFTDBHelper extends SQLiteOpenHelper {
         } catch (SQLException e) { e.printStackTrace(); }
         finally { db.endTransaction(); }
         db.close();
+        dbHelper.close();
     }
 
-    public void deleteAll(){
-        SQLiteDatabase db = getWritableDatabase();
+    public static void deleteAll(Context context){
+        DBHelper dbHelper = new DBHelper(context);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
         if(db == null) return;
         try {
             db.beginTransaction();
@@ -124,9 +113,10 @@ public class APFTDBHelper extends SQLiteOpenHelper {
         } catch (SQLException e) { e.printStackTrace(); }
         finally { db.endTransaction(); }
         db.close();
+        dbHelper.close();
     }
 
-    public void exportExcel(Workbook workbook){
+    public static void exportExcel(SQLiteDatabase db, Workbook workbook){
         Sheet sheet = workbook.createSheet(TABLE_NAME);
 
         Row row = sheet.createRow(0);
@@ -143,7 +133,6 @@ public class APFTDBHelper extends SQLiteOpenHelper {
         row.createCell(10).setCellValue(COLUMN_SCORE_TOTAL);
         row.createCell(11).setCellValue(COLUMN_IS_PASSED);
 
-        SQLiteDatabase db = getReadableDatabase();
         Cursor cursor= db.rawQuery(SQL_SELECT,null);
 
         int rowIndex = 1;
@@ -164,37 +153,8 @@ public class APFTDBHelper extends SQLiteOpenHelper {
         }
 
         cursor.close();
-        db.close();
     }
 
     private static String sqlWhere(String column, String arg){ return (column+"=\""+arg+"\" "); }
     private static String sqlWhere(String column, int arg){ return (column+"="+ arg +" "); }
-
-    public static final class DBContract implements BaseColumns {
-        public static final String TABLE_NAME = "APFTRecord";
-        public static final String COLUMN_RECORD_DATE = "RecordDate";
-        public static final String COLUMN_RAW_PU = "PURaw", COLUMN_RAW_SU = "SURaw", COLUMN_RAW_CARDIO = "CardioRaw";
-        public static final String COLUMN_SCORE_PU = "PUScore", COLUMN_SCORE_SU = "SUScore", COLUMN_SCORE_CARDIO = "CardioScore";
-        public static final String COLUMN_CARDIO_ALTER = "CardioAlter", COLUMN_SEX = "Sex", COLUMN_AGE_GROUP = "AgeGroup";
-        public static final String COLUMN_SCORE_TOTAL = "ScoreTotal", COLUMN_IS_PASSED = "isPassed";
-
-        public static final String SQL_CREATE_TBL="CREATE TABLE IF NOT EXISTS "+ TABLE_NAME +" ("+
-                //_ID+" INTEGER PRIMARY KEY AUTOINCREMENT,"+
-                COLUMN_RECORD_DATE+" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,"+
-                COLUMN_RAW_PU+" INTEGER NOT NULL,"+ COLUMN_SCORE_PU+" INTEGER NOT NULL,"+
-                COLUMN_RAW_SU+" INTEGER NOT NULL,"+ COLUMN_SCORE_SU+" INTEGER NOT NULL,"+
-                COLUMN_RAW_CARDIO+" TEXT NOT NULL,"+ COLUMN_SCORE_CARDIO+" INTEGER NOT NULL,"+
-                COLUMN_CARDIO_ALTER+" TEXT NOT NULL,"+
-                COLUMN_SEX+" TEXT NOT NULL,"+ COLUMN_AGE_GROUP+" TEXT NOT NULL,"+
-                COLUMN_SCORE_TOTAL+" INTEGER NOT NULL,"+ COLUMN_IS_PASSED+" TEXT NOT NULL)";
-        public static final String SQL_DROP_TBL = "DROP TABLE IF EXISTS "+ TABLE_NAME;
-        public static final String SQL_SELECT = "SELECT * FROM " + TABLE_NAME;
-        public static final String SQL_INSERT = "INSERT OR REPLACE INTO "+TABLE_NAME+
-                "("+COLUMN_RECORD_DATE+", "+
-                COLUMN_RAW_PU+", "+COLUMN_SCORE_PU+", "+ COLUMN_RAW_SU+", "+COLUMN_SCORE_SU+", "+
-                COLUMN_RAW_CARDIO+", "+COLUMN_SCORE_CARDIO+", "+COLUMN_CARDIO_ALTER+", "+
-                COLUMN_SEX+", "+COLUMN_AGE_GROUP+", "+ COLUMN_SCORE_TOTAL+", "+ COLUMN_IS_PASSED+") VALUES";
-        public static final String SQL_DELETE_WHERE = "DELETE FROM " + TABLE_NAME + " WHERE ";
-        public static final String SQL_DELETE_ALL = "DELETE FROM " + TABLE_NAME;
-    }
 }
