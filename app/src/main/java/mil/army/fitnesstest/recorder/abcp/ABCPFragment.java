@@ -127,17 +127,15 @@ public class ABCPFragment extends Fragment {
 
     public void onSexChanged(RadioGroup radioGroup, int checkedId){
         ArrayList<Item> list = itemList.getValue();
-        switch (checkedId){
-            case R.id.rBtn_male:
-                record.sex = Sex.Male;
-                list.remove(Item.HIPS);
-                list.get(Item.ABDOMEN_WAIST).title = getString(R.string.abdomen);
-                break;
-            case R.id.rBtn_female:
-                record.sex = Sex.Female;
-                list.get(Item.ABDOMEN_WAIST).title = getString(R.string.waist);
-                list.add(HIPS);
-            break;
+        if(checkedId == R.id.rBtn_male){
+            record.sex = Sex.Male;
+            list.remove(Item.HIPS);
+            list.get(Item.ABDOMEN_WAIST).title = getString(R.string.abdomen);
+        }
+        else{
+            record.sex = Sex.Female;
+            list.get(Item.ABDOMEN_WAIST).title = getString(R.string.waist);
+            list.add(HIPS);
         } // Attach and Detach Hips item
         itemList.setValue(list);
         record.invalidate(list);//record.validate();

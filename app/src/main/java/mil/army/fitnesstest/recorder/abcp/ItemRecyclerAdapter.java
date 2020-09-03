@@ -50,19 +50,14 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter<ItemRecyclerAdapte
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
             if(fromUser) updateRaw(progress);
         }
-        public void onAdjustBtnClick(View v) {
-            switch (v.getId()){
-                case R.id.btn_minus: updateRaw(item.raw-1); break;
-                case R.id.btn_plus: updateRaw(item.raw+1); break;
-            }
-        }
+        public void onAdjustBtnClick(View v) { updateRaw(item.raw+(v.getId() == R.id.btn_plus ? 1 : -1)); }
         private void updateRaw(int rawSco){
             // 범위 문제 edittext때문에 좀더 고민해 봐야함. 수정 중 범위벗어나는 걸 허락 하기가 어려움.
             if(rawSco == item.raw) return;
             else if(rawSco<item.min) rawSco = item.min;
             else if(rawSco>item.max) rawSco = item.max;
             item.raw = rawSco;
-            updateItemList(item.itemType,item);
+            updateItemList(item);
             binding.invalidateAll();
         }
     }
@@ -79,9 +74,9 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter<ItemRecyclerAdapte
 
     @Override public int getItemCount() { return itemList.getValue().size(); }
 
-    private void updateItemList(int position, Item item){
+    private void updateItemList(Item item){
         ArrayList<Item> list = itemList.getValue();
-        list.set(position, item);
+        list.set(item.itemType, item);
         itemList.setValue(list);
     }
 

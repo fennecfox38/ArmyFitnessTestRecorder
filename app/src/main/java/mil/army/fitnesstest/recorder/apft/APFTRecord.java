@@ -7,6 +7,8 @@ import androidx.lifecycle.MutableLiveData;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Objects;
 
 import mil.army.fitnesstest.recorder.Duration;
 import mil.army.fitnesstest.recorder.Record;
@@ -27,35 +29,34 @@ public class APFTRecord<T extends APFTEvent> extends Record<T> {
     public APFTRecord(){ super(); }
 
     @Override public void updateRecord(ArrayList<T> eventList) {
-        sco_total=0;
-        for(T event : eventList){
-            switch (event.eventType){
-                case APFTEvent.PU: raw_PU = ((CountAPFTEvent)event).raw; break;
-                case APFTEvent.SU: raw_SU = ((CountAPFTEvent)event).raw; break;
-                case APFTEvent.CARDIO:
-                    raw_Cardio = ((DurationAPFTEvent)event).duration;
-                    cardioAlter = ((DurationAPFTEvent)event).cardioAlter;
-                    break;
-            }
-            sco[event.eventType] = event.sco;
-            sco_total += sco[event.eventType];
-        }
+        CountAPFTEvent countEvent = (CountAPFTEvent) eventList.get(APFTEvent.PU);
+        raw_PU = countEvent.raw;
+        sco[0] = countEvent.sco;
+        countEvent = (CountAPFTEvent) eventList.get(APFTEvent.SU);
+        raw_SU = countEvent.raw;
+        sco[1] = countEvent.sco;
+        DurationAPFTEvent durationEvent = (DurationAPFTEvent) eventList.get(APFTEvent.CARDIO);
+        raw_Cardio = durationEvent.duration;
+        cardioAlter = durationEvent.cardioAlter;
+        sco[2] = durationEvent.sco;
+        sco_total = sco[0] + sco[1] + sco[2];
     }
 
     @Override public void restoreList(ArrayList<T> eventList) {
-        for(T event : eventList){
-            event.sex = sex;
-            event.ageGroup = ageGroup;
-            switch (event.eventType){
-                case APFTEvent.PU: ((CountAPFTEvent)event).raw = raw_PU; break;
-                case APFTEvent.SU: ((CountAPFTEvent)event).raw = raw_SU; break;
-                case APFTEvent.CARDIO:
-                    ((DurationAPFTEvent)event).duration = raw_Cardio;
-                    ((DurationAPFTEvent)event).cardioAlter = cardioAlter;
-                    break;
-            }
-            event.sco = sco[event.eventType];
-        }
+        CountAPFTEvent countEvent = (CountAPFTEvent) eventList.get(APFTEvent.PU);
+        countEvent.sex = sex;
+        countEvent.ageGroup = ageGroup;
+        countEvent.raw = raw_PU;
+        countEvent.sco = sco[0];
+        countEvent = (CountAPFTEvent) eventList.get(APFTEvent.SU);
+        countEvent.sex = sex;
+        countEvent.ageGroup = ageGroup;
+        countEvent.raw = raw_SU;
+        countEvent.sco = sco[1];
+        DurationAPFTEvent durationEvent = (DurationAPFTEvent) eventList.get(APFTEvent.CARDIO);
+        durationEvent.duration = raw_Cardio;
+        durationEvent.cardioAlter = cardioAlter;
+        durationEvent.sco = sco[2];
     }
 
     @Override public void invalidate(ArrayList<T> eventList) {
@@ -64,7 +65,7 @@ public class APFTRecord<T extends APFTEvent> extends Record<T> {
     }
 
     public void validateEvent(MutableLiveData<ArrayList<T>> mutableList){
-        ArrayList<T> eventList = mutableList.getValue();
+        ArrayList<T> eventList = Objects.requireNonNull(mutableList.getValue());
         for(T event : eventList){
             event.sex = sex;
             event.ageGroup = ageGroup;
@@ -91,27 +92,32 @@ public class APFTRecord<T extends APFTEvent> extends Record<T> {
     }
 
     @NotNull @Override public String toString() {
-        return null;
+        return "Record Date: " +dateToString() +
+                "\nSex: " + sex.name() +
+                "\nAge Group: " + ageGroup.toString() +
+                "\nPush-Up: " + raw_PU + "reps / score: " + sco[0] +
+                "\nSit-Up: " + raw_SU + "reps / score: " + sco[1] +
+                "\n"+ cardioAlter.toString() +": " + raw_Cardio.toString() + " / score: " + sco[2] +
+                "\nScore Total: " + sco_total +
+                "\n" + getPassed(isPassed);
     }
 
-
     public enum AgeGroup{
-        _17_21("17–21"),
-        _22_26("22–26"),
-        _27_31("27–31"),
-        _32_36("32–36"),
-        _37_41("37–41"),
-        _42_46("42–46"),
-        _47_51("47–51"),
-        _52_56("52–56");
+        _17_21("17–21"), _22_26("22–26"), _27_31("27–31"), _32_36("32–36"),
+        _37_41("37–41"), _42_46("42–46"), _47_51("47–51"), _52_56("52–56");
 
         private String str; // contains default string.
+        private static HashMap<String, AgeGroup> map = new HashMap<String, AgeGroup>(){{
+            put("17–21", _17_21); put("22–26", _22_26); put("27–31", _27_31); put("32–36", _32_36);
+            put("37–41", _37_41); put("42–46", _42_46); put("47–51",  _47_51); put("52–56", _52_56);
+        }};
         AgeGroup(String str){this.str=str;} // constructor & setter.
         @NotNull public String toString(){return str;}
 
         public static AgeGroup findById(int ordinal){ return values()[ordinal]; }
         public static AgeGroup findByString(String str){
-            switch (str){
+            return map.get(str);
+            /*switch (str){
                 case "17–21": return _17_21;
                 case "22–26": return _22_26;
                 case "27–31": return _27_31;
@@ -121,7 +127,7 @@ public class APFTRecord<T extends APFTEvent> extends Record<T> {
                 case "47–51": return _47_51;
                 case "52–56": return _52_56;
                 default: return null;
-            }
+            }*/
         }
     }
 }

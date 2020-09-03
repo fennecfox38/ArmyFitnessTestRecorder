@@ -27,42 +27,48 @@ public class ACFTRecord<T extends ACFTEvent> extends Record<T> {
     public ACFTRecord(){ super(); }
 
     public void updateRecord(ArrayList<T> eventList){
+        CountACFTEvent countEvent = (CountACFTEvent) eventList.get(ACFTEvent.MDL);
+        raw_0 = countEvent.raw;
+        countEvent = (CountACFTEvent) eventList.get(ACFTEvent.SPT);
+        raw_1 = countEvent.raw/10.f;
+        countEvent = (CountACFTEvent) eventList.get(ACFTEvent.HPU);
+        raw_2 = countEvent.raw;
+        DurationACFTEvent durationEvent = (DurationACFTEvent) eventList.get(ACFTEvent.SDC);
+        raw_3 = durationEvent.duration;
+        countEvent = (CountACFTEvent) eventList.get(ACFTEvent.LTK);
+        raw_4 = countEvent.raw;
+        durationEvent = (DurationACFTEvent) eventList.get(ACFTEvent.CARDIO);
+        raw_5 = durationEvent.duration;
+        cardioAlter = durationEvent.cardioAlter;
         sco_total = 0; qualifiedLevel = Level.Heavy;
         for(T event : eventList){
-            switch (event.eventType){
-                case ACFTEvent.MDL: raw_0 = ((CountACFTEvent) event).raw; break;
-                case ACFTEvent.SPT: raw_1 = (((CountACFTEvent) event).raw/10.0f); break;
-                case ACFTEvent.HPU: raw_2 = ((CountACFTEvent) event).raw; break;
-                case ACFTEvent.SDC: raw_3.setTotalInSec(((DurationACFTEvent)event).duration.getTotalInSec()); break;
-                case ACFTEvent.LTK: raw_4 = ((CountACFTEvent) event).raw; break;
-                case ACFTEvent.CARDIO:
-                    raw_5.setTotalInSec(((DurationACFTEvent)event).duration.getTotalInSec());
-                    cardioAlter = ((DurationACFTEvent)event).cardioAlter;
-                    break;
-            }
-            sco[event.eventType] = event.sco;
-            sco_total += sco[event.eventType];
-
-            if (qualifiedLevel.compareTo(event.level) > 0) qualifiedLevel = event.level;
+            //sco[event.eventType] = event.sco;
+            //sco_total += sco[event.eventType];
+            sco_total += sco[event.eventType] = event.sco;
+            if (qualifiedLevel.compareTo(event.level) > 0)
+                qualifiedLevel = event.level;
         }
     }
 
     public void restoreList(ArrayList<T> eventList){
-        for(T event : eventList){
-            switch (event.eventType){
-                case ACFTEvent.MDL: ((CountACFTEvent)event).raw = raw_0; break;
-                case ACFTEvent.SPT: ((CountACFTEvent)event).raw = ((int)(raw_1*10)); break;
-                case ACFTEvent.HPU: ((CountACFTEvent)event).raw = raw_2; break;
-                case ACFTEvent.SDC: ((DurationACFTEvent)event).duration.setTotalInSec(raw_3.getTotalInSec()); break;
-                case ACFTEvent.LTK: ((CountACFTEvent)event).raw = raw_4; break;
-                case ACFTEvent.CARDIO:
-                    ((DurationACFTEvent)event).duration.setTotalInSec(raw_5.getTotalInSec());
-                    ((DurationACFTEvent)event).cardioAlter = cardioAlter;
-                    break;
-            }
-            event.sco = sco[event.eventType];
-            event.giveLevel();
-        }
+        CountACFTEvent countEvent = (CountACFTEvent) eventList.get(ACFTEvent.MDL);
+        countEvent.raw = raw_0; countEvent.sco = sco[0]; countEvent.giveScore();
+
+        countEvent = (CountACFTEvent) eventList.get(ACFTEvent.SPT);
+        countEvent.raw = ((int)(raw_1*10)); countEvent.sco = sco[1]; countEvent.giveScore();
+
+        countEvent = (CountACFTEvent) eventList.get(ACFTEvent.HPU);
+        countEvent.raw = raw_2; countEvent.sco = sco[2]; countEvent.giveScore();
+
+        DurationACFTEvent durationEvent = (DurationACFTEvent) eventList.get(ACFTEvent.SDC);
+        durationEvent.duration = raw_3; durationEvent.sco = sco[3]; durationEvent.giveScore();
+
+        countEvent = (CountACFTEvent) eventList.get(ACFTEvent.LTK);
+        countEvent.raw = raw_4; countEvent.sco = sco[4]; countEvent.giveScore();
+
+        durationEvent = (DurationACFTEvent) eventList.get(ACFTEvent.CARDIO);
+        durationEvent.duration = raw_5; durationEvent.cardioAlter = cardioAlter;
+        durationEvent.sco = sco[5]; durationEvent.giveScore();
     }
 
     public void invalidate(ArrayList<T> eventList){
@@ -109,11 +115,9 @@ public class ACFTRecord<T extends ACFTEvent> extends Record<T> {
 
 
     public enum MOS{
-        Moderate(),
-        Significant(),
-        Heavy();
+        Moderate(), Significant(), Heavy();
 
-        MOS(){ } // constructor
+        //MOS(){ } // constructor
         public MOS valueOf(int ordinal){ return values()[ordinal]; }
     }
 

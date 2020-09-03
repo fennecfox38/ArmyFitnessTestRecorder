@@ -12,10 +12,8 @@ import android.widget.SeekBar;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.AppCompatSpinner;
 import androidx.databinding.BindingAdapter;
 import androidx.databinding.DataBindingUtil;
-import androidx.databinding.InverseBindingAdapter;
 import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -62,14 +60,10 @@ public class ACFTEventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
             if(fromUser) updateRawSco(progress);
         }
-        public void onAdjustBtnClick(View v) {
-            switch (v.getId()){
-                case R.id.btn_minus: updateRawSco(event.raw-1); break;
-                case R.id.btn_plus: updateRawSco(event.raw+1); break;
-            }
-        }
+        public void onAdjustBtnClick(View v) { updateRawSco(event.raw+ (v.getId()==R.id.btn_plus ? 1 : -1)); }
         private void updateRawSco(int rawSco){
-            if(rawSco<0) rawSco = 0;
+            if(rawSco == event.raw) return;
+            else if(rawSco<0) rawSco = 0;
             else if(rawSco>event.max) rawSco = event.max;
             event.raw = rawSco;
             event.giveScore();
@@ -164,15 +158,5 @@ public class ACFTEventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
         }
         editText.setSelection(editText.length());
     }
-
-    @BindingAdapter("android:selectedItemPosition")
-    public static void setSelectedItemPosition(AppCompatSpinner spinner, int selection) {
-        spinner.setSelection(selection);
-    }
-    @InverseBindingAdapter(attribute = "android:selection")
-    public static int getSelectedItemPosition(AppCompatSpinner spinner) {
-        return spinner.getSelectedItemPosition();
-    }
-
 }
 

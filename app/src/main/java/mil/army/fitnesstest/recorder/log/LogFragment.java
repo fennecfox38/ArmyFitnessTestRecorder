@@ -105,10 +105,12 @@ public class LogFragment extends Fragment{
         public static final int TAB_ACFT=0, TAB_APFT=1, TAB_ABCP=2;
         private View[] view;
         private ACFTLogRecyclerAdapter acftAdapter;
+        private APFTLogRecyclerAdapter apftAdapter;
         private ABCPLogRecyclerAdapter abcpAdapter;
         TabPagerAdapter(){
             view = new View[3];
             acftAdapter = new ACFTLogRecyclerAdapter(requireContext());
+            apftAdapter = new APFTLogRecyclerAdapter(requireContext());
             abcpAdapter = new ABCPLogRecyclerAdapter(requireContext());
         }
 
@@ -119,7 +121,7 @@ public class LogFragment extends Fragment{
             recyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
             switch (position){
                 case TAB_ACFT: recyclerView.setAdapter(acftAdapter); break;
-                case TAB_APFT: break;
+                case TAB_APFT: recyclerView.setAdapter(apftAdapter);break;
                 case TAB_ABCP: recyclerView.setAdapter(abcpAdapter);break;
             }
             container.addView(view[position]);
@@ -129,7 +131,7 @@ public class LogFragment extends Fragment{
         public void actionDelete(int currentPage){
             switch (currentPage){
                 case TAB_ACFT: acftAdapter.deleteAllRecord(view[TAB_ACFT]); break;
-                case TAB_APFT: break;
+                case TAB_APFT: apftAdapter.deleteAllRecord(view[TAB_APFT]); break;
                 case TAB_ABCP: abcpAdapter.deleteAllRecord(view[TAB_ABCP]); break;
             }
         }

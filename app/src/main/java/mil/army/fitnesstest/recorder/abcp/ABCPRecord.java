@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import mil.army.fitnesstest.Standard;
 import mil.army.fitnesstest.recorder.Record;
@@ -20,26 +21,20 @@ public class ABCPRecord<T extends Item> extends Record<T> {
     public ABCPRecord(){ super(); }
 
     public void updateRecord(ArrayList<T> items){
-        for(T item : items){
-            switch(item.itemType){
-                case Item.HEIGHT: height = ((item.raw)/2.f + 58); break;
-                case Item.WEIGHT: weight = (item.raw+90); break;
-                case Item.NECK: neck = ((item.raw)/2.f + 10); break;
-                case Item.ABDOMEN_WAIST: abdomen_waist = ((item.raw)/2.f + 20); break;
-                case Item.HIPS: hips = ((item.raw)/2.f + 20); break;
-            }
-        }
+        height = ((items.get(Item.HEIGHT).raw)/2.f + 58);
+        weight = (items.get(Item.WEIGHT).raw+90);
+        neck = ((items.get(Item.NECK).raw)/2.f + 10);
+        abdomen_waist = ((items.get(Item.ABDOMEN_WAIST).raw)/2.f + 20);
+        try{ hips = ((items.get(Item.HIPS).raw)/2.f + 20); }
+        catch (Exception e) { e.printStackTrace(); }
     }
     public void restoreList(ArrayList<T> items){
-        for(T item : items){
-            switch(item.itemType){
-                case Item.HEIGHT: item.raw = ((int) (height-58)*2); break;
-                case Item.WEIGHT: item.raw = (weight-90); break;
-                case Item.NECK: item.raw = ((int) (neck-10)*2); break;
-                case Item.ABDOMEN_WAIST: item.raw = ((int) (abdomen_waist -20)*2); break;
-                case Item.HIPS: item.raw = ((int) (hips-20)*2); break;
-            }
-        }
+        items.get(Item.HEIGHT).raw = ((int) (height-58)*2);
+        items.get(Item.WEIGHT).raw = (weight-90);
+        items.get(Item.NECK).raw = ((int) (neck-10)*2);
+        items.get(Item.ABDOMEN_WAIST).raw = ((int) (abdomen_waist -20)*2);
+        try{ items.get(Item.HIPS).raw = ((int) (hips-20)*2); }
+        catch (Exception e) { e.printStackTrace(); }
     }
 
     public void invalidate(ArrayList<T> items){
@@ -69,24 +64,25 @@ public class ABCPRecord<T extends Item> extends Record<T> {
     }
 
     public enum AgeGroup{
-        _17_20("17–20"),
-        _21_27("21–27"),
-        _28_39("28–39"),
-        _40_("40+");
+        _17_20("17–20"), _21_27("21–27"),
+        _28_39("28–39"), _40_("40+");
 
         private String str; // contains default string.
         AgeGroup(String str){this.str=str;} // constructor & setter.
-        public String toString(){ return str; }
-
+        @NotNull public String toString(){ return str; }
+        private static HashMap<String,AgeGroup> map = new HashMap<String,AgeGroup>(){{
+           put("17–20",_17_20);  put("21–27",_21_27); put("28–39",_28_39); put("40+",_40_);
+        }};
         public static AgeGroup valueOf(int ordinal){ return values()[ordinal]; }
         public static AgeGroup findByString(String str){
-            switch (str){
+            return map.get(str);
+            /*switch (str){
                 case "17–20": return _17_20;
                 case "21–27": return _21_27;
                 case "28–39": return _28_39;
                 case "40+": return _40_;
                 default: return null;
-            }
+            }*/
         }
     }
 

@@ -12,7 +12,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatSpinner;
 import androidx.core.view.GravityCompat;
+import androidx.databinding.BindingAdapter;
+import androidx.databinding.InverseBindingAdapter;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDestination;
@@ -80,5 +83,16 @@ public class MainActivity extends AppCompatActivity {
             drawer_main.closeDrawer(GravityCompat.START);
         else super.onBackPressed();
     }
+
+
+    @BindingAdapter("android:selectedItemPosition")
+    public static void setSelectedItemPosition(AppCompatSpinner spinner, int selection) {
+        spinner.setSelection(selection);
+    }
+    @InverseBindingAdapter(attribute = "android:selection")
+    public static int getSelectedItemPosition(AppCompatSpinner spinner) {
+        return spinner.getSelectedItemPosition();
+    }
+
 
 }

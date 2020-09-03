@@ -144,9 +144,5 @@ public class APFTEventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
         editText.setText(String.valueOf(event.raw));
         editText.setSelection(editText.length());
     }
-    @BindingAdapter("android:selectedItemPosition")
-    public static void setSelectedItemPosition(AppCompatSpinner spinner, int selection) {
-        spinner.setSelection(selection);
-    }
 
 }
