@@ -27,7 +27,7 @@ import mil.army.fitnesstest.recorder.acft.event.ACFTEvent;
 public class ACFTLogRecyclerAdapter extends RecyclerView.Adapter<ACFTLogRecyclerAdapter.ACFTLogViewHolder> {
     private Context context;
     private Resources resources;
-    private ArrayList<ACFTRecord<ACFTEvent>> list;
+    private ArrayList<ACFTRecord> list;
 
     public ACFTLogRecyclerAdapter(Context context){
         this.context = context; resources = context.getResources();
@@ -36,7 +36,7 @@ public class ACFTLogRecyclerAdapter extends RecyclerView.Adapter<ACFTLogRecycler
 
     public class ACFTLogViewHolder extends RecyclerView.ViewHolder{
         RecyclerviewAcftLogBinding binding;
-        public ACFTRecord<ACFTEvent> record;
+        public ACFTRecord record;
         public ACFTLogViewHolder(@NonNull View itemView) {
             super(itemView);
             itemView.setOnCreateContextMenuListener((menu, view, menuInfo) -> {
@@ -84,7 +84,7 @@ public class ACFTLogRecyclerAdapter extends RecyclerView.Adapter<ACFTLogRecycler
     @Override public int getItemCount() { return list.size(); }
 
     public void deleteAllRecord(View root){
-        final ArrayList<ACFTRecord<ACFTEvent>> backup = new ArrayList<>(list);
+        final ArrayList<ACFTRecord> backup = new ArrayList<>(list);
         list.clear(); notifyDataSetChanged();
         ACFTDBHandler.deleteAll(context);
         Snackbar.make(root, resources.getString(R.string.recordDeleted), Snackbar.LENGTH_SHORT)

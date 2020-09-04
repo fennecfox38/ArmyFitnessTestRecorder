@@ -24,7 +24,7 @@ import mil.army.fitnesstest.recorder.apft.event.APFTEvent;
 public class APFTLogRecyclerAdapter extends RecyclerView.Adapter<APFTLogRecyclerAdapter.APFTViewHolder> {
     Context context;
     Resources resources;
-    ArrayList<APFTRecord<APFTEvent>> list;
+    ArrayList<APFTRecord> list;
 
     public APFTLogRecyclerAdapter(Context context){
         this.context = context; resources = context.getResources();
@@ -33,7 +33,7 @@ public class APFTLogRecyclerAdapter extends RecyclerView.Adapter<APFTLogRecycler
 
     public class APFTViewHolder extends RecyclerView.ViewHolder{
         RecyclerviewApftLogBinding binding;
-        public APFTRecord<APFTEvent> record;
+        public APFTRecord record;
         public APFTViewHolder(@NonNull View itemView) {
             super(itemView);
             itemView.setOnCreateContextMenuListener((menu, view, menuInfo) -> {
@@ -71,7 +71,7 @@ public class APFTLogRecyclerAdapter extends RecyclerView.Adapter<APFTLogRecycler
     @Override public int getItemCount() { return list.size(); }
 
     public void deleteAllRecord(View root){
-        final ArrayList<APFTRecord<APFTEvent>> backup = new ArrayList<>(list);
+        final ArrayList<APFTRecord> backup = new ArrayList<>(list);
         list.clear(); notifyDataSetChanged();
         APFTDBHandler.deleteAll(context);
         Snackbar.make(root, resources.getString(R.string.recordDeleted), Snackbar.LENGTH_SHORT)

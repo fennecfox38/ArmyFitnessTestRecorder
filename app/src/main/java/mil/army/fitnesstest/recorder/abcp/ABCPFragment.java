@@ -13,7 +13,6 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.AppCompatSpinner;
 import androidx.databinding.BindingAdapter;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
@@ -31,7 +30,7 @@ import mil.army.fitnesstest.recorder.Sex;
 
 public class ABCPFragment extends Fragment {
     private MainActivity activity;
-    public ABCPRecord<Item> record = new ABCPRecord<>();
+    public ABCPRecord record = new ABCPRecord();
     public MutableLiveData<ArrayList<Item>> itemList = new MutableLiveData<>(null);
     private ItemRecyclerAdapter adapter;
     public FragmentAbcpBinding binding;
@@ -57,7 +56,6 @@ public class ABCPFragment extends Fragment {
 
         itemList.observe(getViewLifecycleOwner(), items -> {
             record.invalidate(items);
-            adapter.notifyDataSetChanged();
             binding.invalidateAll();
         });
         binding.setFragment(this);
@@ -69,7 +67,7 @@ public class ABCPFragment extends Fragment {
         super.onDestroyView();
     }
 
-    private void loadData(ABCPRecord<Item> record, ArrayList<Item> list){
+    private void loadData(ABCPRecord record, ArrayList<Item> list){
         SharedPreferences sharedPreferences = activity.getSharedPreferences("ABCPRecord", Activity.MODE_PRIVATE);
         record.sex = Sex.valueOf(sharedPreferences.getInt("Sex", 0));
         record.ageGroup = ABCPRecord.AgeGroup.valueOf(sharedPreferences.getInt("AgeGroup",0));
@@ -85,7 +83,7 @@ public class ABCPFragment extends Fragment {
         record.restoreList(list);
     }
 
-    private void saveData(ABCPRecord<Item> record){
+    private void saveData(ABCPRecord record){
         SharedPreferences.Editor editor = activity.getSharedPreferences("ABCPRecord", Activity.MODE_PRIVATE).edit();
         editor.clear();
 
@@ -154,12 +152,4 @@ public class ABCPFragment extends Fragment {
         textView.setText(String.format("%.1f%%",percentage));
     }
 
-    @BindingAdapter("android:selectedItemPosition")
-    public static void setSelectedItemPosition(AppCompatSpinner spinner, int selection) {
-        spinner.setSelection(selection);
-    }
-    /*@InverseBindingAdapter(attribute = "android:selectedItemPosition")
-    public static int getSelectedItemPosition(AppCompatSpinner spinner) {
-        return spinner.getSelectedItemPosition();
-    }*/
 }

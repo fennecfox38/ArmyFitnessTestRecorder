@@ -19,15 +19,15 @@ import static mil.army.fitnesstest.recorder.acft.ACFTDBContract.*;
 
 public class ACFTDBHandler{
 
-    public static ArrayList<ACFTRecord<ACFTEvent>> getRecordList(Context context){
+    public static ArrayList<ACFTRecord> getRecordList(Context context){
         DBHelper dbHelper = new DBHelper(context);
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor cursor= db.rawQuery(SQL_SELECT,null);
 
-        ArrayList<ACFTRecord<ACFTEvent>> list = new ArrayList<>();
-        ACFTRecord<ACFTEvent> record;
+        ArrayList<ACFTRecord> list = new ArrayList<>();
+        ACFTRecord record;
         for(boolean haveItem = cursor.moveToFirst(); haveItem; haveItem=cursor.moveToNext()){
-            record = new ACFTRecord<>();
+            record = new ACFTRecord();
             record.stringToDate(cursor.getString(cursor.getColumnIndex(COLUMN_RECORD_DATE)));
             record.raw_0 = cursor.getInt(cursor.getColumnIndex(COLUMN_RAW_MDL));
             record.raw_1 = preciseFloat(cursor.getFloat(cursor.getColumnIndex(COLUMN_RAW_SPT)));
@@ -55,14 +55,14 @@ public class ACFTDBHandler{
         return list;
     }
 
-    public static void saveRecordList(Context context, ArrayList<ACFTRecord<ACFTEvent>> list){
+    public static void saveRecordList(Context context, ArrayList<ACFTRecord> list){
         DBHelper dbHelper = new DBHelper(context);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         if(db == null) return;
         try {
             db.beginTransaction();          //clear the table first
             db.delete(TABLE_NAME,null,null);
-            for(ACFTRecord<ACFTEvent> record : list)   //go through the list and add one by one
+            for(ACFTRecord record : list)   //go through the list and add one by one
                 db.insert(TABLE_NAME, null, record.getContentValues());
             db.setTransactionSuccessful();
         } catch (SQLException e) { e.printStackTrace(); }
@@ -71,7 +71,7 @@ public class ACFTDBHandler{
         dbHelper.close();
     }
 
-    public static void insertRecord(Context context, ACFTRecord<ACFTEvent> record){
+    public static void insertRecord(Context context, ACFTRecord record){
         DBHelper dbHelper = new DBHelper(context);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         if(db == null) return;
@@ -99,7 +99,7 @@ public class ACFTDBHandler{
         dbHelper.close();
     }
 
-    public static void deleteRecord(Context context, ACFTRecord<ACFTEvent> record) {
+    public static void deleteRecord(Context context, ACFTRecord record) {
         String sqlExec = SQL_DELETE_WHERE + sqlWhere(COLUMN_RECORD_DATE,record.dateToString()) + "AND ";
         sqlExec += sqlWhere(COLUMN_RAW_MDL,record.raw_0) + "AND " + sqlWhere(COLUMN_RAW_SPT,record.raw_1) + "AND ";
         sqlExec += sqlWhere(COLUMN_RAW_HPU,record.raw_2) + "AND " + sqlWhere(COLUMN_RAW_SDC,record.raw_3.toString()) + "AND ";

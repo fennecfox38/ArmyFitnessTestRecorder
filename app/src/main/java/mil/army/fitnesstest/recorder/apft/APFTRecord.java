@@ -20,7 +20,7 @@ import mil.army.fitnesstest.recorder.apft.event.DurationAPFTEvent;
 
 import static mil.army.fitnesstest.recorder.apft.APFTDBContract.*;
 
-public class APFTRecord<T extends APFTEvent> extends Record<T> {
+public class APFTRecord extends Record{
     public Sex sex = Sex.Male; public AgeGroup ageGroup = AgeGroup._17_21;
     public int raw_PU=0, raw_SU=0; public Duration raw_Cardio = new Duration(0,0);
     public int[] sco = {0,0,0}; public APFTCardioAlter cardioAlter;
@@ -28,7 +28,7 @@ public class APFTRecord<T extends APFTEvent> extends Record<T> {
 
     public APFTRecord(){ super(); }
 
-    @Override public void updateRecord(ArrayList<T> eventList) {
+    public void updateRecord(ArrayList<APFTEvent> eventList) {
         CountAPFTEvent countEvent = (CountAPFTEvent) eventList.get(APFTEvent.PU);
         raw_PU = countEvent.raw;
         sco[0] = countEvent.sco;
@@ -42,7 +42,7 @@ public class APFTRecord<T extends APFTEvent> extends Record<T> {
         sco_total = sco[0] + sco[1] + sco[2];
     }
 
-    @Override public void restoreList(ArrayList<T> eventList) {
+    public void restoreList(ArrayList<APFTEvent> eventList) {
         CountAPFTEvent countEvent = (CountAPFTEvent) eventList.get(APFTEvent.PU);
         countEvent.sex = sex;
         countEvent.ageGroup = ageGroup;
@@ -59,14 +59,14 @@ public class APFTRecord<T extends APFTEvent> extends Record<T> {
         durationEvent.sco = sco[2];
     }
 
-    @Override public void invalidate(ArrayList<T> eventList) {
+    public void invalidate(ArrayList<APFTEvent> eventList) {
         if(eventList!=null) updateRecord(eventList);
         isPassed=(sco[0]>=60 && sco[1]>=60 && sco[2]>=60);
     }
 
-    public void validateEvent(MutableLiveData<ArrayList<T>> mutableList){
-        ArrayList<T> eventList = Objects.requireNonNull(mutableList.getValue());
-        for(T event : eventList){
+    public void validateEvent(MutableLiveData<ArrayList<APFTEvent>> mutableList){
+        ArrayList<APFTEvent> eventList = Objects.requireNonNull(mutableList.getValue());
+        for(APFTEvent event : eventList){
             event.sex = sex;
             event.ageGroup = ageGroup;
             event.giveScore();

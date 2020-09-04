@@ -15,7 +15,7 @@ import mil.army.fitnesstest.recorder.acft.event.DurationACFTEvent;
 
 import static mil.army.fitnesstest.recorder.acft.ACFTDBContract.*;
 
-public class ACFTRecord<T extends ACFTEvent> extends Record<T> {
+public class ACFTRecord extends Record {
     public int[] sco = {0, 0, 0, 0, 0, 0};
     public int raw_0 = 0, raw_2 = 0, raw_4 = 0; public float raw_1 = 0;
     public Duration raw_3 = new Duration(0), raw_5 = new Duration(0);
@@ -26,7 +26,7 @@ public class ACFTRecord<T extends ACFTEvent> extends Record<T> {
 
     public ACFTRecord(){ super(); }
 
-    public void updateRecord(ArrayList<T> eventList){
+    public void updateRecord(ArrayList<ACFTEvent> eventList){
         CountACFTEvent countEvent = (CountACFTEvent) eventList.get(ACFTEvent.MDL);
         raw_0 = countEvent.raw;
         countEvent = (CountACFTEvent) eventList.get(ACFTEvent.SPT);
@@ -41,7 +41,7 @@ public class ACFTRecord<T extends ACFTEvent> extends Record<T> {
         raw_5 = durationEvent.duration;
         cardioAlter = durationEvent.cardioAlter;
         sco_total = 0; qualifiedLevel = Level.Heavy;
-        for(T event : eventList){
+        for(ACFTEvent event : eventList){
             //sco[event.eventType] = event.sco;
             //sco_total += sco[event.eventType];
             sco_total += sco[event.eventType] = event.sco;
@@ -50,7 +50,7 @@ public class ACFTRecord<T extends ACFTEvent> extends Record<T> {
         }
     }
 
-    public void restoreList(ArrayList<T> eventList){
+    public void restoreList(ArrayList<ACFTEvent> eventList){
         CountACFTEvent countEvent = (CountACFTEvent) eventList.get(ACFTEvent.MDL);
         countEvent.raw = raw_0; countEvent.sco = sco[0]; countEvent.giveScore();
 
@@ -71,7 +71,7 @@ public class ACFTRecord<T extends ACFTEvent> extends Record<T> {
         durationEvent.sco = sco[5]; durationEvent.giveScore();
     }
 
-    public void invalidate(ArrayList<T> eventList){
+    public void invalidate(ArrayList<ACFTEvent> eventList){
         if(eventList!=null) updateRecord(eventList);
         isPassed = (qualifiedLevel.ordinal()>mos.ordinal()); // qualifiedLevel>=mos.ordinal()+1
     }

@@ -18,15 +18,15 @@ import static mil.army.fitnesstest.recorder.abcp.ABCPDBContract.*;
 
 public class ABCPDBHandler{
 
-    public static ArrayList<ABCPRecord<Item>> getRecordList(Context context){
+    public static ArrayList<ABCPRecord> getRecordList(Context context){
         DBHelper dbHelper = new DBHelper(context);
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor cursor= db.rawQuery(SQL_SELECT,null);
 
-        ArrayList<ABCPRecord<Item>> list = new ArrayList<>();
-        ABCPRecord<Item> record;
+        ArrayList<ABCPRecord> list = new ArrayList<>();
+        ABCPRecord record;
         for(boolean haveItem = cursor.moveToFirst(); haveItem; haveItem=cursor.moveToNext()){
-            record = new ABCPRecord<Item>();
+            record = new ABCPRecord();
             record.stringToDate(cursor.getString(cursor.getColumnIndex(COLUMN_RECORD_DATE)));
             record.sex = Sex.valueOf(cursor.getString(cursor.getColumnIndex(COLUMN_SEX)));
             record.ageGroup = ABCPRecord.AgeGroup.findByString(cursor.getString(cursor.getColumnIndex(COLUMN_AGE_GROUP)));
@@ -49,14 +49,14 @@ public class ABCPDBHandler{
         return list;
     }
 
-    public static void saveRecordList(Context context, ArrayList<ABCPRecord<Item>> list){
+    public static void saveRecordList(Context context, ArrayList<ABCPRecord> list){
         DBHelper dbHelper = new DBHelper(context);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         if(db == null) return;
         try {
             db.beginTransaction();          //clear the table first
             db.delete(TABLE_NAME,null,null);
-            for(ABCPRecord<Item> record : list)   //go through the list and add one by one
+            for(ABCPRecord record : list)   //go through the list and add one by one
                 db.insert(TABLE_NAME, null, record.getContentValues());
             db.setTransactionSuccessful();
         } catch (SQLException e) { e.printStackTrace(); }
@@ -65,7 +65,7 @@ public class ABCPDBHandler{
         dbHelper.close();
     }
 
-    public static void insertRecord(Context context, ABCPRecord<Item> record){
+    public static void insertRecord(Context context, ABCPRecord record){
         DBHelper dbHelper = new DBHelper(context);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         if(db == null) return;
@@ -93,7 +93,7 @@ public class ABCPDBHandler{
         dbHelper.close();
     }
 
-    public static void deleteRecord(Context context, ABCPRecord<Item> record){
+    public static void deleteRecord(Context context, ABCPRecord record){
         String sqlExec = SQL_DELETE_WHERE + sqlWhere(COLUMN_RECORD_DATE,record.dateToString()) + "AND ";
         sqlExec += sqlWhere(COLUMN_SEX,record.sex.name()) + "AND " + sqlWhere(COLUMN_AGE_GROUP,record.ageGroup.toString()) + "AND ";
         sqlExec += sqlWhere(COLUMN_HEIGHT,record.height) + "AND " + sqlWhere(COLUMN_WEIGHT,record.weight) + "AND ";

@@ -13,14 +13,14 @@ import mil.army.fitnesstest.recorder.Sex;
 
 import static mil.army.fitnesstest.recorder.abcp.ABCPDBContract.*;
 
-public class ABCPRecord<T extends Item> extends Record<T> {
+public class ABCPRecord extends Record {
     public Sex sex = Sex.Male; public AgeGroup ageGroup= AgeGroup._17_20;
     public float height=58.0f, neck=10.0f, abdomen_waist =20.0f, hips=20.0f, bodyFatPercentage; public int weight=90;
     public boolean height_weight = false, bodyFatPass = true;
 
     public ABCPRecord(){ super(); }
 
-    public void updateRecord(ArrayList<T> items){
+    public void updateRecord(ArrayList<Item> items){
         height = ((items.get(Item.HEIGHT).raw)/2.f + 58);
         weight = (items.get(Item.WEIGHT).raw+90);
         neck = ((items.get(Item.NECK).raw)/2.f + 10);
@@ -28,7 +28,7 @@ public class ABCPRecord<T extends Item> extends Record<T> {
         try{ hips = ((items.get(Item.HIPS).raw)/2.f + 20); }
         catch (Exception e) { e.printStackTrace(); }
     }
-    public void restoreList(ArrayList<T> items){
+    public void restoreList(ArrayList<Item> items){
         items.get(Item.HEIGHT).raw = ((int) (height-58)*2);
         items.get(Item.WEIGHT).raw = (weight-90);
         items.get(Item.NECK).raw = ((int) (neck-10)*2);
@@ -37,7 +37,7 @@ public class ABCPRecord<T extends Item> extends Record<T> {
         catch (Exception e) { e.printStackTrace(); }
     }
 
-    public void invalidate(ArrayList<T> items){
+    public void invalidate(ArrayList<Item> items){
         if(items!=null) updateRecord(items);
         height_weight = Standard.ABCP.isHWPassed(sex.ordinal(),ageGroup.ordinal(),height,weight);
         bodyFatPercentage = (sex==Sex.Male ? Standard.ABCP.maleBodyFat(height,neck, abdomen_waist) : Standard.ABCP.femaleBodyFat(height,neck, abdomen_waist,hips));

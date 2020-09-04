@@ -29,7 +29,7 @@ import mil.army.fitnesstest.databinding.FragmentAcftBinding;
 
 public class ACFTFragment extends Fragment{
     private MainActivity activity;
-    public ACFTRecord<ACFTEvent> record = new ACFTRecord<>();
+    public ACFTRecord record = new ACFTRecord();
     public MutableLiveData<ArrayList<ACFTEvent>> eventList = new MutableLiveData<>(null);
     public FragmentAcftBinding binding;
 
@@ -67,7 +67,7 @@ public class ACFTFragment extends Fragment{
         super.onDestroyView();
     }
 
-    private void loadData(ACFTRecord<ACFTEvent> record, ArrayList<ACFTEvent> list){
+    private void loadData(ACFTRecord record, ArrayList<ACFTEvent> list){
         SharedPreferences sharedPreferences = activity.getSharedPreferences("ACFTRecord", Activity.MODE_PRIVATE);
 
         record.raw_0 = sharedPreferences.getInt("raw_0",0);
@@ -86,7 +86,7 @@ public class ACFTFragment extends Fragment{
         record.isPassed = sharedPreferences.getBoolean("isPassed",false);
         record.restoreList(list);
     }
-    private void saveData(ACFTRecord<ACFTEvent> record){
+    private void saveData(ACFTRecord record){
         SharedPreferences.Editor editor = activity.getSharedPreferences("ACFTRecord", Activity.MODE_PRIVATE).edit();
 
         editor.putInt("raw_0", record.raw_0);

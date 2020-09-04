@@ -21,15 +21,15 @@ import static mil.army.fitnesstest.recorder.apft.APFTDBContract.*;
 
 public class APFTDBHandler{
 
-    public static ArrayList<APFTRecord<APFTEvent>> getRecordList(Context context){
+    public static ArrayList<APFTRecord> getRecordList(Context context){
         DBHelper dbHelper = new DBHelper(context);
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor cursor= db.rawQuery(SQL_SELECT,null);
 
-        ArrayList<APFTRecord<APFTEvent>> list = new ArrayList<>();
-        APFTRecord<APFTEvent> record;
+        ArrayList<APFTRecord> list = new ArrayList<>();
+        APFTRecord record;
         for(boolean haveItem = cursor.moveToFirst(); haveItem; haveItem=cursor.moveToNext()){
-            record = new APFTRecord<APFTEvent>();
+            record = new APFTRecord();
             record.stringToDate(cursor.getString(cursor.getColumnIndex(COLUMN_RECORD_DATE)));
             record.raw_PU = cursor.getInt(cursor.getColumnIndex(COLUMN_RAW_PU));
             record.raw_SU = cursor.getInt(cursor.getColumnIndex(COLUMN_RAW_SU));
@@ -51,13 +51,13 @@ public class APFTDBHandler{
         return list;
     }
 
-    public static void saveRecordList(Context context, ArrayList<APFTRecord<APFTEvent>> list){
+    public static void saveRecordList(Context context, ArrayList<APFTRecord> list){
         DBHelper dbHelper = new DBHelper(context);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         if(db==null) return;
         try{
             db.beginTransaction();
-            for(APFTRecord<APFTEvent> record : list)
+            for(APFTRecord record : list)
                 db.insert(TABLE_NAME,null,record.getContentValues());
             db.setTransactionSuccessful();
         } catch (SQLException e) { e.printStackTrace(); }
@@ -66,7 +66,7 @@ public class APFTDBHandler{
         dbHelper.close();
     }
 
-    public static void insertRecord(Context context, APFTRecord<APFTEvent> record){
+    public static void insertRecord(Context context, APFTRecord record){
         DBHelper dbHelper = new DBHelper(context);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         if(db==null) return;
@@ -80,7 +80,7 @@ public class APFTDBHandler{
         dbHelper.close();
     }
 
-    public static void deleteRecord(Context context, APFTRecord<APFTEvent> record){
+    public static void deleteRecord(Context context, APFTRecord record){
         String sqlExec = SQL_DELETE_WHERE + sqlWhere(COLUMN_RECORD_DATE,record.dateToString()) + "AND ";
         sqlExec += sqlWhere(COLUMN_RAW_PU,record.raw_PU) + "AND " + sqlWhere(COLUMN_SCORE_PU,record.sco[0]) + "AND ";
         sqlExec += sqlWhere(COLUMN_RAW_SU,record.raw_SU) + "AND " + sqlWhere(COLUMN_SCORE_SU,record.sco[1]) + "AND ";

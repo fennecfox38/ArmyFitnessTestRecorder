@@ -32,7 +32,7 @@ import mil.army.fitnesstest.recorder.apft.event.DurationAPFTEvent;
 
 public class APFTFragment extends Fragment {
     private MainActivity activity;
-    public APFTRecord<APFTEvent> record = new APFTRecord<>();
+    public APFTRecord record = new APFTRecord();
     public MutableLiveData<ArrayList<APFTEvent>> eventList = new MutableLiveData<>(null);
     public APFTEventRecyclerAdapter adapter;
     public FragmentApftBinding binding;
@@ -67,7 +67,7 @@ public class APFTFragment extends Fragment {
         super.onDestroyView();
     }
 
-    public void loadData(APFTRecord<APFTEvent> record, ArrayList<APFTEvent> list){
+    public void loadData(APFTRecord record, ArrayList<APFTEvent> list){
         SharedPreferences sharedPreferences = activity.getSharedPreferences("APFTRecord", Activity.MODE_PRIVATE);
 
         record.raw_PU = sharedPreferences.getInt("raw_PU",0);
@@ -83,7 +83,7 @@ public class APFTFragment extends Fragment {
         record.restoreList(list);
     }
 
-    public void saveData(APFTRecord<APFTEvent> record){
+    public void saveData(APFTRecord record){
         SharedPreferences.Editor editor = activity.getSharedPreferences("APFTRecord", Activity.MODE_PRIVATE).edit();
 
         editor.putInt("raw_PU",record.raw_PU);

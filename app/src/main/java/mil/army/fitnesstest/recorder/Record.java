@@ -4,10 +4,9 @@ import android.content.ContentValues;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 
-public abstract class Record<T> {
+public abstract class Record {
     public boolean isPassed=false;
     public int year, month, day;
 
@@ -18,9 +17,6 @@ public abstract class Record<T> {
         day = today.get(Calendar.DAY_OF_MONTH);
     }
 
-    public abstract void updateRecord(ArrayList<T> list);
-    public abstract void restoreList(ArrayList<T> list);
-    public abstract void invalidate(ArrayList<T> list);
     public abstract ContentValues getContentValues();
 
     public String dateToString(){
