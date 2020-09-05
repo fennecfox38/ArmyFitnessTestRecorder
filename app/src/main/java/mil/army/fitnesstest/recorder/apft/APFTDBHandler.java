@@ -4,7 +4,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-import android.provider.BaseColumns;
 
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -15,7 +14,6 @@ import java.util.ArrayList;
 import mil.army.fitnesstest.recorder.DBHelper;
 import mil.army.fitnesstest.recorder.Sex;
 import mil.army.fitnesstest.recorder.apft.event.APFTCardioAlter;
-import mil.army.fitnesstest.recorder.apft.event.APFTEvent;
 
 import static mil.army.fitnesstest.recorder.apft.APFTDBContract.*;
 

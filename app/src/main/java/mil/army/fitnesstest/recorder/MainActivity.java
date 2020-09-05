@@ -53,7 +53,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
         drawer_main = findViewById(R.id.drawer_main);
         NavigationView nav_main = findViewById(R.id.nav_main);
         Menu navMenu = nav_main.getMenu();
@@ -61,13 +60,7 @@ public class MainActivity extends AppCompatActivity {
         navMenu.findItem(R.id.menu_APFT_scale).setIntent(new Intent(getApplicationContext(), ScaleChartActivity.class).putExtra("requested", ScaleChartActivity.APFT_REQUESTED));
         navMenu.findItem(R.id.menu_ABCP_scale).setIntent(new Intent(getApplicationContext(), ScaleChartActivity.class).putExtra("requested", ScaleChartActivity.ABCP_REQUESTED));
         navMenu.findItem(R.id.menu_MOS_chart).setIntent(new Intent(getApplicationContext(), ScaleChartActivity.class).putExtra("requested", ScaleChartActivity.MOS_CHART_REQUESTED));
-        nav_main.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                drawer_main.closeDrawer(GravityCompat.START);
-                return false;
-            }
-        });
+        nav_main.setNavigationItemSelectedListener(item -> { drawer_main.closeDrawer(GravityCompat.START);return false; });
 
     }
 

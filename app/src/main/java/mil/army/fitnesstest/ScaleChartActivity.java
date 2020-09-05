@@ -7,8 +7,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 
-import mil.army.fitnesstest.R;
-
 public class ScaleChartActivity extends AppCompatActivity {
     public static final int ACFT_REQUESTED =0, APFT_REQUESTED =1, ABCP_REQUESTED =2, MOS_CHART_REQUESTED=3;
     private int requested;
