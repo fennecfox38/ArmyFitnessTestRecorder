@@ -14,10 +14,10 @@ public class DurationAPFTEvent extends APFTEvent {
 
     @Override public void giveScore() {
         switch (cardioAlter){
-            case RUN: sco = Standard.APFT.RUNScore(sex, ageGroup, duration); break;
-            case WALK: sco = Standard.APFT.WALKScore(sex, ageGroup, duration); break;
-            case BIKE: sco = Standard.APFT.BIKEScore(sex, ageGroup, duration); break;
-            case SWIM: sco = Standard.APFT.SWIMScore(sex, ageGroup, duration); break;
+            case RUN: sco = Standard.APFT.RUNScore(sex.ordinal(), ageGroup.ordinal(), duration.getTotalInSec()); break;
+            case WALK: sco = Standard.APFT.WALKScore(sex.ordinal(), ageGroup.ordinal(), duration.getTotalInSec()); break;
+            case BIKE: sco = Standard.APFT.BIKEScore(sex.ordinal(), ageGroup.ordinal(), duration.getTotalInSec()); break;
+            case SWIM: sco = Standard.APFT.SWIMScore(sex.ordinal(), ageGroup.ordinal(), duration.getTotalInSec()); break;
         }
     }
 }

@@ -1,9 +1,5 @@
 package mil.army.fitnesstest;
 
-import mil.army.fitnesstest.recorder.apft.APFTRecord;
-import mil.army.fitnesstest.recorder.Duration;
-import mil.army.fitnesstest.recorder.Sex;
-
 public class Standard {
 
     public static final class ACFT{
@@ -11,32 +7,20 @@ public class Standard {
         public static native int MDLScore(int raw);
         public static native int SPTScore(int rawInt);
         public static native int HPUScore(int raw);
-        public static native int SDCScore(int min, int sec);
+        public static native int SDCScore(int sec);
         public static native int LTKScore(int raw);
-        public static native int RUNScore(int min, int sec);
-        public static native int AlterScore(int min, int sec);
+        public static native int RUNScore(int sec);
+        public static int AlterScore(int sec){ return (sec<=1500 ? 60 : 0); }
     }
 
     public static final class APFT{
         static { System.loadLibrary("apft-lib"); }
-        public static int PUScore(Sex sex, APFTRecord.AgeGroup ageGroup, int raw){
-            return 60;
-        }
-        public static int SUScore(Sex sex, APFTRecord.AgeGroup ageGroup, int raw){
-            return 60;
-        }
-        public static int RUNScore(Sex sex, APFTRecord.AgeGroup ageGroup, Duration duration){
-            return 60;
-        }
-        public static int WALKScore(Sex sex, APFTRecord.AgeGroup ageGroup, Duration duration){
-            return 60;
-        }
-        public static int BIKEScore(Sex sex, APFTRecord.AgeGroup ageGroup, Duration duration){
-            return 60;
-        }
-        public static int SWIMScore(Sex sex, APFTRecord.AgeGroup ageGroup, Duration duration){
-            return 60;
-        }
+        public static native int PUScore(int sex, int ageGroup, int raw);
+        public static native int SUScore(int ageGroup, int raw);
+        public static native int RUNScore(int sex, int ageGroup, int sec);
+        public static native int WALKScore(int sex, int ageGroup, int sec);
+        public static native int BIKEScore(int sex, int ageGroup, int sec);
+        public static native int SWIMScore(int sex, int ageGroup, int sec);
     }
 
     public static final class ABCP{

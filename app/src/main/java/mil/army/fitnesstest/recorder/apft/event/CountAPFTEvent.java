@@ -9,10 +9,8 @@ public class CountAPFTEvent extends APFTEvent {
         super(eventType, title, max);
     }
 
-    @Override public void giveScore() {
-        switch (eventType){
-            case PU: sco = Standard.APFT.PUScore(sex, ageGroup, raw); break;
-            case SU: sco = Standard.APFT.SUScore(sex, ageGroup, raw); break;
-        }
+    @Override public void giveScore(){
+        if(eventType==PU) sco = Standard.APFT.PUScore(sex.ordinal(), ageGroup.ordinal(), raw);
+        else sco = Standard.APFT.SUScore(ageGroup.ordinal(), raw);
     }
 }

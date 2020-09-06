@@ -15,10 +15,10 @@ public class DurationACFTEvent extends ACFTEvent {
 
     @Override public void giveScore(){
         if(eventType == SDC)
-            sco = Standard.ACFT.SDCScore(duration.getMin(),duration.getSec());
+            sco = Standard.ACFT.SDCScore(duration.getTotalInSec());
         else if(cardioAlter== ACFTCardioAlter.RUN)
-            sco = Standard.ACFT.RUNScore(duration.getMin(),duration.getSec());
-        else sco = Standard.ACFT.AlterScore(duration.getMin(),duration.getSec());
+            sco = Standard.ACFT.RUNScore(duration.getTotalInSec());
+        else sco = Standard.ACFT.AlterScore(duration.getTotalInSec());
         giveLevel();
     }
 
