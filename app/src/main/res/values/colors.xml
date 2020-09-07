@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#FF9800</color> <!--#6200EE-->
+    <color name="colorPrimary">#FF9800</color> <!--#6200EE--><!--#FFCB05-->
     <color name="colorPrimaryDark">#FF9800</color> <!--#3700B3-->
     <color name="colorAccent">#FF9800</color> <!--#03DAC5-->
     <color name="navigationBarColor">#FF9800</color>

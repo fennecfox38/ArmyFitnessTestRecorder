@@ -7,7 +7,13 @@
     <string name="title_abcp">ABCP</string>
     <string name="title_long_abcp">Body Composition</string>
     <string name="title_log">Log</string>
-    <string name="setting">Settings</string>
+    <string name="info">Information</string>
+    <string name="license">License</string>
+    <string name="infobody1">This Application ( </string>
+    <string name="infobody2"> ) has been designed based on US Army Regulation and Field Manual (AR 600–9, FM 7–22) to help soldiers.</string>
+    <string name="infobody3">However, this application has never been officially authorized. The result of this application cannot be valid without the actual record.</string>
+    <string name="infobody4">This application is under Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0.txt). The source has been published on GitHub (https://github.com/fennecfox38/ArmyFitnessTestRecorder)</string>
+    <string name="infobody5">Review and Feedback may be accepted via the following.</string>
     <string name="ACFTScale">ACFT Score Scale</string>
     <string name="APFTScale">APFT Score Scale</string>
     <string name="ABCPScale">ABCP Score Scale</string>
@@ -16,7 +22,7 @@
     <string name="Notification">Notification</string>
     <string name="Save">Save</string>
     <string name="MOS">MOS</string>
-    <string name="Qualifies"> qualifies </string>
+    <string name="satisfies"> satisfies </string>
     <string name="recordDate">Record Date</string>
     <string name="pass">Pass</string>
     <string name="fail">Fail</string>
@@ -51,6 +57,7 @@
     <string name="title_duration_picker">Set Duration Time</string>
     <string name="OK">OK</string>
     <string name="Cancel">Cancel</string>
+    <string name="Dismiss">Dismiss</string>
     <string name="min">min</string>
     <string name="sec">sec</string>
     <string name="sex">Sex</string>
@@ -73,7 +80,4 @@
     <string name="shareXLS">Share MS Excel File</string>
     <string name="recordDeleted">Record deleted successfully.</string>
     <string name="undo">Undo</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_apft_fragment">Hello APFT fragment</string>
-    <string name="total">Total</string>
 </resources>

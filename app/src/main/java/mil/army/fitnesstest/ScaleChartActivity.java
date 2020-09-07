@@ -9,24 +9,28 @@ import android.view.MenuItem;
 
 public class ScaleChartActivity extends AppCompatActivity {
     public static final int ACFT_REQUESTED =0, APFT_REQUESTED =1, ABCP_REQUESTED =2, MOS_CHART_REQUESTED=3;
+    public static final int[] layoutId={R.layout.layout_acft_scale_chart,R.layout.layout_apft_scale_chart,R.layout.layout_abcp_scale_chart,R.layout.layout_mos_chart};
+    public static final int[] titleId={R.string.ACFTScale,R.string.APFTScale,R.string.ABCPScale,R.string.MOSChart};
     private int requested;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_scale_chart);
+
+        requested = getIntent().getIntExtra("requested",ACFT_REQUESTED);
+        setContentView(layoutId[requested]);
 
         ActionBar actionBar = getSupportActionBar();
         assert actionBar != null;
         actionBar.setHomeAsUpIndicator(R.drawable.ic_back);
         actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE|ActionBar.DISPLAY_HOME_AS_UP);
+        actionBar.setTitle(titleId[requested]);
 
-        requested = getIntent().getIntExtra("requested",ACFT_REQUESTED);
-        switch (requested){
+        /*switch (requested){
             case ACFT_REQUESTED: actionBar.setTitle(R.string.ACFTScale); break;
             case APFT_REQUESTED: actionBar.setTitle(R.string.APFTScale); break;
             case ABCP_REQUESTED: actionBar.setTitle(R.string.ABCPScale); break;
             case MOS_CHART_REQUESTED: actionBar.setTitle(R.string.MOSChart); break;
-        }
+        }*/
 
     }
 
