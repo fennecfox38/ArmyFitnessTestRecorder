@@ -33,6 +33,7 @@ public class ACFTLogRecyclerAdapter extends RecyclerView.Adapter<ACFTLogRecycler
         this.context = context; resources = context.getResources();
         list = ACFTDBHandler.getRecordList(context);
     }
+    public void reloadList() { list = ACFTDBHandler.getRecordList(context); notifyDataSetChanged(); }
 
     public class ACFTLogViewHolder extends RecyclerView.ViewHolder{
         RecyclerviewAcftLogBinding binding;

@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -26,10 +27,13 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 import mil.army.fitnesstest.R;
 import mil.army.fitnesstest.recorder.DBHelper;
 import mil.army.fitnesstest.recorder.FileProvider;
+
+import static android.app.Activity.RESULT_OK;
 
 public class LogFragment extends Fragment{
     private ViewPager viewPager;
@@ -59,7 +63,11 @@ public class LogFragment extends Fragment{
     }
 
     @Override public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        menu.add(0,0,0,getString(R.string.share)).setIcon(R.drawable.ic_share).setOnMenuItemClickListener(item -> {
+        menu.add(0,0,0,getString(R.string.Import)).setIcon(R.drawable.ic_import).setOnMenuItemClickListener(item -> {
+            startActivityForResult(Intent.createChooser(new Intent(Intent.ACTION_GET_CONTENT).setType("application/*"),getString(R.string.Import)),0);
+            return false;
+        }).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+        menu.add(0,1,1,getString(R.string.share)).setIcon(R.drawable.ic_share).setOnMenuItemClickListener(item -> {
             AlertDialog.Builder builder=new AlertDialog.Builder(requireContext());
             builder.setTitle(getString(R.string.share)); builder.setIcon(R.drawable.ic_share);
             builder.setItems(new String[]{getString(R.string.shareDB), getString(R.string.shareXLS)}, (dialog, which) -> {
@@ -71,11 +79,27 @@ public class LogFragment extends Fragment{
             builder.create().show();
             return false;
         }).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-        menu.add(0,1,1,getString(R.string.delete)).setIcon(R.drawable.ic_delete).setOnMenuItemClickListener(item -> {
+        menu.add(0,2,2,getString(R.string.delete)).setIcon(R.drawable.ic_delete).setOnMenuItemClickListener(item -> {
             pagerAdapter.actionDelete(viewPager.getCurrentItem());
             return false;
         }).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
         super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode != 0 || data == null || resultCode != RESULT_OK) return;
+        try {
+            InputStream inputStream = requireContext().getContentResolver().openInputStream(data.getData());
+            FileOutputStream outputStream = new FileOutputStream(FileProvider.getDBFile(requireContext()));
+            byte[] buff = new byte[1024];
+            int read;
+            while ((read = inputStream.read(buff, 0, buff.length)) > 0)
+                outputStream.write(buff, 0, read);
+            inputStream.close();
+            outputStream.close();
+            pagerAdapter.reloadPages();
+        } catch (IOException e) { e.printStackTrace(); }
     }
 
     public void shareDB(){
@@ -134,6 +158,12 @@ public class LogFragment extends Fragment{
                 case TAB_APFT: apftAdapter.deleteAllRecord(view[TAB_APFT]); break;
                 case TAB_ABCP: abcpAdapter.deleteAllRecord(view[TAB_ABCP]); break;
             }
+        }
+
+        public void reloadPages(){
+            acftAdapter.reloadList();
+            apftAdapter.reloadList();
+            abcpAdapter.reloadList();
         }
 
         @Override public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {

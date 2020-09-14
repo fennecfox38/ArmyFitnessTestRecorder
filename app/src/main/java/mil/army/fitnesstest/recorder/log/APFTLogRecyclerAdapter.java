@@ -30,6 +30,7 @@ public class APFTLogRecyclerAdapter extends RecyclerView.Adapter<APFTLogRecycler
         this.context = context; resources = context.getResources();
         list = APFTDBHandler.getRecordList(context);
     }
+    public void reloadList() { list = APFTDBHandler.getRecordList(context); notifyDataSetChanged(); }
 
     public class APFTViewHolder extends RecyclerView.ViewHolder{
         RecyclerviewApftLogBinding binding;

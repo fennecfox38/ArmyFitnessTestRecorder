@@ -25,13 +25,6 @@ public class ScaleChartActivity extends AppCompatActivity {
         actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE|ActionBar.DISPLAY_HOME_AS_UP);
         actionBar.setTitle(titleId[requested]);
 
-        /*switch (requested){
-            case ACFT_REQUESTED: actionBar.setTitle(R.string.ACFTScale); break;
-            case APFT_REQUESTED: actionBar.setTitle(R.string.APFTScale); break;
-            case ABCP_REQUESTED: actionBar.setTitle(R.string.ABCPScale); break;
-            case MOS_CHART_REQUESTED: actionBar.setTitle(R.string.MOSChart); break;
-        }*/
-
     }
 
     @Override public boolean onOptionsItemSelected(@NonNull MenuItem item) {

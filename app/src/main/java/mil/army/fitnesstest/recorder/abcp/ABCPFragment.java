@@ -136,6 +136,7 @@ public class ABCPFragment extends Fragment {
             list.add(HIPS);
         } // Attach and Detach Hips item
         itemList.setValue(list);
+        adapter.notifyDataSetChanged();
         record.invalidate(list);//record.validate();
         binding.invalidateAll();
     }

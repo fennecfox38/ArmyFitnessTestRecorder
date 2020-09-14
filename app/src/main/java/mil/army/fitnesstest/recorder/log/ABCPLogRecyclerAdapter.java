@@ -30,6 +30,7 @@ public class ABCPLogRecyclerAdapter extends RecyclerView.Adapter<ABCPLogRecycler
         this.context = context; resources = context.getResources();
         list = ABCPDBHandler.getRecordList(context);
     }
+    public void reloadList() { list = ABCPDBHandler.getRecordList(context); notifyDataSetChanged(); }
 
     public class ABCPLogViewHolder extends RecyclerView.ViewHolder {
         RecyclerviewAbcpLogBinding binding;
@@ -59,8 +60,7 @@ public class ABCPLogRecyclerAdapter extends RecyclerView.Adapter<ABCPLogRecycler
         public String getPassed(boolean isPassed){ return resources.getString(isPassed ? R.string.pass: R.string.fail); }
     }
 
-    @NonNull @Override
-    public ABCPLogViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    @NonNull @Override public ABCPLogViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = ((LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE))
                 .inflate(R.layout.recyclerview_abcp_log,parent,false);
         return (new ABCPLogViewHolder(view));
