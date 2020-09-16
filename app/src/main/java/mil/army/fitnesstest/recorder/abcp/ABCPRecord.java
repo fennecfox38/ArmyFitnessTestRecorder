@@ -33,18 +33,20 @@ public class ABCPRecord extends Record {
         items.get(Item.WEIGHT).raw = (weight-90);
         items.get(Item.NECK).raw = ((int) (neck-10)*2);
         items.get(Item.ABDOMEN_WAIST).raw = ((int) (abdomen_waist -20)*2);
-        try{ items.get(Item.HIPS).raw = ((int) (hips-20)*2); }
-        catch (Exception e) { e.printStackTrace(); }
+        items.get(Item.HIPS).raw = ((int) (hips-20)*2);
     }
 
-    public void invalidate(ArrayList<Item> items){
-        if(items!=null) updateRecord(items);
-        height_weight = Standard.ABCP.isHWPassed(sex.ordinal(),ageGroup.ordinal(),height,weight);
-        bodyFatPercentage = (sex==Sex.Male ? Standard.ABCP.maleBodyFat(height,neck, abdomen_waist) : Standard.ABCP.femaleBodyFat(height,neck, abdomen_waist,hips));
+    public int invalidate(ArrayList<Item> items) {
+        if (items != null) updateRecord(items);
+        height_weight = Standard.ABCP.isHWPassed(sex.ordinal(), ageGroup.ordinal(), height, weight);
+        bodyFatPercentage = (sex == Sex.Male ? Standard.ABCP.maleBodyFat(height, neck, abdomen_waist) : Standard.ABCP.femaleBodyFat(height, neck, abdomen_waist, hips));
         bodyFatPass = Standard.ABCP.isBodyFatPassed(sex.ordinal(), ageGroup.ordinal(), bodyFatPercentage);
-        isPassed = height_weight && bodyFatPass;
-    }
+        isPassed = height_weight || bodyFatPass;
 
+        if (height_weight) return 2;
+        else if (sex == Sex.Male) return 4;
+        else return 5;
+    }
 
     public ContentValues getContentValues() {
         ContentValues cv = new ContentValues();
@@ -74,16 +76,7 @@ public class ABCPRecord extends Record {
            put("17–20",_17_20);  put("21–27",_21_27); put("28–39",_28_39); put("40+",_40_);
         }};
         public static AgeGroup valueOf(int ordinal){ return values()[ordinal]; }
-        public static AgeGroup findByString(String str){
-            return map.get(str);
-            /*switch (str){
-                case "17–20": return _17_20;
-                case "21–27": return _21_27;
-                case "28–39": return _28_39;
-                case "40+": return _40_;
-                default: return null;
-            }*/
-        }
+        public static AgeGroup findByString(String str){ return map.get(str); }
     }
 
     @NotNull @Override public String toString() {

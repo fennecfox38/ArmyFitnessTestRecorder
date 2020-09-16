@@ -34,7 +34,6 @@ public class ABCPFragment extends Fragment {
     public MutableLiveData<ArrayList<Item>> itemList = new MutableLiveData<>(null);
     private ItemRecyclerAdapter adapter;
     public FragmentAbcpBinding binding;
-    public static Item HIPS = new Item(Item.HIPS, "Hips", "inches",0,80);
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         activity = (MainActivity) requireActivity();
@@ -46,16 +45,18 @@ public class ABCPFragment extends Fragment {
             list.add(new Item(Item.WEIGHT, getString(R.string.weight), getString(R.string.lbs),0,220));
             list.add(new Item(Item.NECK, getString(R.string.neck), getString(R.string.inches),0,60));
             list.add(new Item(Item.ABDOMEN_WAIST, getString(R.string.abdomen), getString(R.string.inches),0,80));
+            list.add(new Item(Item.HIPS, "Hips", "inches",0,80));
             loadData(record, list);
             itemList.setValue(list);
         }
 
         adapter = new ItemRecyclerAdapter(requireContext(), itemList);
+        adapter.itemCount = record.invalidate(itemList.getValue());
         binding.recyclerViewAbcp.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)) ;
         binding.recyclerViewAbcp.setAdapter(adapter);
 
         itemList.observe(getViewLifecycleOwner(), items -> {
-            record.invalidate(items);
+            adapter.itemCount = record.invalidate(items);
             binding.invalidateAll();
         });
         binding.setFragment(this);
@@ -78,7 +79,6 @@ public class ABCPFragment extends Fragment {
         if(record.sex == Sex.Female){
             record.hips = sharedPreferences.getFloat("Hips",20.f);
             list.get(Item.ABDOMEN_WAIST).title = getString(R.string.waist);
-            list.add(HIPS);
         }
         record.restoreList(list);
     }
@@ -108,7 +108,6 @@ public class ABCPFragment extends Fragment {
 
     public void onSaveClick(View view) {
         ABCPDBHandler.insertRecord(requireContext(), record);
-        //Bundle bundle = new Bundle(); bundle.putInt("page",TAB_ABCP);
         Snackbar.make(binding.getRoot(),"Saving is on maintenance", Snackbar.LENGTH_SHORT)
                 .setAction("log", v -> activity.navController.navigate(R.id.navigation_log)).show();
     }
@@ -127,23 +126,22 @@ public class ABCPFragment extends Fragment {
         ArrayList<Item> list = itemList.getValue();
         if(checkedId == R.id.rBtn_male){
             record.sex = Sex.Male;
-            list.remove(Item.HIPS);
             list.get(Item.ABDOMEN_WAIST).title = getString(R.string.abdomen);
         }
         else{
             record.sex = Sex.Female;
             list.get(Item.ABDOMEN_WAIST).title = getString(R.string.waist);
-            list.add(HIPS);
-        } // Attach and Detach Hips item
+        }
         itemList.setValue(list);
+        adapter.itemCount = record.invalidate(list);
         adapter.notifyDataSetChanged();
-        record.invalidate(list);//record.validate();
         binding.invalidateAll();
     }
 
     public void onAgeSelected(AdapterView<?> parent, View view, int position, long id) {
         record.ageGroup = ABCPRecord.AgeGroup.valueOf(position);
-        record.invalidate(null);
+        adapter.itemCount = record.invalidate(null);
+        adapter.notifyDataSetChanged();
         binding.invalidateAll();
     }
 

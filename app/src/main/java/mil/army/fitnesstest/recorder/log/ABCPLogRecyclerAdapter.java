@@ -19,7 +19,6 @@ import mil.army.fitnesstest.R;
 import mil.army.fitnesstest.recorder.abcp.ABCPDBHandler;
 import mil.army.fitnesstest.recorder.abcp.ABCPRecord;
 import mil.army.fitnesstest.databinding.RecyclerviewAbcpLogBinding;
-import mil.army.fitnesstest.recorder.abcp.Item;
 
 public class ABCPLogRecyclerAdapter extends RecyclerView.Adapter<ABCPLogRecyclerAdapter.ABCPLogViewHolder> {
     private Context context;

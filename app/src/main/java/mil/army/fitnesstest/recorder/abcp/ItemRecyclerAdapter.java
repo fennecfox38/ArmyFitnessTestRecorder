@@ -20,6 +20,7 @@ import mil.army.fitnesstest.databinding.RecyclerviewItemAbcpBinding;
 
 public class ItemRecyclerAdapter extends RecyclerView.Adapter<ItemRecyclerAdapter.ItemViewHolder> {
     private Context context;
+    public int itemCount = 5;
     public MutableLiveData<ArrayList<Item>> itemList;
 
     public ItemRecyclerAdapter(Context context, MutableLiveData<ArrayList<Item>> itemList){
@@ -72,7 +73,7 @@ public class ItemRecyclerAdapter extends RecyclerView.Adapter<ItemRecyclerAdapte
         holder.item = itemList.getValue().get(position);
     }
 
-    @Override public int getItemCount() { return itemList.getValue().size(); }
+    @Override public int getItemCount() { return itemCount; }
 
     private void updateItemList(Item item){
         ArrayList<Item> list = itemList.getValue();
