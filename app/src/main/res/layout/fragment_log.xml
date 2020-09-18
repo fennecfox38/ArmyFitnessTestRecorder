@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:text="@string/title_abcp"/>
     </com.google.android.material.tabs.TabLayout>
-    <androidx.viewpager.widget.ViewPager
+    <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager_log"
         android:layout_width="match_parent"
         android:layout_height="0dp"

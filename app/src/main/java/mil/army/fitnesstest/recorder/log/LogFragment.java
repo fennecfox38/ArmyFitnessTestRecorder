@@ -16,14 +16,12 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.PagerAdapter;
-import androidx.viewpager.widget.ViewPager;
+import androidx.viewpager2.widget.ViewPager2;
 
-import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -36,7 +34,8 @@ import mil.army.fitnesstest.recorder.FileProvider;
 import static android.app.Activity.RESULT_OK;
 
 public class LogFragment extends Fragment{
-    private ViewPager viewPager;
+    private static int[] TAB_NAME = {R.string.title_acft, R.string.title_apft, R.string.title_abcp};
+    private ViewPager2 viewPager;
     private TabPagerAdapter pagerAdapter;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -44,21 +43,14 @@ public class LogFragment extends Fragment{
 
         View root = inflater.inflate(R.layout.fragment_log, container, false);
 
-        TabLayout tabLayout = root.findViewById(R.id.tabLayout_log);
         viewPager = root.findViewById(R.id.viewPager_log) ;
-
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override public void onTabSelected(TabLayout.Tab tab) {
-                viewPager.setCurrentItem(tab.getPosition());
-            }
-            @Override public void onTabUnselected(TabLayout.Tab tab) { }
-            @Override public void onTabReselected(TabLayout.Tab tab) { }
-        });
         pagerAdapter = new TabPagerAdapter();
-        viewPager.setAdapter(pagerAdapter) ;
-        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-        viewPager.setCurrentItem(TabPagerAdapter.TAB_ACFT);
+        viewPager.setAdapter(pagerAdapter);
 
+        new TabLayoutMediator(root.findViewById(R.id.tabLayout_log),viewPager, (tab, position) -> {
+            tab.setText(TAB_NAME[position]);
+            viewPager.setCurrentItem(tab.getPosition(), true);
+        }).attach();
         return root;
     }
 
@@ -125,32 +117,37 @@ public class LogFragment extends Fragment{
         } catch (IOException e){ e.printStackTrace(); }
     }
 
-    private class TabPagerAdapter extends PagerAdapter {
+    private class TabPagerAdapter extends RecyclerView.Adapter<TabPagerAdapter.ViewHolder> {
         public static final int TAB_ACFT=0, TAB_APFT=1, TAB_ABCP=2;
-        private View[] view;
-        private ACFTLogRecyclerAdapter acftAdapter;
-        private APFTLogRecyclerAdapter apftAdapter;
-        private ABCPLogRecyclerAdapter abcpAdapter;
-        TabPagerAdapter(){
-            view = new View[3];
-            acftAdapter = new ACFTLogRecyclerAdapter(requireContext());
-            apftAdapter = new APFTLogRecyclerAdapter(requireContext());
-            abcpAdapter = new ABCPLogRecyclerAdapter(requireContext());
+        private View[] view = new View[3];
+        private ACFTLogRecyclerAdapter acftAdapter = new ACFTLogRecyclerAdapter(requireContext());
+        private APFTLogRecyclerAdapter apftAdapter = new APFTLogRecyclerAdapter(requireContext());
+        private ABCPLogRecyclerAdapter abcpAdapter = new ABCPLogRecyclerAdapter(requireContext());
+
+        public class ViewHolder extends RecyclerView.ViewHolder{
+            RecyclerView recyclerView;
+            public ViewHolder(@NonNull View itemView) {
+                super(itemView);
+                recyclerView = itemView.findViewById(R.id.recyclerView_log);
+                recyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
+            }
         }
 
-        @NotNull @Override public Object instantiateItem(@NotNull ViewGroup container, int position) {
-            view[position] = ((LayoutInflater) requireContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE))
-                    .inflate(R.layout.layout_container_log, container, false);
-            RecyclerView recyclerView = view[position].findViewById(R.id.recyclerView_log);
-            recyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
-            switch (position){
-                case TAB_ACFT: recyclerView.setAdapter(acftAdapter); break;
-                case TAB_APFT: recyclerView.setAdapter(apftAdapter);break;
-                case TAB_ABCP: recyclerView.setAdapter(abcpAdapter);break;
-            }
-            container.addView(view[position]);
-            return view[position];
+        @NonNull @Override public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View view = ((LayoutInflater) requireContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE))
+                    .inflate(R.layout.layout_container_log, parent, false);
+            return new ViewHolder(view);
         }
+        @Override public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+            switch (position){
+                case TAB_ACFT: holder.recyclerView.setAdapter(acftAdapter); break;
+                case TAB_APFT: holder.recyclerView.setAdapter(apftAdapter);break;
+                case TAB_ABCP: holder.recyclerView.setAdapter(abcpAdapter);break;
+            }
+            view[position] = holder.recyclerView;
+        }
+        @Override public int getItemCount() { return 3; }
+        @Override public int getItemViewType(int position) { return position; }
 
         public void actionDelete(int currentPage){
             switch (currentPage){
@@ -159,18 +156,11 @@ public class LogFragment extends Fragment{
                 case TAB_ABCP: abcpAdapter.deleteAllRecord(view[TAB_ABCP]); break;
             }
         }
-
         public void reloadPages(){
             acftAdapter.reloadList();
             apftAdapter.reloadList();
             abcpAdapter.reloadList();
         }
-
-        @Override public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
-            container.removeView((View) object);
-        }
-        @Override public int getCount() { return 3; }
-        @Override public boolean isViewFromObject(@NonNull View view, @NonNull Object object) { return (view == (View)object); }
     }
 
 }
