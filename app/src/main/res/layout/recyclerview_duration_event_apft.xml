@@ -51,7 +51,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="20dp"
             android:gravity="end"
-            android:textColor="@{viewholder.getPassedColor(viewholder.event.isPassed())}"
+            android:textColor="@{(viewholder.event.isPassed() ? @color/passed : @color/failed)}"
             android:textSize="20sp"
             android:text="@{viewholder.event.getPassed()}"
             app:layout_constraintBaseline_toBaselineOf="@+id/txt_title"

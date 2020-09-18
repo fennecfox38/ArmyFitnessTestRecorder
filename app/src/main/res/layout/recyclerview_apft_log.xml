@@ -46,9 +46,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:textColor="@{viewholder.getPassedColor(viewholder.record.isPassed)}"
+                android:textColor="@{(viewholder.record.isPassed ? @color/passed : @color/failed)}"
                 android:textSize="20sp"
-                android:text="@{viewholder.getPassed(viewholder.record.isPassed)}"/>
+                android:text="@{(viewholder.record.isPassed ? @string/pass: @string/fail)}"/>
         </TableRow>
 
         <View
@@ -108,9 +108,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:textColor="@{viewholder.getPassedColor(viewholder.record.sco[0]>=60)}"
+                android:textColor="@{(viewholder.record.sco[0]>=60 ? @color/passed : @color/failed)}"
                 android:textSize="15sp"
-                android:text="@{viewholder.getPassed(viewholder.record.sco[0]>=60)}"/>
+                android:text="@{(viewholder.record.sco[0]>=60 ? @string/pass: @string/fail)}"/>
         </TableRow>
 
         <TableRow
@@ -164,9 +164,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:textColor="@{viewholder.getPassedColor(viewholder.record.sco[1]>=60)}"
+                android:textColor="@{(viewholder.record.sco[1]>=60 ? @color/passed : @color/failed)}"
                 android:textSize="15sp"
-                android:text="@{viewholder.getPassed(viewholder.record.sco[1]>=60)}"/>
+                android:text="@{(viewholder.record.sco[1]>=60 ? @string/pass: @string/fail)}"/>
         </TableRow>
 
         <TableRow
@@ -207,9 +207,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:textColor="@{viewholder.getPassedColor(viewholder.record.sco[2]>=60)}"
+                android:textColor="@{(viewholder.record.sco[2]>=60 ? @color/passed : @color/failed)}"
                 android:textSize="15sp"
-                android:text="@{viewholder.getPassed(viewholder.record.sco[2]>=60)}"/>
+                android:text="@{(viewholder.record.sco[2]>=60 ? @string/pass: @string/fail)}"/>
         </TableRow>
 
     </TableLayout>

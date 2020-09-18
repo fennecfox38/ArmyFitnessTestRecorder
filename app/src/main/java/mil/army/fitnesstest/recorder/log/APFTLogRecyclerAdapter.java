@@ -56,8 +56,6 @@ public class APFTLogRecyclerAdapter extends RecyclerView.Adapter<APFTLogRecycler
             });
             binding = DataBindingUtil.bind(itemView);
         }
-        public int getPassedColor(boolean isPassed){ return resources.getColor(isPassed ? R.color.passed: R.color.failed); }
-        public String getPassed(boolean isPassed){ return resources.getString(isPassed ? R.string.pass: R.string.fail); }
     }
 
     @NonNull @Override public APFTViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
