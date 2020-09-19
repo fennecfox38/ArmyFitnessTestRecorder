@@ -55,12 +55,12 @@ public class ABCPRecord extends Record {
         cv.put(COLUMN_AGE_GROUP,ageGroup.toString());
         cv.put(COLUMN_HEIGHT,height);
         cv.put(COLUMN_WEIGHT,weight);
-        cv.put(COLUMN_NECK,neck);
-        cv.put(COLUMN_ABDOMEN_WAIST,abdomen_waist);
-        cv.put(COLUMN_HIPS,(sex==Sex.Female?hips:null));
-        cv.put(COLUMN_BODY_FAT_PERCENT,bodyFatPercentage);
+        cv.put(COLUMN_NECK,(height_weight ? 0.f : neck));
+        cv.put(COLUMN_ABDOMEN_WAIST,(height_weight ? 0.f : abdomen_waist));
+        cv.put(COLUMN_HIPS,(sex==Sex.Female?(height_weight ? 0.f : hips):null));
+        cv.put(COLUMN_BODY_FAT_PERCENT,(height_weight ? 0.f : bodyFatPercentage));
         cv.put(COLUMN_HW_PASSED,Boolean.toString(height_weight));
-        cv.put(COLUMN_BODY_FAT_PASSED,Boolean.toString(bodyFatPass));
+        cv.put(COLUMN_BODY_FAT_PASSED,(height_weight ? "N/A" : Boolean.toString(bodyFatPass)));
         cv.put(COLUMN_TOTAL_PASSED,Boolean.toString(isPassed));
         return cv;
     }

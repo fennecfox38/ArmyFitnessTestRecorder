@@ -1,6 +1,5 @@
 package mil.army.fitnesstest.recorder.abcp;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.SharedPreferences;
@@ -10,10 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.RadioGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.databinding.BindingAdapter;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.MutableLiveData;
@@ -108,8 +105,8 @@ public class ABCPFragment extends Fragment {
 
     public void onSaveClick(View view) {
         ABCPDBHandler.insertRecord(requireContext(), record);
-        Snackbar.make(binding.getRoot(),"Saving is on maintenance", Snackbar.LENGTH_SHORT)
-                .setAction("log", v -> activity.navController.navigate(R.id.navigation_log)).show();
+        Snackbar.make(binding.getRoot(),R.string.recordSaved, Snackbar.LENGTH_SHORT)
+                .setAction(R.string.title_log, v -> activity.navController.navigate(R.id.navigation_log)).show();
     }
 
     public void onDateClick(View view) {
@@ -143,11 +140,6 @@ public class ABCPFragment extends Fragment {
         adapter.itemCount = record.invalidate(null);
         adapter.notifyDataSetChanged();
         binding.invalidateAll();
-    }
-
-    @SuppressLint("DefaultLocale") @BindingAdapter("android:text")
-    public static void setText(TextView textView, float percentage) {
-        textView.setText(String.format("%.1f%%",percentage));
     }
 
 }

@@ -102,8 +102,8 @@ public class APFTFragment extends Fragment {
 
     public void onSaveClick(View view) {
         APFTDBHandler.insertRecord(requireContext(), record);
-        Snackbar.make(binding.getRoot(),"Saved on log.", Snackbar.LENGTH_SHORT)
-                .setAction("log", v -> activity.navController.navigate(R.id.navigation_log)).show();
+        Snackbar.make(binding.getRoot(),R.string.recordSaved, Snackbar.LENGTH_SHORT)
+                .setAction(R.string.title_log, v -> activity.navController.navigate(R.id.navigation_log)).show();
     }
     public void onDateClick(View view) {
         DatePickerDialog datePick = new DatePickerDialog(requireContext(), (view1, year, month, dayOfMonth) -> {

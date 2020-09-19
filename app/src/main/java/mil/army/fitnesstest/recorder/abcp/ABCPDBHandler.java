@@ -36,10 +36,7 @@ public class ABCPDBHandler{
             record.abdomen_waist = preciseFloat(cursor.getFloat(cursor.getColumnIndex(COLUMN_ABDOMEN_WAIST)));
             try{ record.hips = cursor.getFloat(cursor.getColumnIndex(COLUMN_HIPS)); }
             catch (Exception e){ record.hips = 0.f; }
-            record.bodyFatPercentage = preciseFloat(cursor.getFloat(cursor.getColumnIndex(COLUMN_BODY_FAT_PERCENT)));
-            record.height_weight = Boolean.parseBoolean(cursor.getString(cursor.getColumnIndex(COLUMN_HW_PASSED)));
-            record.bodyFatPass = Boolean.parseBoolean(cursor.getString(cursor.getColumnIndex(COLUMN_BODY_FAT_PASSED)));
-            record.isPassed = Boolean.parseBoolean(cursor.getString(cursor.getColumnIndex(COLUMN_TOTAL_PASSED)));
+            record.invalidate(null);
             list.add(record);
         }
 
@@ -149,9 +146,9 @@ public class ABCPDBHandler{
             try { row.createCell(7).setCellValue(cursor.getFloat(cursor.getColumnIndex(COLUMN_HIPS))); }
             catch(Exception e){ row.createCell(7).setCellValue((String) null); }
             row.createCell(8).setCellValue(preciseDouble(cursor.getFloat(cursor.getColumnIndex(COLUMN_BODY_FAT_PERCENT))));
-            row.createCell(9).setCellValue(Boolean.parseBoolean(cursor.getString(cursor.getColumnIndex(COLUMN_HW_PASSED))));
-            row.createCell(10).setCellValue(Boolean.parseBoolean(cursor.getString(cursor.getColumnIndex(COLUMN_BODY_FAT_PASSED))));
-            row.createCell(11).setCellValue(Boolean.parseBoolean(cursor.getString(cursor.getColumnIndex(COLUMN_TOTAL_PASSED))));
+            row.createCell(9).setCellValue(cursor.getString(cursor.getColumnIndex(COLUMN_HW_PASSED)));
+            row.createCell(10).setCellValue(cursor.getString(cursor.getColumnIndex(COLUMN_BODY_FAT_PASSED)));
+            row.createCell(11).setCellValue(cursor.getString(cursor.getColumnIndex(COLUMN_TOTAL_PASSED)));
         }
 
         cursor.close();

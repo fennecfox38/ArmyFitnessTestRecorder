@@ -80,6 +80,7 @@
     <string name="delete">Delete</string>
     <string name="shareDB">Share SQLiteDatabase File</string>
     <string name="shareXLS">Share MS Excel File</string>
+    <string name="recordSaved">Record saved on log successfully.</string>
     <string name="recordDeleted">Record deleted successfully.</string>
     <string name="undo">Undo</string>
 </resources>

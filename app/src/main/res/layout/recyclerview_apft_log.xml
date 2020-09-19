@@ -42,13 +42,27 @@
                 android:layout_gravity="center"
                 android:textSize="20sp"
                 android:text="@{viewholder.record.ageGroup.toString()}"/>
-            <TextView
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:textColor="@{(viewholder.record.isPassed ? @color/passed : @color/failed)}"
-                android:textSize="20sp"
-                android:text="@{(viewholder.record.isPassed ? @string/pass: @string/fail)}"/>
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:textColor="@{(viewholder.record.isPassed ? @color/passed : @color/failed)}"
+                    android:textSize="15sp"
+                    android:text="@{String.valueOf(viewholder.record.sco_total)}"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="3dp"
+                    android:layout_gravity="start"
+                    android:textColor="@{(viewholder.record.isPassed ? @color/passed : @color/failed)}"
+                    android:textSize="15sp"
+                    android:text="@string/Points"/>
+            </LinearLayout>
         </TableRow>
 
         <View
