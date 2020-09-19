@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
-import java.util.Locale;
 
 import mil.army.fitnesstest.R;
 import mil.army.fitnesstest.recorder.abcp.ABCPDBHandler;
@@ -56,7 +55,8 @@ public class ABCPLogRecyclerAdapter extends RecyclerView.Adapter<ABCPLogRecycler
             });
             binding = DataBindingUtil.bind(itemView);
         }
-        public String getBodyFat(float bodyFatPercent, boolean hw){ return (hw ? resources.getString(R.string.na) : String.format(Locale.getDefault(),"%.1f%%",bodyFatPercent)); }
+        public int getPassedColor(boolean isPassed){ return resources.getColor(isPassed ? R.color.passed: R.color.failed); }
+        public String getPassed(boolean isPassed){ return resources.getString(isPassed ? R.string.pass: R.string.fail); }
     }
 
     @NonNull @Override public ABCPLogViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

@@ -140,9 +140,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
-                android:textColor="@{(fragment.record.isPassed ? @color/passed : @color/failed)}"
+                android:textColor="@{fragment.getPassedColor(fragment.record.isPassed)}"
                 android:textSize="25sp"
-                android:text="@{(fragment.record.isPassed ? @string/pass: @string/fail)}"
+                android:text="@{fragment.getPassed(fragment.record.isPassed)}"
                 app:layout_constraintBaseline_toBaselineOf="@+id/txt_sco_total"
                 app:layout_constraintStart_toEndOf="@+id/txt_sco_total"
                 app:layout_constraintEnd_toStartOf="@+id/fab"/>

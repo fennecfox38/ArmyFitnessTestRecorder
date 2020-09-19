@@ -41,7 +41,8 @@ public class MainActivity extends AppCompatActivity {
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_nav_view);
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_acft, R.id.navigation_abcp, R.id.navigation_apft, R.id.navigation_log).build();
+                R.id.navigation_acft, R.id.navigation_abcp, R.id.navigation_apft, R.id.navigation_log)
+                .build();
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
@@ -106,6 +107,9 @@ public class MainActivity extends AppCompatActivity {
             drawer_main.closeDrawer(GravityCompat.START);
         else super.onBackPressed();
     }
+
+
+
 
     @BindingAdapter("android:selectedItemPosition")
     public static void setSelectedItemPosition(AppCompatSpinner spinner, int selection) {

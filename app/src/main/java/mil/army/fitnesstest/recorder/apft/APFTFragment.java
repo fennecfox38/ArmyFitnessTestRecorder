@@ -100,6 +100,9 @@ public class APFTFragment extends Fragment {
         editor.commit();
     }
 
+    public int getPassedColor(boolean isPassed){ return getResources().getColor(isPassed ? R.color.passed: R.color.failed); }
+    public String getPassed(boolean isPassed){ return getString(isPassed ? R.string.pass: R.string.fail); }
+
     public void onSaveClick(View view) {
         APFTDBHandler.insertRecord(requireContext(), record);
         Snackbar.make(binding.getRoot(),"Saved on log.", Snackbar.LENGTH_SHORT)

@@ -59,6 +59,8 @@ public class ACFTLogRecyclerAdapter extends RecyclerView.Adapter<ACFTLogRecycler
             });
             binding = DataBindingUtil.bind(itemView);
         }
+        public int getPassedColor(boolean isPassed){ return resources.getColor(isPassed ? R.color.passed: R.color.failed); }
+        public String getPassed(boolean isPassed){ return resources.getString(isPassed ? R.string.pass: R.string.fail); }
         public String getLevel(int sco, boolean pf){
             if(sco<60) return resources.getString(R.string.fail);
             else if(pf) return resources.getString(R.string.pass);

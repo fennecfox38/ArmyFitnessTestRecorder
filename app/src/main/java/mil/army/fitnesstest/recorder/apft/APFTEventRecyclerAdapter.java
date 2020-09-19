@@ -70,6 +70,7 @@ public class APFTEventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
             updateEventList(event);
             binding.invalidateAll();
         }
+        public int getPassedColor(boolean isPassed){ return resources.getColor(isPassed ? R.color.passed: R.color.failed); }
     }
 
     public class DurationViewHolder extends RecyclerView.ViewHolder{
@@ -99,6 +100,7 @@ public class APFTEventRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.
             });
             builder.create().show();
         }
+        public int getPassedColor(boolean isPassed){ return resources.getColor(isPassed ? R.color.passed: R.color.failed); }
         public void onAlterSelected(AdapterView<?> parent, View view, int position, long id) {
             event.cardioAlter= APFTCardioAlter.findById(position);
             event.giveScore();

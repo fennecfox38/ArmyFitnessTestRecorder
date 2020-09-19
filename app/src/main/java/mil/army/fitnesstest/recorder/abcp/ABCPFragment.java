@@ -22,7 +22,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
-import java.util.Locale;
 
 import mil.army.fitnesstest.recorder.MainActivity;
 import mil.army.fitnesstest.R;
@@ -104,7 +103,8 @@ public class ABCPFragment extends Fragment {
         editor.commit();
     }
 
-    public String getBodyFat(float bodyFatPercent, boolean hw){ return (hw ? getString(R.string.na) : String.format(Locale.getDefault(),"%.1f%%",bodyFatPercent)); }
+    public int getPassedColor(boolean isPassed){ return getResources().getColor(isPassed ? R.color.passed: R.color.failed); }
+    public String getPassed(boolean isPassed){ return getString(isPassed ? R.string.pass: R.string.fail); }
 
     public void onSaveClick(View view) {
         ABCPDBHandler.insertRecord(requireContext(), record);
@@ -145,7 +145,8 @@ public class ABCPFragment extends Fragment {
         binding.invalidateAll();
     }
 
-    @SuppressLint("DefaultLocale") @BindingAdapter("android:text")
+    @SuppressLint("DefaultLocale")
+    @BindingAdapter("android:text")
     public static void setText(TextView textView, float percentage) {
         textView.setText(String.format("%.1f%%",percentage));
     }
