@@ -134,9 +134,9 @@ public class LogFragment extends Fragment{
         }
 
         @NonNull @Override public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View view = ((LayoutInflater) requireContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE))
+            view[viewType] = ((LayoutInflater) requireContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE))
                     .inflate(R.layout.layout_container_log, parent, false);
-            return new ViewHolder(view);
+            return new ViewHolder(view[viewType]);
         }
         @Override public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
             switch (position){
@@ -144,7 +144,6 @@ public class LogFragment extends Fragment{
                 case TAB_APFT: holder.recyclerView.setAdapter(apftAdapter);break;
                 case TAB_ABCP: holder.recyclerView.setAdapter(abcpAdapter);break;
             }
-            view[position] = holder.recyclerView;
         }
         @Override public int getItemCount() { return 3; }
         @Override public int getItemViewType(int position) { return position; }

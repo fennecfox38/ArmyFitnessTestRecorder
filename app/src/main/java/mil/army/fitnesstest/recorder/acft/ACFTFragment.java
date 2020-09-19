@@ -104,8 +104,6 @@ public class ACFTFragment extends Fragment{
         editor.putBoolean("isPassed",record.isPassed);
         editor.commit();
     }
-    public int getPassedColor(boolean isPassed){ return getResources().getColor(isPassed ? R.color.passed: R.color.failed); }
-    public String getPassed(boolean isPassed){ return getString(isPassed ? R.string.pass: R.string.fail); }
 
     public void onSaveClick(View view) {
         ACFTDBHandler.insertRecord(requireContext(), record);
