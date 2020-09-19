@@ -20,9 +20,7 @@ import java.util.ArrayList;
 import mil.army.fitnesstest.R;
 import mil.army.fitnesstest.recorder.acft.ACFTDBHandler;
 import mil.army.fitnesstest.recorder.acft.ACFTRecord;
-import mil.army.fitnesstest.recorder.acft.Level;
 import mil.army.fitnesstest.databinding.RecyclerviewAcftLogBinding;
-import mil.army.fitnesstest.recorder.acft.event.ACFTEvent;
 
 public class ACFTLogRecyclerAdapter extends RecyclerView.Adapter<ACFTLogRecyclerAdapter.ACFTLogViewHolder> {
     private Context context;
@@ -42,7 +40,7 @@ public class ACFTLogRecyclerAdapter extends RecyclerView.Adapter<ACFTLogRecycler
             super(itemView);
             itemView.setOnCreateContextMenuListener((menu, view, menuInfo) -> {
                 menu.setHeaderTitle(resources.getString(R.string.record));
-                menu.add(0,0,0,resources.getString(R.string.share)).setOnMenuItemClickListener(item -> {
+                menu.add(0,0,0,resources.getString(R.string.Export)).setOnMenuItemClickListener(item -> {
                     context.startActivity(new Intent(Intent.ACTION_SEND).putExtra(Intent.EXTRA_TEXT, record.toString()).setType("text/plain"));
                     return false;
                 });

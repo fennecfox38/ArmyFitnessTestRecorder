@@ -76,10 +76,11 @@
     <string name="hips">Hips</string>
     <string name="record">Record</string>
     <string name="Import">Import</string>
-    <string name="share">Share</string>
+    <string name="Export">Export</string>
     <string name="delete">Delete</string>
-    <string name="shareDB">Share SQLiteDatabase File</string>
-    <string name="shareXLS">Share MS Excel File</string>
+    <string name="saveDB">Save SQL DB File</string>
+    <string name="shareDB">Share SQL DB File</string>
+    <string name="shareXLS">Share Excel XLS File</string>
     <string name="recordSaved">Record saved on log successfully.</string>
     <string name="recordDeleted">Record deleted successfully.</string>
     <string name="undo">Undo</string>

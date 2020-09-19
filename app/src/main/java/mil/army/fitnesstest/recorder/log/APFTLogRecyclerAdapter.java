@@ -19,7 +19,6 @@ import mil.army.fitnesstest.R;
 import mil.army.fitnesstest.databinding.RecyclerviewApftLogBinding;
 import mil.army.fitnesstest.recorder.apft.APFTDBHandler;
 import mil.army.fitnesstest.recorder.apft.APFTRecord;
-import mil.army.fitnesstest.recorder.apft.event.APFTEvent;
 
 public class APFTLogRecyclerAdapter extends RecyclerView.Adapter<APFTLogRecyclerAdapter.APFTViewHolder> {
     Context context;
@@ -39,7 +38,7 @@ public class APFTLogRecyclerAdapter extends RecyclerView.Adapter<APFTLogRecycler
             super(itemView);
             itemView.setOnCreateContextMenuListener((menu, view, menuInfo) -> {
                 menu.setHeaderTitle(resources.getString(R.string.record));
-                menu.add(0,0,0,resources.getString(R.string.share)).setOnMenuItemClickListener(item -> {
+                menu.add(0,0,0,resources.getString(R.string.Export)).setOnMenuItemClickListener(item -> {
                     context.startActivity(new Intent(Intent.ACTION_SEND).putExtra(Intent.EXTRA_TEXT, record.toString()).setType("text/plain"));
                     return false;
                 });

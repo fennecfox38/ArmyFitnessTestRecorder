@@ -1,7 +1,8 @@
 package mil.army.fitnesstest.recorder.log;
 
-import android.content.Context;
+import android.content.ContentResolver;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -14,18 +15,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.tabs.TabLayoutMediator;
 
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Workbook;
-
-import java.io.FileOutputStream;
+import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
+import java.util.Objects;
 
 import mil.army.fitnesstest.R;
 import mil.army.fitnesstest.recorder.DBHelper;
@@ -34,6 +30,7 @@ import mil.army.fitnesstest.recorder.FileProvider;
 import static android.app.Activity.RESULT_OK;
 
 public class LogFragment extends Fragment{
+    private static int REQUEST_IMPORT_DB = 101, REQUEST_EXPORT_DB = 102;
     private static int[] TAB_NAME = {R.string.title_acft, R.string.title_apft, R.string.title_abcp};
     private ViewPager2 viewPager;
     private TabPagerAdapter pagerAdapter;
@@ -44,7 +41,7 @@ public class LogFragment extends Fragment{
         View root = inflater.inflate(R.layout.fragment_log, container, false);
 
         viewPager = root.findViewById(R.id.viewPager_log) ;
-        pagerAdapter = new TabPagerAdapter();
+        pagerAdapter = new TabPagerAdapter(requireContext());
         viewPager.setAdapter(pagerAdapter);
 
         new TabLayoutMediator(root.findViewById(R.id.tabLayout_log),viewPager, (tab, position) -> {
@@ -56,16 +53,15 @@ public class LogFragment extends Fragment{
 
     @Override public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         menu.add(0,0,0,getString(R.string.Import)).setIcon(R.drawable.ic_import).setOnMenuItemClickListener(item -> {
-            startActivityForResult(Intent.createChooser(new Intent(Intent.ACTION_GET_CONTENT).setType("application/*"),getString(R.string.Import)),0);
+            startActivityForResult(Intent.createChooser(new Intent(Intent.ACTION_GET_CONTENT).setType("application/*"),getString(R.string.Import)),REQUEST_IMPORT_DB);
             return false;
         }).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-        menu.add(0,1,1,getString(R.string.share)).setIcon(R.drawable.ic_share).setOnMenuItemClickListener(item -> {
+        menu.add(0,1,1,getString(R.string.Export)).setIcon(R.drawable.ic_share).setOnMenuItemClickListener(item -> {
             AlertDialog.Builder builder=new AlertDialog.Builder(requireContext());
-            builder.setTitle(getString(R.string.share)); builder.setIcon(R.drawable.ic_share);
-            builder.setItems(new String[]{getString(R.string.shareDB), getString(R.string.shareXLS)}, (dialog, which) -> {
+            builder.setTitle(getString(R.string.Export)); builder.setIcon(R.drawable.ic_share);
+            builder.setItems(new String[]{getString(R.string.saveDB),getString(R.string.shareDB), getString(R.string.shareXLS)}, (dialog, which) -> {
                 switch (which){
-                    case 0: shareDB();break;
-                    case 1: shareXLS(); break;
+                    case 0: intentSaveDB(); break; case 1: intentShareDB(); break; case 2: intentShareXLS(); break;
                 }
             });
             builder.create().show();
@@ -80,86 +76,47 @@ public class LogFragment extends Fragment{
 
     @Override public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode != 0 || data == null || resultCode != RESULT_OK) return;
-        try {
-            InputStream inputStream = requireContext().getContentResolver().openInputStream(data.getData());
-            FileOutputStream outputStream = new FileOutputStream(FileProvider.getDBFile(requireContext()));
-            byte[] buff = new byte[1024];
-            int read;
-            while ((read = inputStream.read(buff, 0, buff.length)) > 0)
-                outputStream.write(buff, 0, read);
-            inputStream.close();
-            outputStream.close();
-            pagerAdapter.reloadPages();
-        } catch (IOException e) { e.printStackTrace(); }
+        if(data == null || resultCode != RESULT_OK) return;
+        Uri fileUri = Objects.requireNonNull(data.getData());
+        ContentResolver resolver = requireContext().getContentResolver();
+        if(requestCode == REQUEST_IMPORT_DB){
+            try {
+                File imported = FileProvider.getTempFile(requireContext(),fileUri);
+
+                FileProvider.fileIO(resolver, fileUri, FileProvider.getDBUri(requireContext()));
+            }
+            catch (IOException e) { e.printStackTrace(); }
+        }
+        else if(requestCode == REQUEST_EXPORT_DB){
+            try { FileProvider.fileIO(resolver, FileProvider.getDBUri(requireContext()), fileUri); }
+            catch (IOException e) { e.printStackTrace(); }
+        }
+        pagerAdapter.reloadPages();
     }
 
-    public void shareDB(){
+    private void intentSaveDB() {
+        Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType(FileProvider.dbMIME);
+        intent.putExtra(Intent.EXTRA_TITLE, FileProvider.dbName);
+        startActivityForResult(intent, REQUEST_EXPORT_DB);
+    }
+    public void intentShareDB(){
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
-        shareIntent.setType("application/vnd.sqlite3"); //shareIntent.setType("application/*");
-        shareIntent.putExtra(Intent.EXTRA_STREAM, FileProvider.getDatabaseUri(requireContext()));
+        shareIntent.setType(FileProvider.dbMIME);
+        shareIntent.putExtra(Intent.EXTRA_STREAM, FileProvider.getDBUri(requireContext()));
         startActivity(Intent.createChooser(shareIntent, getString(R.string.shareDB)));
     }
+    public void intentShareXLS(){
+        try (DBHelper dbHelper = new DBHelper(requireContext())) {
+            dbHelper.exportExcel(requireContext());
+        } // try-with-resources automatically calls dbHelper.close()
+        catch (IOException e) { e.printStackTrace(); }
 
-    public void shareXLS(){
-        Workbook workbook = new HSSFWorkbook();
-        DBHelper dbHelper = new DBHelper(requireContext());
-        dbHelper.exportExcel(workbook); dbHelper.close();
-        try{
-            FileOutputStream fileOutputStream = new FileOutputStream(FileProvider.getXLSFile(requireContext()));
-            workbook.write(fileOutputStream);
-            workbook.close();
-
-            Intent shareIntent = new Intent(Intent.ACTION_SEND);
-            shareIntent.setType("application/excel"); //shareIntent.setType("application/*");
-            shareIntent.putExtra(Intent.EXTRA_STREAM, FileProvider.getXLSUri(requireContext()));
-            startActivity(Intent.createChooser(shareIntent, getString(R.string.shareXLS)));
-        } catch (IOException e){ e.printStackTrace(); }
-    }
-
-    private class TabPagerAdapter extends RecyclerView.Adapter<TabPagerAdapter.ViewHolder> {
-        public static final int TAB_ACFT=0, TAB_APFT=1, TAB_ABCP=2;
-        private View[] view = new View[3];
-        private ACFTLogRecyclerAdapter acftAdapter = new ACFTLogRecyclerAdapter(requireContext());
-        private APFTLogRecyclerAdapter apftAdapter = new APFTLogRecyclerAdapter(requireContext());
-        private ABCPLogRecyclerAdapter abcpAdapter = new ABCPLogRecyclerAdapter(requireContext());
-
-        public class ViewHolder extends RecyclerView.ViewHolder{
-            RecyclerView recyclerView;
-            public ViewHolder(@NonNull View itemView) {
-                super(itemView);
-                recyclerView = itemView.findViewById(R.id.recyclerView_log);
-                recyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false));
-            }
-        }
-
-        @NonNull @Override public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            view[viewType] = ((LayoutInflater) requireContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE))
-                    .inflate(R.layout.layout_container_log, parent, false);
-            return new ViewHolder(view[viewType]);
-        }
-        @Override public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-            switch (position){
-                case TAB_ACFT: holder.recyclerView.setAdapter(acftAdapter); break;
-                case TAB_APFT: holder.recyclerView.setAdapter(apftAdapter);break;
-                case TAB_ABCP: holder.recyclerView.setAdapter(abcpAdapter);break;
-            }
-        }
-        @Override public int getItemCount() { return 3; }
-        @Override public int getItemViewType(int position) { return position; }
-
-        public void actionDelete(int currentPage){
-            switch (currentPage){
-                case TAB_ACFT: acftAdapter.deleteAllRecord(view[TAB_ACFT]); break;
-                case TAB_APFT: apftAdapter.deleteAllRecord(view[TAB_APFT]); break;
-                case TAB_ABCP: abcpAdapter.deleteAllRecord(view[TAB_ABCP]); break;
-            }
-        }
-        public void reloadPages(){
-            acftAdapter.reloadList();
-            apftAdapter.reloadList();
-            abcpAdapter.reloadList();
-        }
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType(FileProvider.xlsMIME);
+        shareIntent.putExtra(Intent.EXTRA_STREAM, FileProvider.getXLSUri(requireContext()));
+        startActivity(Intent.createChooser(shareIntent, getString(R.string.shareXLS)));
     }
 
 }

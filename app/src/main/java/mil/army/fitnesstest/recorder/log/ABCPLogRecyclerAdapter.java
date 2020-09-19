@@ -39,7 +39,7 @@ public class ABCPLogRecyclerAdapter extends RecyclerView.Adapter<ABCPLogRecycler
             super(itemView);
             itemView.setOnCreateContextMenuListener((menu, view, menuInfo) -> {
                 menu.setHeaderTitle(resources.getString(R.string.record));
-                menu.add(0,0,0,resources.getString(R.string.share)).setOnMenuItemClickListener(item -> {
+                menu.add(0,0,0,resources.getString(R.string.Export)).setOnMenuItemClickListener(item -> {
                     context.startActivity(new Intent(Intent.ACTION_SEND).putExtra(Intent.EXTRA_TEXT, record.toString()).setType("text/plain"));
                     return false;
                 });
