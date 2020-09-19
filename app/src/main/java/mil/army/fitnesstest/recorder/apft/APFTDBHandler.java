@@ -147,7 +147,7 @@ public class APFTDBHandler{
             row.createCell(8).setCellValue(cursor.getString(cursor.getColumnIndex(COLUMN_SEX)));
             row.createCell(9).setCellValue(cursor.getString(cursor.getColumnIndex(COLUMN_AGE_GROUP)));
             row.createCell(10).setCellValue(cursor.getInt(cursor.getColumnIndex(COLUMN_SCORE_TOTAL)));
-            row.createCell(11).setCellValue(Boolean.parseBoolean(cursor.getString(cursor.getColumnIndex(COLUMN_IS_PASSED))));
+            row.createCell(11).setCellValue(cursor.getString(cursor.getColumnIndex(COLUMN_IS_PASSED)));
         }
 
         cursor.close();

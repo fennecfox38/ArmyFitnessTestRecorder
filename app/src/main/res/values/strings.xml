@@ -7,13 +7,15 @@
     <string name="title_abcp">ABCP</string>
     <string name="title_long_abcp">Body Composition</string>
     <string name="title_log">Log</string>
+    <string name="feedback">Feedback</string>
+    <string name="playstore">Play Store</string>
     <string name="info">Information</string>
+    <string name="github">GitHub</string>
     <string name="license">License</string>
     <string name="infobody1">This Application ( </string>
     <string name="infobody2"> ) has been designed based on US Army Regulation and Field Manual (AR 600–9, FM 7–22) to help soldiers.</string>
     <string name="infobody3">However, this application has never been officially authorized. The result of this application cannot be valid without the record in official form. Use for reference only.</string>
-    <string name="infobody4">This application is under Apache License 2.0 (http://www.apache.org/licenses/LICENSE-2.0.txt). The source has been published on GitHub (https://github.com/fennecfox38/ArmyFitnessTestRecorder)</string>
-    <string name="infobody5">Review and Feedback may be accepted via the following.</string>
+    <string name="infobody4">This application is under Apache License 2.0. The source has been published on GitHub. More information below.</string>
     <string name="ACFTScale">ACFT Score Scale</string>
     <string name="APFTScale">APFT Score Scale</string>
     <string name="ABCPScale">ABCP Score Scale</string>

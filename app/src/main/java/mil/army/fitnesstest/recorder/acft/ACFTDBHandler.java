@@ -171,7 +171,7 @@ public class ACFTDBHandler{
             row.createCell(14).setCellValue(cursor.getString(cursor.getColumnIndex(COLUMN_QUALIFIED_LEVEL)));
             row.createCell(15).setCellValue(cursor.getInt(cursor.getColumnIndex(COLUMN_SCORE_TOTAL)));
             row.createCell(16).setCellValue(cursor.getString(cursor.getColumnIndex(COLUMN_MOS_REQUIREMENT)));
-            row.createCell(17).setCellValue(Boolean.parseBoolean(cursor.getString(cursor.getColumnIndex(COLUMN_IS_PASSED))));
+            row.createCell(17).setCellValue(cursor.getString(cursor.getColumnIndex(COLUMN_IS_PASSED)));
         }
 
         cursor.close();
