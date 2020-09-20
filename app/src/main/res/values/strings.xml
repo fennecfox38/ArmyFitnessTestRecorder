@@ -19,7 +19,6 @@
     <string name="ACFTScale">ACFT Score Scale</string>
     <string name="APFTScale">APFT Score Scale</string>
     <string name="ABCPScale">ABCP Score Scale</string>
-    <string name="MOSChart">MOS Chart</string>
     <string name="DashBoard">DashBoard</string>
     <string name="Notification">Notification</string>
     <string name="Save">Save</string>
@@ -80,6 +79,7 @@
     <string name="Import">Import</string>
     <string name="Export">Export</string>
     <string name="delete">Delete</string>
+    <string name="SelectDBFile">Select DB File to be imported.</string>
     <string name="saveDB">Save SQL DB File</string>
     <string name="shareDB">Share SQL DB File</string>
     <string name="shareXLS">Share Excel XLS File</string>

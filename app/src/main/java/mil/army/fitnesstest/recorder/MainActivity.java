@@ -1,4 +1,18 @@
-
+/*
+ * Copyright (C) 2020 Army Fitness Test Recorder
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 package mil.army.fitnesstest.recorder;
 
@@ -9,7 +23,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
@@ -29,7 +42,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import mil.army.fitnesstest.R;
-import mil.army.fitnesstest.ScaleChartActivity;
+import mil.army.fitnesstest.WebViewActivity;
 
 public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawer_main;
@@ -57,18 +70,9 @@ public class MainActivity extends AppCompatActivity {
         drawer_main = findViewById(R.id.drawer_main);
         NavigationView nav_main = findViewById(R.id.nav_main);
         Menu navMenu = nav_main.getMenu();
-        /*navMenu.findItem(R.id.menu_ACFT_scale).setIntent(new Intent(getApplicationContext(), ScaleChartActivity.class).putExtra("requested", ScaleChartActivity.ACFT_REQUESTED));
-        navMenu.findItem(R.id.menu_APFT_scale).setIntent(new Intent(getApplicationContext(), ScaleChartActivity.class).putExtra("requested", ScaleChartActivity.APFT_REQUESTED));
-        navMenu.findItem(R.id.menu_ABCP_scale).setIntent(new Intent(getApplicationContext(), ScaleChartActivity.class).putExtra("requested", ScaleChartActivity.ABCP_REQUESTED));
-        navMenu.findItem(R.id.menu_MOS_chart).setIntent(new Intent(getApplicationContext(), ScaleChartActivity.class).putExtra("requested", ScaleChartActivity.MOS_CHART_REQUESTED));*/
-        MenuItem.OnMenuItemClickListener onScaleChartClickListen = item -> {
-            Toast.makeText(MainActivity.this,"Showing scale chart is in the plan.",Toast.LENGTH_SHORT).show();
-            return false;
-        };
-        navMenu.findItem(R.id.menu_ACFT_scale).setOnMenuItemClickListener(onScaleChartClickListen);
-        navMenu.findItem(R.id.menu_APFT_scale).setOnMenuItemClickListener(onScaleChartClickListen);
-        navMenu.findItem(R.id.menu_ABCP_scale).setOnMenuItemClickListener(onScaleChartClickListen);
-        navMenu.findItem(R.id.menu_MOS_chart).setOnMenuItemClickListener(onScaleChartClickListen);
+        navMenu.findItem(R.id.menu_ACFT_scale).setIntent(new Intent(getApplicationContext(), WebViewActivity.class).putExtra("requested", WebViewActivity.ACFT_REQUESTED));
+        navMenu.findItem(R.id.menu_APFT_scale).setIntent(new Intent(getApplicationContext(), WebViewActivity.class).putExtra("requested", WebViewActivity.APFT_REQUESTED));
+        navMenu.findItem(R.id.menu_ABCP_scale).setIntent(new Intent(getApplicationContext(), WebViewActivity.class).putExtra("requested", WebViewActivity.ABCP_REQUESTED));
         navMenu.findItem(R.id.menu_feedback).setOnMenuItemClickListener(item -> {
             String body = "*************************************\nFeedback for " + getPackageName() + "\nApp Version : ";
             try { body += getPackageManager().getPackageInfo(getPackageName(),0).versionName; }
@@ -91,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
                     +getString(R.string.infobody4));
             builder.setPositiveButton(R.string.github, (dialog, which) -> startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/fennecfox38/ArmyFitnessTestRecorder"))));
             builder.setNegativeButton(R.string.license, (dialog, which)
-                    -> startActivity(new Intent(getApplicationContext(), ScaleChartActivity.class).putExtra("requested", ScaleChartActivity.LICENSE_REQUESTED)));
+                    -> startActivity(new Intent(getApplicationContext(), WebViewActivity.class).putExtra("requested", WebViewActivity.LICENSE_REQUESTED)));
             builder.setNeutralButton(R.string.Dismiss, (dialog, which) -> dialog.dismiss());
             builder.create().show();
             return false;

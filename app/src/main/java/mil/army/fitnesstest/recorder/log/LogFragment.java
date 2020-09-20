@@ -10,6 +10,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -53,6 +54,7 @@ public class LogFragment extends Fragment{
 
     @Override public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         menu.add(0,0,0,getString(R.string.Import)).setIcon(R.drawable.ic_import).setOnMenuItemClickListener(item -> {
+            Toast.makeText(requireContext(),R.string.SelectDBFile,Toast.LENGTH_SHORT).show();
             startActivityForResult(Intent.createChooser(new Intent(Intent.ACTION_GET_CONTENT).setType("application/*"),getString(R.string.Import)),REQUEST_IMPORT_DB);
             return false;
         }).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
@@ -80,11 +82,7 @@ public class LogFragment extends Fragment{
         Uri fileUri = Objects.requireNonNull(data.getData());
         ContentResolver resolver = requireContext().getContentResolver();
         if(requestCode == REQUEST_IMPORT_DB){
-            try {
-                File imported = FileProvider.getTempFile(requireContext(),fileUri);
-
-                FileProvider.fileIO(resolver, fileUri, FileProvider.getDBUri(requireContext()));
-            }
+            try { FileProvider.fileIO(resolver, fileUri, FileProvider.getDBUri(requireContext())); }
             catch (IOException e) { e.printStackTrace(); }
         }
         else if(requestCode == REQUEST_EXPORT_DB){

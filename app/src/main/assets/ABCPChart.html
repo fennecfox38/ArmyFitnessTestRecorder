@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<style>
+			body {font-family: Arial;}
+
+			/* Style the tab */
+            .tab {
+              overflow: hidden;
+              border: 1px solid #ccc;
+              background-color: #424242;
+            }
+
+            /* Style the buttons inside the tab */
+            .tab button {
+              color: #fff;
+              background-color: inherit;
+              float: left;
+              border: none;
+              outline: none;
+              cursor: pointer;
+              padding: 14px 16px;
+              transition: 0.3s;
+              font-size: 17px;
+            }
+
+            /* Change background color of buttons on hover */
+            .tab button:hover {
+              color: #fff;
+              background-color: #888;
+            }
+
+            /* Create an active/current tablink class */
+            .tab button.active {
+              color: #fff;
+              background-color: #999;
+            }
+
+            /* Style the tab content */
+            .tabcontent {
+              display: none;
+              padding: 6px 12px;
+              border: 1px solid #ccc;
+              border-top: none;
+            }
+            th {
+            	border: 1px solid #999;
+                padding: 0.1em 1em;
+            }
+            td {
+                border: 1px solid #999;
+                padding: 0.1em 1em;
+            }
+    	</style>
+    </head>
+	<body style="color: white; background: #424242;">
+
+		<div class="tab">
+        	<button class="tablinks" onclick="openTab(event, 'Male')" id="defaultOpen" >Male</button>
+        	<button class="tablinks" onclick="openTab(event, 'Female')">Female</button>
+      	</div>
+
+        <div id="Male" class="tabcontent">
+        	<h2>Male Height and Weight Standards</h2>
+        	<table style="width: 100%; text-align:center;">
+            	<tbody>
+                	<tr>
+                        <th colspan="2"></th>
+                        <th colspan="6">Max Weight by Age Group</th>
+                  	</tr>
+                  	<tr>
+                    	<th>Height</th>
+                    	<th>Min Weight</th>
+                    	<th>17-20</th>
+                    	<th>21-27</th>
+                    	<th>28-39</th>
+                    	<th>40+</th>
+                  	</tr>
+                  	<tr>
+                        <td>58&#8243;</td>
+                        <td>91 lbs.</td>
+                        <td>&#8212;</td>
+                        <td>&#8212;</td>
+                        <td>&#8212;</td>
+                        <td>&#8212;</td>
+                  	</tr>
+                  	<tr>
+                        <td>59&#8243;</td>
+                        <td>94 lbs.</td>
+                        <td>&#8212;</td>
+                        <td>&#8212;</td>
+                        <td>&#8212;</td>
+                        <td>&#8212;</td>
+                  	</tr>
+                  	<tr>
+                        <td>60&#8243;</td>
+                        <td>97 lbs.</td>
+                        <td>132 lbs.</td>
+                        <td>136 lbs.</td>
+                        <td>139 lbs.</td>
+                        <td>141 lbs.</td>
+                  	</tr>
+                  	<tr>
+                        <td>61&#8243;</td>
+                        <td>100 lbs.</td>
+                        <td>136 lbs.</td>
+                        <td>140 lbs.</td>
+                        <td>144 lbs.</td>
+                        <td>146 lbs.</td>
+                  	</tr>
+                  	<tr>
+                        <td>62&#8243;</td>
+                        <td>104 lbs.</td>
+                        <td>141 lbs.</td>
+                        <td>144 lbs.</td>
+                        <td>148 lbs.</td>
+                        <td>150 lbs.</td>
+                  	</tr>
+                  	<tr>
+                        <td>63&#8243;</td>
+                        <td>107 lbs.</td>
+                        <td>145 lbs.</td>
+                        <td>149 lbs.</td>
+                        <td>153 lbs.</td>
+                        <td>155 lbs.</td>
+                  	</tr>
+                  	<tr>
+                        <td>64&#8243;</td>
+                        <td>110 lbs.</td>
+                        <td>150 lbs.</td>
+                        <td>154 lbs.</td>
+                        <td>158 lbs.</td>
+                        <td>160 lbs.</td>
+                  	</tr>
+                  	<tr>
+                        <td>65&#8243;</td>
+                        <td>114 lbs.</td>
+                        <td>155 lbs.</td>
+                        <td>159 lbs.</td>
+                        <td>163 lbs.</td>
+                        <td>165 lbs.</td>
+                  	</tr>
+                  	<tr>
+                        <td>66&#8243;</td>
+                        <td>117 lbs.</td>
+                        <td>160 lbs.</td>
+                        <td>163 lbs.</td>
+                        <td>168 lbs.</td>
+                        <td>170 lbs.</td>
+                  	</tr>
+                  	<tr>
+                        <td>67&#8243;</td>
+                        <td>121 lbs.</td>
+                        <td>165 lbs.</td>
+                        <td>169 lbs.</td>
+                        <td>174 lbs.</td>
+                        <td>176 lbs.</td>
+                  	</tr>
+                  	<tr>
+                        <td>68&#8243;</td>
+                        <td>125 lbs.</td>
+                        <td>170 lbs.</td>
+                        <td>174 lbs.</td>
+                        <td>179 lbs.</td>
+                        <td>181 lbs.</td>
+                  	</tr>
+                  	<tr>
+                        <td>69&#8243;</td>
+                        <td>128 lbs.</td>
+                        <td>175 lbs.</td>
+                        <td>179 lbs.</td>
+                        <td>184 lbs.</td>
+                        <td>186 lbs.</td>
+                  	</tr>
+                  	<tr>
+                        <td>70&#8243;</td>
+                        <td>132 lbs.</td>
+                        <td>180 lbs.</td>
+                        <td>185 lbs.</td>
+                        <td>189 lbs.</td>
+                        <td>192 lbs.</td>
+                  	</tr>
+                  	<tr>
+                        <td>71&#8243;</td>
+                        <td>136 lbs.</td>
+                        <td>185 lbs.</td>
+                        <td>189 lbs.</td>
+                        <td>194 lbs.</td>
+                        <td>197 lbs.</td>
+                  	</tr>
+                  	<tr>
+                        <td>72&#8243;</td>
+                        <td>140 lbs.</td>
+                        <td>190 lbs.</td>
+                        <td>195 lbs.</td>
+                        <td>200 lbs.</td>
+                        <td>203 lbs.</td>
+                  	</tr>
+                  	<tr>
+                        <td>73&#8243;</td>
+                        <td>144 lbs.</td>
+                        <td>195 lbs.</td>
+                        <td>200 lbs.</td>
+                        <td>205 lbs.</td>
+                        <td>208 lbs.</td>
+                  	</tr>
+                  	<tr>
+                        <td>74&#8243;</td>
+                        <td>148 lbs.</td>
+                        <td>201 lbs.</td>
+                        <td>206 lbs.</td>
+                        <td>211 lbs.</td>
+                        <td>214 lbs.</td>
+                  	</tr>
+                  	<tr>
+                        <td>75&#8243;</td>
+                        <td>152 lbs.</td>
+                        <td>206 lbs.</td>
+                        <td>212 lbs.</td>
+                        <td>217 lbs.</td>
+                        <td>220 lbs.</td>
+                  	</tr>
+                  	<tr>
+                        <td>76&#8243;</td>
+                        <td>156 lbs.</td>
+                        <td>212 lbs.</td>
+                        <td>217 lbs.</td>
+                        <td>223 lbs.</td>
+                        <td>226 lbs.</td>
+                  	</tr>
+                  	<tr>
+                        <td>77&#8243;</td>
+                        <td>160 lbs.</td>
+                        <td>218 lbs.</td>
+                        <td>223 lbs.</td>
+                        <td>229 lbs.</td>
+                        <td>232 lbs.</td>
+                  	</tr>
+                  	<tr>
+                        <td>78&#8243;</td>
+                        <td>164 lbs.</td>
+                        <td>223 lbs.</td>
+                        <td>229 lbs.</td>
+                        <td>235 lbs.</td>
+                        <td>238 lbs.</td>
+                  	</tr>
+                  	<tr>
+                        <td>79&#8243;</td>
+                        <td>168 lbs.</td>
+                        <td>229 lbs.</td>
+                        <td>235 lbs.</td>
+                        <td>241 lbs.</td>
+                        <td>244 lbs.</td>
+                  	</tr>
+                  	<tr>
+                        <td>80&#8243;</td>
+                        <td>173 lbs.</td>
+                        <td>234 lbs.</td>
+                        <td>240 lbs.</td>
+                        <td>247 lbs.</td>
+                        <td>250 lbs.</td>
+                  	</tr>
+            	</tbody>
+          	</table>
+            <h2>Male maximum allowable percent body fat standards</h2>
+            <table style="width: 100%; text-align:center;">
+            	<tbody>
+                    <tr>
+                    	<th colspan="5">Body Fat Percentage = [86.010 x log10(abdomen - neck)] - [70.041 x log10(height in inches)] + 36.76</th>
+                    <tr>
+                	<tr>
+                    	<th>Age Group</th>
+                    	<th>17-20</th>
+                    	<th>21-27</th>
+                    	<th>28-39</th>
+                    	<th>40+</th>
+                    </tr>
+                	<tr>
+                    	<td>Body Fat</td>
+                    	<td>20%</td>
+                    	<td>22%</td>
+                    	<td>24%</td>
+                    	<td>26%</td>
+                    </tr>
+                </tbody>
+            </table>
+		</div>
+
+        <div id="Female" class="tabcontent">
+        	<h2>Female Height and Weight Standards</h2>
+          	<table style="width: 100%; text-align:center;">
+            	<tbody>
+                    <tr>
+                        <th colspan="2"></th>
+                        <th colspan="4">Max Weight by Age Group</th>
+                    </tr>
+                    <tr>
+                        <th>Height</th>
+                        <th>Min Weight</th>
+                        <th>17-20</th>
+                        <th>21-27</th>
+                        <th>28-39</th>
+                        <th>40+</th>
+                    </tr>
+                    <tr>
+                        <td>58&#8243;</td>
+                        <td>91 lbs.</td>
+                        <td>119 lbs.</td>
+                        <td>121 lbs.</td>
+                        <td>122 lbs.</td>
+                        <td>124 lbs.</td>
+                    </tr>
+                    <tr>
+                        <td>59&#8243;</td>
+                        <td>94 lbs.</td>
+                        <td>124 lbs.</td>
+                        <td>125 lbs.</td>
+                        <td>126 lbs.</td>
+                        <td>128 lbs.</td>
+                    </tr>
+                    <tr>
+                        <td>60&#8243;</td>
+                        <td>97 lbs.</td>
+                        <td>128 lbs.</td>
+                        <td>129 lbs.</td>
+                        <td>131 lbs.</td>
+                        <td>133 lbs.</td>
+                    </tr>
+                    <tr>
+                        <td>61&#8243;</td>
+                        <td>100 lbs.</td>
+                        <td>132 lbs.</td>
+                        <td>134 lbs.</td>
+                        <td>135 lbs.</td>
+                        <td>137 lbs.</td>
+                    </tr>
+                    <tr>
+                        <td>62&#8243;</td>
+                        <td>104 lbs.</td>
+                        <td>136 lbs.</td>
+                        <td>138 lbs.</td>
+                        <td>140 lbs.</td>
+                        <td>142 lbs.</td>
+                    </tr>
+                    <tr>
+                        <td>63&#8243;</td>
+                        <td>107 lbs.</td>
+                        <td>141 lbs.</td>
+                        <td>143 lbs.</td>
+                        <td>144 lbs.</td>
+                        <td>146 lbs.</td>
+                    </tr>
+                    <tr>
+                        <td>64&#8243;</td>
+                        <td>110 lbs.</td>
+                        <td>145 lbs.</td>
+                        <td>147 lbs.</td>
+                        <td>149 lbs.</td>
+                        <td>151 lbs.</td>
+                    </tr>
+                    <tr>
+                        <td>65&#8243;</td>
+                        <td>114 lbs.</td>
+                        <td>150 lbs.</td>
+                        <td>152 lbs.</td>
+                        <td>154 lbs.</td>
+                        <td>156 lbs.</td>
+                    </tr>
+                    <tr>
+                        <td>66&#8243;</td>
+                        <td>117 lbs.</td>
+                        <td>155 lbs.</td>
+                        <td>156 lbs.</td>
+                        <td>158 lbs.</td>
+                        <td>161 lbs.</td>
+                    </tr>
+                    <tr>
+                        <td>67&#8243;</td>
+                        <td>121 lbs.</td>
+                        <td>159 lbs.</td>
+                        <td>161 lbs.</td>
+                        <td>163 lbs.</td>
+                        <td>166 lbs.</td>
+                    </tr>
+                    <tr>
+                        <td>68&#8243;</td>
+                        <td>125 lbs.</td>
+                        <td>164 lbs.</td>
+                        <td>166 lbs.</td>
+                        <td>168 lbs.</td>
+                        <td>171 lbs.</td>
+                    </tr>
+                    <tr>
+                        <td>69&#8243;</td>
+                        <td>128 lbs.</td>
+                        <td>169 lbs.</td>
+                        <td>171 lbs.</td>
+                        <td>173 lbs.</td>
+                        <td>176 lbs.</td>
+                    </tr>
+                    <tr>
+                        <td>70&#8243;</td>
+                        <td>132 lbs.</td>
+                        <td>174 lbs.</td>
+                        <td>176 lbs.</td>
+                        <td>178 lbs.</td>
+                        <td>181 lbs.</td>
+                    </tr>
+                    <tr>
+                        <td>71&#8243;</td>
+                        <td>136 lbs.</td>
+                        <td>179 lbs.</td>
+                        <td>181 lbs.</td>
+                        <td>183 lbs.</td>
+                        <td>186 lbs.</td>
+                    </tr>
+                    <tr>
+                        <td>72&#8243;</td>
+                        <td>140 lbs.</td>
+                        <td>184 lbs.</td>
+                        <td>186 lbs.</td>
+                        <td>188 lbs.</td>
+                        <td>191 lbs.</td>
+                    </tr>
+                    <tr>
+                        <td>73&#8243;</td>
+                        <td>144 lbs.</td>
+                        <td>189 lbs.</td>
+                        <td>191 lbs.</td>
+                        <td>194 lbs.</td>
+                        <td>197 lbs.</td>
+                    </tr>
+                    <tr>
+                        <td>74&#8243;</td>
+                        <td>148 lbs.</td>
+                        <td>194 lbs.</td>
+                        <td>197 lbs.</td>
+                        <td>199 lbs.</td>
+                        <td>202 lbs.</td>
+                    </tr>
+                    <tr>
+                        <td>75&#8243;</td>
+                        <td>152 lbs.</td>
+                        <td>200 lbs.</td>
+                        <td>202 lbs.</td>
+                        <td>204 lbs.</td>
+                        <td>208 lbs.</td>
+                    </tr>
+                    <tr>
+                        <td>76&#8243;</td>
+                        <td>156 lbs.</td>
+                        <td>205 lbs.</td>
+                        <td>207 lbs.</td>
+                        <td>210 lbs.</td>
+                        <td>213 lbs.</td>
+                    </tr>
+                    <tr>
+                        <td>77&#8243;</td>
+                        <td>160 lbs.</td>
+                        <td>210 lbs.</td>
+                        <td>213 lbs.</td>
+                        <td>215 lbs.</td>
+                        <td>219 lbs.</td>
+                    </tr>
+                    <tr>
+                        <td>78&#8243;</td>
+                        <td>164 lbs.</td>
+                        <td>216 lbs.</td>
+                        <td>218 lbs.</td>
+                        <td>221 lbs.</td>
+                        <td>225 lbs.</td>
+                    </tr>
+                    <tr>
+                        <td>79&#8243;</td>
+                        <td>168 lbs.</td>
+                        <td>221 lbs.</td>
+                        <td>224 lbs.</td>
+                        <td>227 lbs.</td>
+                        <td>230 lbs.</td>
+                    </tr>
+                    <tr>
+                        <td>80&#8243;</td>
+                        <td>173 lbs.</td>
+                        <td>227 lbs.</td>
+                        <td>230 lbs.</td>
+                        <td>233 lbs.</td>
+                        <td>236 lbs.</td>
+                	</tr>
+        		</tbody>
+        	</table>
+            <h2>Female maximum allowable percent body fat standards</h2>
+            <table style="width: 100%; text-align:center;">
+            	<tbody>
+                    <tr>
+                    	<th colspan="5">Body Fat Percentage = [163.205 x log10(waist + hip - neck)] - [97.684 x log10(height in inches)] - 78.387</th>
+                    <tr>
+                	<tr>
+                    	<th>Age Group</th>
+                    	<th>17-20</th>
+                    	<th>21-27</th>
+                    	<th>28-39</th>
+                    	<th>40+</th>
+                    </tr>
+                	<tr>
+                    	<td>Body Fat</td>
+                    	<td>30%</td>
+                    	<td>32%</td>
+                    	<td>34%</td>
+                    	<td>36%</td>
+                    </tr>
+                </tbody>
+            </table>
+		</div>
+
+        <script>
+        	document.getElementById("defaultOpen").click();
+            function openTab(evt, TabName) {
+              var i, tabcontent, tablinks;
+              tabcontent = document.getElementsByClassName("tabcontent");
+              for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+              }
+              tablinks = document.getElementsByClassName("tablinks");
+              for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+              }
+              document.getElementById(TabName).style.display = "block";
+              evt.currentTarget.className += " active";
+            }
+        </script>
+   
+	</body>
+</html> 

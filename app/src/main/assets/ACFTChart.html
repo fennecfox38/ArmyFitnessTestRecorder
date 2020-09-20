@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<style>
+			body {font-family: Arial;}
+
+			/* Style the tab */
+            .tab {
+              overflow: hidden;
+              border: 1px solid #ccc;
+              background-color: #424242;
+            }
+
+            /* Style the buttons inside the tab */
+            .tab button {
+              color: #fff;
+              background-color: inherit;
+              float: left;
+              border: none;
+              outline: none;
+              cursor: pointer;
+              padding: 14px 16px;
+              transition: 0.3s;
+              font-size: 17px;
+            }
+
+            /* Change background color of buttons on hover */
+            .tab button:hover {
+              color: #fff;
+              background-color: #888;
+            }
+
+            /* Create an active/current tablink class */
+            .tab button.active {
+              color: #fff;
+              background-color: #999;
+            }
+
+            /* Style the tab content */
+            .tabcontent {
+              display: none;
+              padding: 6px 12px;
+              border: 1px solid #ccc;
+              border-top: none;
+            }
+            th {
+            	border: 1px solid #999;
+                padding: 0.1em 1em;
+            }
+            td {
+                border: 1px solid #999;
+                padding: 0.1em 1em;
+            }
+    	</style>
+    </head>
+	<body style="color: white; background: #424242;">
+
+		<div class="tab">
+        	<button class="tablinks" onclick="openTab(event, 'Score Scale Chart')" id="defaultOpen" >Score Scale Chart</button>
+        	<button class="tablinks" onclick="openTab(event, 'Enlisted')">Enlisted</button>
+        	<button class="tablinks" onclick="openTab(event, 'Commissioned Officer')">Commissioned Officer</button>
+        	<button class="tablinks" onclick="openTab(event, 'Warrant Officer')">Warrant Officer</button>
+      	</div>
+        
+        <div id="Score Scale Chart" class="tabcontent">
+        	<h2>ACFT Score Scale Chart</h2>
+        	<table style="width: 100%; text-align:center;">
+                <tr>
+                    <td>Alternate Cardio Event</td>
+                    <td>5000M Row</td>
+                    <td>15000M Bike</td>
+                    <td>1000M Swim</td>
+                </tr>
+                <tr>
+                    <td>Pass Requirement</td>
+                    <td>25:00</td>
+                    <td>25:00</td>
+                    <td>25:00</td>
+                </tr>
+            </table>
+            <br>
+			<table style="width: 100%; text-align:center;">
+			<tbody>
+					<tr>
+						<th>Points</th>
+						<th><strong>MDL (lbs)</strong></th>
+						<th><strong>SPT (m)</strong></th>
+						<th><strong>HPU (reps)</strong></th>
+						<th><strong>SDC (m:ss)</strong></th>
+						<th><strong>LTK (reps)</strong></th>
+						<th><strong>2MR (mm:ss)</strong></th>
+					</tr>
+					<tr>
+						<td>100</td>
+						<td>340</td>
+						<td>12.5</td>
+						<td>60</td>
+						<td>1:33</td>
+						<td>20</td>
+						<td>13:30</td>
+					</tr><tr><td>99</td>
+						<td> </td>
+						<td>12.4</td>
+						<td>59</td>
+						<td>1:36</td>
+						<td> </td>
+						<td>13:39</td>
+					</tr><tr><td>98</td>
+						<td> </td>
+						<td>12.2</td>
+						<td>58</td>
+						<td>1:39</td>
+						<td>19</td>
+						<td>13:48</td>
+					</tr><tr><td>97</td>
+						<td>330</td>
+						<td>12.1</td>
+						<td>57</td>
+						<td>1:41</td>
+						<td> </td>
+						<td>13:57</td>
+					</tr><tr><td>96</td>
+						<td> </td>
+						<td>11.9</td>
+						<td>56</td>
+						<td>1:43</td>
+						<td>18</td>
+						<td>14:06</td>
+					</tr><tr><td>95</td>
+						<td> </td>
+						<td>11.8</td>
+						<td>55</td>
+						<td>1:45</td>
+						<td> </td>
+						<td>14:15</td>
+					</tr><tr><td>94</td>
+						<td>320</td>
+						<td>11.6</td>
+						<td>54</td>
+						<td>1:46</td>
+						<td>17</td>
+						<td>14:24</td>
+					</tr><tr><td>93</td>
+						<td> </td>
+						<td>11.5</td>
+						<td>53</td>
+						<td>1:47</td>
+						<td> </td>
+						<td>14:33</td>
+					</tr><tr><td>92</td>
+						<td>310</td>
+						<td>11.3</td>
+						<td>52</td>
+						<td>1:48</td>
+						<td>16</td>
+						<td>14:42</td>
+					</tr><tr><td>91</td>
+						<td> </td>
+						<td>11.2</td>
+						<td>51</td>
+						<td>1:49</td>
+						<td> </td>
+						<td>14:51</td>
+					</tr><tr><td>90</td>
+						<td>300</td>
+						<td>11.0</td>
+						<td>50</td>
+						<td>1:50</td>
+						<td>15</td>
+						<td>15:00</td>
+					</tr><tr><td>89</td>
+						<td> </td>
+						<td>10.9</td>
+						<td>49</td>
+						<td>1:51</td>
+						<td> </td>
+						<td>15:09</td>
+					</tr><tr><td>88</td>
+						<td>290</td>
+						<td>10.7</td>
+						<td>48</td>
+						<td>1:52</td>
+						<td>14</td>
+						<td>15:18</td>
+					</tr><tr><td>87</td>
+						<td> </td>
+						<td>10.6</td>
+						<td>47</td>
+						<td>1:53</td>
+						<td> </td>
+						<td>15:27</td>
+					</tr><tr><td>86</td>
+						<td>280</td>
+						<td>10.4</td>
+						<td>46</td>
+						<td>1:54</td>
+						<td>13</td>
+						<td>15:36</td>
+					</tr><tr><td>85</td>
+						<td> </td>
+						<td>10.3</td>
+						<td>45</td>
+						<td>1:55</td>
+						<td> </td>
+						<td>15:45</td>
+					</tr><tr><td>84</td>
+						<td>270</td>
+						<td>10.1</td>
+						<td>44</td>
+						<td>1:56</td>
+						<td>12</td>
+						<td>15:54</td>
+					</tr><tr><td>83</td>
+						<td> </td>
+						<td>10.0</td>
+						<td>43</td>
+						<td>1:57</td>
+						<td> </td>
+						<td>16:03</td>
+					</tr><tr><td>82</td>
+						<td>260</td>
+						<td>9.8</td>
+						<td>42</td>
+						<td>1:58</td>
+						<td>11</td>
+						<td>16:12</td>
+					</tr><tr><td>81</td>
+						<td> </td>
+						<td>9.7</td>
+						<td>41</td>
+						<td>1:59</td>
+						<td> </td>
+						<td>16:21</td>
+					</tr><tr><td>80</td>
+						<td>250</td>
+						<td>9.5</td>
+						<td>40</td>
+						<td>2:00</td>
+						<td>10</td>
+						<td>16:30</td>
+					</tr><tr><td>79</td>
+						<td> </td>
+						<td>9.4</td>
+						<td>39</td>
+						<td>2:01</td>
+						<td> </td>
+						<td>16:39</td>
+					</tr><tr><td>78</td>
+						<td>240</td>
+						<td>9.2</td>
+						<td>38</td>
+						<td>2:02</td>
+						<td>9</td>
+						<td>16:48</td>
+					</tr><tr><td>77</td>
+						<td> </td>
+						<td>9.1</td>
+						<td>37</td>
+						<td>2:03</td>
+						<td> </td>
+						<td>16:57</td>
+					</tr><tr><td>76</td>
+						<td>230</td>
+						<td>8.9</td>
+						<td>36</td>
+						<td>2:04</td>
+						<td>8</td>
+						<td>17:06</td>
+					</tr><tr><td>75</td>
+						<td> </td>
+						<td>8.8</td>
+						<td>35</td>
+						<td>2:05</td>
+						<td> </td>
+						<td>17:15</td>
+					</tr><tr><td>74</td>
+						<td>220</td>
+						<td>8.6</td>
+						<td>34</td>
+						<td>2:06</td>
+						<td>7</td>
+						<td>17:24</td>
+					</tr><tr><td>73</td>
+						<td> </td>
+						<td>8.5</td>
+						<td>33</td>
+						<td>2:07</td>
+						<td> </td>
+						<td>17:33</td>
+					</tr><tr><td>72</td>
+						<td>210</td>
+						<td>8.3</td>
+						<td>32</td>
+						<td>2:08</td>
+						<td>6</td>
+						<td>17:42</td>
+					</tr><tr><td>71</td>
+						<td> </td>
+						<td>8.2</td>
+						<td>31</td>
+						<td>2:09</td>
+						<td> </td>
+						<td>17:51</td>
+					</tr><tr><td>70</td>
+						<td>200</td>
+						<td>8.0</td>
+						<td>30</td>
+						<td>2:10</td>
+						<td>5</td>
+						<td>18:00</td>
+						<td><strong>Heavy</strong></td>
+					</tr><tr><td>69</td>
+						<td> </td>
+						<td>7.8</td>
+						<td>28</td>
+						<td>2:14</td>
+						<td> </td>
+						<td>18:12</td>
+					</tr><tr><td>68</td>
+						<td>190</td>
+						<td>7.5</td>
+						<td>26</td>
+						<td>2:18</td>
+						<td>4</td>
+						<td>18:24</td>
+					</tr><tr><td>67</td>
+						<td> </td>
+						<td>7.1</td>
+						<td>24</td>
+						<td>2:22</td>
+						<td> </td>
+						<td>18:36</td>
+					</tr><tr><td>66</td>
+						<td> </td>
+						<td>6.8</td>
+						<td>22</td>
+						<td>2:26</td>
+						<td> </td>
+						<td>18:48</td>
+					</tr><tr><td>65</td>
+						<td>180</td>
+						<td>6.5</td>
+						<td>20</td>
+						<td>2:30</td>
+						<td>3</td>
+						<td>19:00</td>
+						<td><strong>Significant</strong></td>
+					</tr><tr><td>64</td>
+						<td>170</td>
+						<td>6.2</td>
+						<td>18</td>
+						<td>2:35</td>
+						<td> </td>
+						<td>19:24</td>
+					</tr><tr><td>63</td>
+						<td>160</td>
+						<td>5.8</td>
+						<td>16</td>
+						<td>2:40</td>
+						<td> </td>
+						<td>19:48</td>
+					</tr><tr><td>62</td>
+						<td>150</td>
+						<td>5.4</td>
+						<td>14</td>
+						<td>2:45</td>
+						<td>2</td>
+						<td>20:12</td>
+					</tr><tr><td>61</td>
+						<td> </td>
+						<td>4.9</td>
+						<td>12</td>
+						<td>2:50</td>
+						<td> </td>
+						<td>20:36</td>
+					</tr><tr><td>60</td>
+						<td>140</td>
+						<td>4.5</td>
+						<td>10</td>
+						<td>3:00</td>
+						<td>1</td>
+						<td>21:00</td>
+						<td><strong>Moderate</strong></td>
+					</tr><tr><td>59</td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td>3:01</td>
+						<td> </td>
+						<td>21:01</td>
+					</tr><tr><td>58</td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td>3:02</td>
+						<td> </td>
+						<td>21:03</td>
+					</tr><tr><td>57</td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td>3:03</td>
+						<td> </td>
+						<td>21:05</td>
+					</tr><tr><td>56</td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td>3:04</td>
+						<td> </td>
+						<td>21:07</td>
+					</tr><tr><td>55</td>
+						<td> </td>
+						<td>4.4</td>
+						<td>9</td>
+						<td>3:05</td>
+						<td> </td>
+						<td>21:09</td>
+					</tr><tr><td>54</td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td>3:06</td>
+						<td> </td>
+						<td>21:10</td>
+					</tr><tr><td>53</td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td>3:07</td>
+						<td> </td>
+						<td>21:12</td>
+					</tr><tr><td>52</td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td>3:08</td>
+						<td> </td>
+						<td>21:14</td>
+					</tr><tr><td>51</td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td>3:09</td>
+						<td> </td>
+						<td>21:16</td>
+					</tr><tr><td>50</td>
+						<td>130</td>
+						<td>4.3</td>
+						<td>8</td>
+						<td>3:10</td>
+						<td> </td>
+						<td>21:18</td>
+					</tr><tr><td>49</td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td>21:19</td>
+					</tr><tr><td>48</td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td>3:11</td>
+						<td> </td>
+						<td>21:21</td>
+					</tr><tr><td>47</td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td>21:23</td>
+					</tr><tr><td>46</td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td>3:12</td>
+						<td> </td>
+						<td>21:25</td>
+					</tr><tr><td>45</td>
+						<td> </td>
+						<td>4.2</td>
+						<td>7</td>
+						<td> </td>
+						<td> </td>
+						<td>21:27</td>
+					</tr><tr><td>44</td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td>3:13</td>
+						<td> </td>
+						<td>21:28</td>
+					</tr><tr><td>43</td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td>21:30</td>
+					</tr><tr><td>42</td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td>3:14</td>
+						<td> </td>
+						<td>21:32</td>
+					</tr><tr><td>41</td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td>21:34</td>
+					</tr><tr><td>40</td>
+						<td>120</td>
+						<td>4.1</td>
+						<td>6</td>
+						<td>3:15</td>
+						<td> </td>
+						<td>21:36</td>
+					</tr><tr><td>39</td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td>21:37</td>
+					</tr><tr><td>38</td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td>3:16</td>
+						<td> </td>
+						<td>21:39</td>
+					</tr><tr><td>37</td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td>21:41</td>
+					</tr><tr><td>36</td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td>3:17</td>
+						<td> </td>
+						<td>21:43</td>
+					</tr><tr><td>35</td>
+						<td> </td>
+						<td>4.0</td>
+						<td>5</td>
+						<td> </td>
+						<td> </td>
+						<td>21:45</td>
+					</tr><tr><td>34</td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td>3:18</td>
+						<td> </td>
+						<td>21:46</td>
+					</tr><tr><td>33</td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td>21:48</td>
+					</tr><tr><td>32</td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td>3:19</td>
+						<td> </td>
+						<td>21:50</td>
+					</tr><tr><td>31</td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td>21:52</td>
+					</tr><tr><td>30</td>
+						<td>110</td>
+						<td>3.9</td>
+						<td>4</td>
+						<td>3:20</td>
+						<td> </td>
+						<td>21:54</td>
+					</tr><tr><td>29</td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td>21:55</td>
+					</tr><tr><td>28</td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td>3:21</td>
+						<td> </td>
+						<td>21:57</td>
+					</tr><tr><td>27</td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td>21:59</td>
+					</tr><tr><td>26</td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td>3:22</td>
+						<td> </td>
+						<td>22:01</td>
+					</tr><tr><td>25</td>
+						<td> </td>
+						<td>3.8</td>
+						<td>3</td>
+						<td> </td>
+						<td> </td>
+						<td>22:03</td>
+					</tr><tr><td>24</td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td>3:23</td>
+						<td> </td>
+						<td>22:04</td>
+					</tr><tr><td>23</td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td>22:06</td>
+					</tr><tr><td>22</td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td>3:24</td>
+						<td> </td>
+						<td>22:08</td>
+					</tr><tr><td>21</td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td>22:10</td>
+					</tr><tr><td>20</td>
+						<td>100</td>
+						<td>3.7</td>
+						<td>2</td>
+						<td>3:25</td>
+						<td> </td>
+						<td>22:12</td>
+					</tr><tr><td>19</td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td>22:13</td>
+					</tr><tr><td>18</td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td>3:26</td>
+						<td> </td>
+						<td>22:15</td>
+					</tr><tr><td>17</td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td>22:17</td>
+					</tr><tr><td>16</td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td>3:27</td>
+						<td> </td>
+						<td>22:19</td>
+					</tr><tr><td>15</td>
+						<td> </td>
+						<td>3.6</td>
+						<td>1</td>
+						<td> </td>
+						<td> </td>
+						<td>22:21</td>
+					</tr><tr><td>14</td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td>3:28</td>
+						<td> </td>
+						<td>22:22</td>
+					</tr><tr><td>13</td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td>22:24</td>
+					</tr><tr><td>12</td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td>3:29</td>
+						<td> </td>
+						<td>22:26</td>
+					</tr><tr><td>11</td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td>22:28</td>
+					</tr><tr><td>10</td>
+						<td>90</td>
+						<td>3.5</td>
+						<td> </td>
+						<td>3:30</td>
+						<td> </td>
+						<td>22:30</td>
+					</tr><tr><td>9</td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td>22:31</td>
+					</tr><tr><td>8</td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td>3:31</td>
+						<td> </td>
+						<td>22:33</td>
+					</tr><tr><td>7</td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td>22:35</td>
+					</tr><tr><td>6</td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td>3:32</td>
+						<td> </td>
+						<td>22:37</td>
+					</tr><tr><td>5</td>
+						<td> </td>
+						<td>3.4</td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td>22:39</td>
+					</tr><tr><td>4</td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td>3:33</td>
+						<td> </td>
+						<td>22:40</td>
+					</tr><tr><td>3</td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td>22:42</td>
+					</tr><tr><td>2</td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td>3:34</td>
+						<td> </td>
+						<td>22:44</td>
+					</tr><tr><td>1</td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td> </td>
+						<td>22:46</td>
+					</tr><tr><td>0</td>
+						<td>80</td>
+						<td>3.3</td>
+						<td>0</td>
+						<td>3:35</td>
+						<td>0</td>
+						<td>22:48</td>
+					</tr>
+				</tbody>
+			</table>
+        </div>
+
+        <div id="Enlisted" class="tabcontent">
+        	<h2>Enlisted Personnel MOS Chart</h2>
+            <table style="width: 100%;"><tbody><tr><td>00Z</td><td>Sergeant Major Nominative</td><td>MODERATE</td></tr><tr><td>09B</td><td>Trainee Unassigned</td><td>MODERATE</td></tr><tr><td>09C</td><td>Trainee Language</td><td>MODERATE</td></tr><tr><td>09D</td><td>College Trainee</td><td>MODERATE</td></tr><tr><td>09E</td><td>Trainee Language, Fort Allen PR</td><td>MODERATE</td></tr><tr><td>09J</td><td>GED Completion Program</td><td>MODERATE</td></tr><tr><td>09L</td><td>Interpreter/Translator</td><td>MODERATE</td></tr><tr><td>09M</td><td>March 2 Success</td><td>MODERATE</td></tr><tr><td>09N</td><td>Nurse Corps Candidate</td><td>MODERATE</td></tr><tr><td>09Q</td><td>Army Legal Immigrant Healthcare Professional Officer Candidate</td><td>MODERATE</td></tr><tr><td>09R</td><td>Simultaneous Member Program</td><td>MODERATE</td></tr><tr><td>09S</td><td>Commissioned Officer Candidate</td><td>MODERATE</td></tr><tr><td>09T</td><td>College Student Army National Guard Officer Program</td><td>MODERATE</td></tr><tr><td>09U</td><td>Unqualified In Authorized Army MOS</td><td>MODERATE</td></tr><tr><td>09W</td><td>Warrant Officer Candidate</td><td>MODERATE</td></tr><tr><td>11B</td><td>Infantryman</td><td>HEAVY</td></tr><tr><td>11C</td><td>Indirect Fire Infantryman</td><td>HEAVY</td></tr><tr><td>11X</td><td>Infantry Recruit</td><td>HEAVY</td></tr><tr><td>11Z</td><td>Infantry Senior Sergeant</td><td>MODERATE</td></tr><tr><td>12A</td><td>Engineer Senior Sergeant</td><td>MODERATE</td></tr><tr><td>12B</td><td>Combat Engineer</td><td>HEAVY</td></tr><tr><td>12C</td><td>Bridge Crewmember</td><td>HEAVY</td></tr><tr><td>12D</td><td>Diver</td><td>HEAVY</td></tr><tr><td>12G</td><td>Quarrying Specialist (RC)</td><td>SIGNIFICANT</td></tr><tr><td>12H</td><td>Construction Engineering Supervisor</td><td>MODERATE</td></tr><tr><td>12K</td><td>Plumber</td><td>MODERATE</td></tr><tr><td>12M</td><td>Firefighter</td><td>HEAVY</td></tr><tr><td>12N</td><td>Horizontal Construction Engineer</td><td>MODERATE</td></tr><tr><td>12P</td><td>Prime Power Production Specialist</td><td>MODERATE</td></tr><tr><td>12Q</td><td>Power Line Distribution Specialist (RC)</td><td>MODERATE</td></tr><tr><td>12R</td><td>Interior Electrician</td><td>MODERATE</td></tr><tr><td>12T</td><td>Technical Engineer</td><td>MODERATE</td></tr><tr><td>12V</td><td>Concrete &amp; Asphalt Equipment Operator (RC)</td><td>SIGNIFICANT</td></tr><tr><td>12W</td><td>Carpentry &amp; Masonry Specialist</td><td>MODERATE</td></tr><tr><td>12X</td><td>General Engineering Supervisor</td><td>MODERATE</td></tr><tr><td>12Y</td><td>Geospatial Engineer</td><td>MODERATE</td></tr><tr><td>12Z</td><td>Combat Engineering Senior Sergeant</td><td>MODERATE</td></tr><tr><td>13B</td><td>Cannon Crewmember</td><td>HEAVY</td></tr><tr><td>13D</td><td>Field Artillery Automated Tactical Data System Specialist</td><td>MODERATE</td></tr><tr><td>13F</td><td>Joint Fire Support Specialist</td><td>HEAVY</td></tr><tr><td>13J</td><td>Fire Control Specialist</td><td>HEAVY</td></tr><tr><td>13M</td><td>Multiple Launch Rocket System (MLRS)/High Mobility Artillery Rocket Syst Em (HIMARS) Crewmember</td><td>HEAVY</td></tr><tr><td>13P</td><td>Multiple Launch Rocket System (MLRS) Operational Fire Direction Specialist</td><td>MODERATE</td></tr><tr><td>13R</td><td>Field Artillery Firefinder Radar Operator</td><td>HEAVY</td></tr><tr><td>13T</td><td>Field Artillery Surveyor/Meteorological Crewmember</td><td>MODERATE</td></tr><tr><td>13X</td><td>Field Artillery Computer Systems Specialist</td><td>MODERATE</td></tr><tr><td>13Z</td><td>Field Artillery Senior Sergeant</td><td>MODERATE</td></tr><tr><td>14E</td><td>Patriot Fire Control Enhanced Operator/Maintainer</td><td>MODERATE</td></tr><tr><td>14G</td><td>Air Defense Battle Management System Operator</td><td>MODERATE</td></tr><tr><td>14H</td><td>Air Defense Enhanced Early Warning Operator</td><td>MODERATE</td></tr><tr><td>14P</td><td>Air &amp; Missile Defense (AMD) Crewmember</td><td>SIGNIFICANT</td></tr><tr><td>14S</td><td>Avenger Crewmember</td><td>SIGNIFICANT</td></tr><tr><td>14T</td><td>Patriot Launching Station Enhanced Operator/Maintainer</td><td>MODERATE</td></tr><tr><td>14X</td><td>Space and Missile Defense Operations</td><td>MODERATE</td></tr><tr><td>14Z</td><td>Air Defense Artillery Senior Sergeant</td><td>MODERATE</td></tr><tr><td>15B</td><td>Aircraft Powerplant Repairer</td><td>MODERATE</td></tr><tr><td>15C</td><td>MQ-1 Operator (Effective 202010)</td><td>MODERATE</td></tr><tr><td>15D</td><td>Aircraft Powertrain Repairer</td><td>MODERATE</td></tr><tr><td>15E</td><td>Unmanned Aircraft Systems Repairer</td><td>MODERATE</td></tr><tr><td>15F</td><td>Aircraft Electrician</td><td>MODERATE</td></tr><tr><td>15G</td><td>Aircraft Structural Repairer</td><td>MODERATE</td></tr><tr><td>15H</td><td>Aircraft Pneudraulics Repairer</td><td>MODERATE</td></tr><tr><td>15J</td><td>OH-58D Armament/Electrical/Avionics Systems Repairer</td><td>SIGNIFICANT</td></tr><tr><td>15K</td><td>Aircraft Components Repair Supervisor</td><td>MODERATE</td></tr><tr><td>15L</td><td>Armament/Electrical/Avionics Repair Supervisor (Arm/Elect/Avionics Rep Supv) (Effective 201910)</td><td>MODERATE</td></tr><tr><td>15M</td><td>MQ-1 Repairer (Effective 202010)</td><td>MODERATE</td></tr><tr><td>15N</td><td>Avionic Mechanic</td><td>MODERATE</td></tr><tr><td>15P</td><td>Aviation Operations Specialist</td><td>MODERATE</td></tr><tr><td>15Q</td><td>Air Traffic Control Operator</td><td>MODERATE</td></tr><tr><td>15R</td><td>AH-64 Attack Helicopter Repairer</td><td>MODERATE</td></tr><tr><td>15S</td><td>OH-58D Helicopter Repairer</td><td>SIGNIFICANT</td></tr><tr><td>15T</td><td>UH-60 Helicopter Repairer</td><td>MODERATE</td></tr><tr><td>15U</td><td>CH-47 Helicopter Repairer</td><td>MODERATE</td></tr><tr><td>15W</td><td>Unmanned Aircraft Systems Operator</td><td>MODERATE</td></tr><tr><td>15Y</td><td>AH-64D Armament/Electrical/Avionic Systems Repairer</td><td>MODERATE</td></tr><tr><td>15Z</td><td>Aircraft Senior Sergeant</td><td>MODERATE</td></tr><tr><td>17C</td><td>Cyber Operations Specialist</td><td>MODERATE</td></tr><tr><td>17E</td><td>Electronic Warfare Specialist (Eff 201810)</td><td>MODERATE</td></tr><tr><td>18B</td><td>Special Forces Weapons Sergeant</td><td>HEAVY</td></tr><tr><td>18C</td><td>Special Forces Engineer Sergeant</td><td>HEAVY</td></tr><tr><td>18D</td><td>Special Forces Medical Sergeant</td><td>HEAVY</td></tr><tr><td>18E</td><td>Special Forces Communications Sergeant</td><td>HEAVY</td></tr><tr><td>18F</td><td>Special Forces Assistant Operations &amp; Intelligence Sergeant</td><td>HEAVY</td></tr><tr><td>18X</td><td>Special Forces Recruit</td><td>HEAVY</td></tr><tr><td>18Z</td><td>Special Forces Senior Sergeant</td><td>MODERATE</td></tr><tr><td>19D</td><td>Cavalry Scout</td><td>HEAVY</td></tr><tr><td>19K</td><td>M1 Armor Crewman</td><td>HEAVY</td></tr><tr><td>19Z</td><td>Armor Senior Sergeant</td><td>MODERATE</td></tr><tr><td>25B</td><td>Information Technology Specialist</td><td>MODERATE</td></tr><tr><td>25C</td><td>Radio Operator-Maintainer</td><td>MODERATE</td></tr><tr><td>25D</td><td>Cyber Network Defender</td><td>MODERATE</td></tr><tr><td>25E</td><td>Electromagnetic Spectrum Manager</td><td>MODERATE</td></tr><tr><td>25L</td><td>Cable Systems Installer-Maintainer</td><td>SIGNIFICANT</td></tr><tr><td>25M</td><td>Multimedia Illustrator</td><td>MODERATE</td></tr><tr><td>25N</td><td>Nodal Network Systems Operator-Maintainer</td><td>MODERATE</td></tr><tr><td>25P</td><td>Microwave Systems Operator-Maintainer</td><td>MODERATE</td></tr><tr><td>25Q</td><td>Multichannel Transmission Systems Operator- Maintainer</td><td>MODERATE</td></tr><tr><td>25R</td><td>Visual Information Equipment Operator-Maintainer</td><td>SIGNIFICANT</td></tr><tr><td>25S</td><td>Satellite Communication Systems Operator- Maintainer</td><td>MODERATE</td></tr><tr><td>25T</td><td>Satellite/Microwave Systems Chief</td><td>MODERATE</td></tr><tr><td>25U</td><td>Signal Support Systems Specialist</td><td>MODERATE</td></tr><tr><td>25V</td><td>Combat Documentation/Production Specialist</td><td>MODERATE</td></tr><tr><td>25W</td><td>Telecommunications Operations Chief</td><td>MODERATE</td></tr><tr><td>25X</td><td>Chief Signal NCO</td><td>MODERATE</td></tr><tr><td>25Z</td><td>Visual Information Operations Chief</td><td>MODERATE</td></tr><tr><td>27D</td><td>Paralegal Specialist</td><td>MODERATE</td></tr><tr><td>29E</td><td>Electronic Warfare Specialist (Res 201810)</td><td>MODERATE</td></tr><tr><td>31B</td><td>Military Police</td><td>SIGNIFICANT</td></tr><tr><td>31D</td><td>CID Special Agent</td><td>MODERATE</td></tr><tr><td>31E</td><td>Internment/Resettlement Specialist</td><td>MODERATE</td></tr><tr><td>31K</td><td>Military Working Dog (MWD) Handler</td><td>SIGNIFICANT</td></tr><tr><td>35F</td><td>Intelligence Analyst</td><td>MODERATE</td></tr><tr><td>35G</td><td>Geospatial Intelligence Imagery Analyst</td><td>MODERATE</td></tr><tr><td>35L</td><td>Counter Intelligence Agent</td><td>MODERATE</td></tr><tr><td>35M</td><td>Human Intelligence Collector</td><td>MODERATE</td></tr><tr><td>35N</td><td>Signals Intelligence Analyst</td><td>MODERATE</td></tr><tr><td>35P</td><td>Cryptologic Linguist</td><td>MODERATE</td></tr><tr><td>35Q</td><td>Cryptologic Network Warfare Specialist</td><td>MODERATE</td></tr><tr><td>35S</td><td>Signals Collector/Analyst</td><td>MODERATE</td></tr><tr><td>35T</td><td>Military Intelligence Systems Maintainer/Integrator</td><td>MODERATE</td></tr><tr><td>35V</td><td>Signals Intelligence (SIGINT) Senior Sergeant/SIGINT Chief</td><td>MODERATE</td></tr><tr><td>35X</td><td>Intelligence Senior Sergeant/Chief Intelligence Sergeant</td><td>MODERATE</td></tr><tr><td>35Y</td><td>Chief Counter Intelligence/Human Intelligence Sergeant</td><td>MODERATE</td></tr><tr><td>35Z</td><td>Intelligence Sergeant Major</td><td>MODERATE</td></tr><tr><td>36B</td><td>Financial Management Technician</td><td>MODERATE</td></tr><tr><td>37F</td><td>Psychological Operations Specialist</td><td>MODERATE</td></tr><tr><td>38B</td><td>Civil Affairs Specialist</td><td>SIGNIFICANT</td></tr><tr><td>42A</td><td>Human Resources Specialist</td><td>SIGNIFICANT</td></tr><tr><td>42R</td><td>Musician</td><td>SIGNIFICANT</td></tr><tr><td>42S</td><td>Special Band Musician</td><td>SIGNIFICANT</td></tr><tr><td>46Q</td><td>Public Affairs Specialist</td><td>MODERATE</td></tr><tr><td>46R</td><td>Public Affairs Broadcast Specialist</td><td>MODERATE</td></tr><tr><td>46S</td><td>Public Affairs Mass Communications Specialist</td><td>MODERATE</td></tr><tr><td>46Z</td><td>Chief Public Affairs NCO</td><td>MODERATE</td></tr><tr><td>51C</td><td>Acquisition, Logistics &amp; Technology (Al&amp;T) Contracting NCO</td><td>MODERATE</td></tr><tr><td>56M</td><td>Religious Affairs Specialist</td><td>MODERATE</td></tr><tr><td>68A</td><td>Biomedical Equipment Specialist</td><td>MODERATE</td></tr><tr><td>68B</td><td>Orthopedic Specialist</td><td>MODERATE</td></tr><tr><td>68C</td><td>Practical Nursing Specialist</td><td>MODERATE</td></tr><tr><td>68D</td><td>Operating Room Specialist</td><td>MODERATE</td></tr><tr><td>68E</td><td>Dental Specialist</td><td>MODERATE</td></tr><tr><td>68F</td><td>Physical Therapy Specialist</td><td>MODERATE</td></tr><tr><td>68G</td><td>Patient Administration Specialist</td><td>MODERATE</td></tr><tr><td>68H</td><td>Optical Laboratory Specialist</td><td>MODERATE</td></tr><tr><td>68J</td><td>Medical Logistics Specialist</td><td>MODERATE</td></tr><tr><td>68K</td><td>Medical Laboratory Specialist</td><td>MODERATE</td></tr><tr><td>68L</td><td>Occupational Therapy Specialist</td><td>MODERATE</td></tr><tr><td>68M</td><td>Nutrition Care Specialist</td><td>MODERATE</td></tr><tr><td>68N</td><td>Cardiovascular Specialist</td><td>MODERATE</td></tr><tr><td>68P</td><td>Radiology Specialist</td><td>MODERATE</td></tr><tr><td>68Q</td><td>Pharmacy Specialist</td><td>MODERATE</td></tr><tr><td>68R</td><td>Veterinary Food Inspection Specialist</td><td>MODERATE</td></tr><tr><td>68S</td><td>Preventive Medicine Specialist</td><td>MODERATE</td></tr><tr><td>68T</td><td>Animal Care Specialist</td><td>MODERATE</td></tr><tr><td>68U</td><td>Ear, Nose &amp; Throat (ENT) Specialist</td><td>MODERATE</td></tr><tr><td>68V</td><td>Respiratory Specialist</td><td>MODERATE</td></tr><tr><td>68W</td><td>Health Care Specialist</td><td>SIGNIFICANT</td></tr><tr><td>68X</td><td>Behavioral Health Specialist</td><td>MODERATE</td></tr><tr><td>68Y</td><td>Eye Specialist</td><td>MODERATE</td></tr><tr><td>68Z</td><td>Chief Medical NCO</td><td>MODERATE</td></tr><tr><td>74D</td><td>Chemical, Biological, Radiological &amp; Nuclear (CBRN) Specialist</td><td>MODERATE</td></tr><tr><td>79R</td><td>Recruiter</td><td>MODERATE</td></tr><tr><td>79S</td><td>Career Counselor</td><td>MODERATE</td></tr><tr><td>79T</td><td>Recruiting &amp; retention NCO (Army National Guard of the United States)</td><td>MODERATE</td></tr><tr><td>79V</td><td>Retention &amp; Transition NCO, USAR</td><td>MODERATE</td></tr><tr><td>88H</td><td>Cargo Specialist</td><td>HEAVY</td></tr><tr><td>88K</td><td>Watercraft Operator</td><td>HEAVY</td></tr><tr><td>88L</td><td>Watercraft Engineer</td><td>SIGNIFICANT</td></tr><tr><td>88M</td><td>Motor Transport Operator</td><td>HEAVY</td></tr><tr><td>88N</td><td>Transportation Management Coordinator</td><td>SIGNIFICANT</td></tr><tr><td>88U</td><td>Railway Specialist (RC)</td><td>MODERATE</td></tr><tr><td>88Z</td><td>Transportation Senior Sergeant</td><td>MODERATE</td></tr><tr><td>89A</td><td>Ammunition Stock Control &amp; Accounting Specialist</td><td>MODERATE</td></tr><tr><td>89B</td><td>Ammunition Specialist</td><td>MODERATE</td></tr><tr><td>89D</td><td>Explosive Ordnance Disposal Specialist</td><td>HEAVY</td></tr><tr><td>91A</td><td>M1 Abrams Tank System Maintainer</td><td>MODERATE</td></tr><tr><td>91B</td><td>Wheeled Vehicle Mechanic</td><td>MODERATE</td></tr><tr><td>91C</td><td>Utilities Equipment Repairer</td><td>MODERATE</td></tr><tr><td>91D</td><td>Tactical Power Generation Specialist</td><td>MODERATE</td></tr><tr><td>91E</td><td>Allied Trades Specialist</td><td>MODERATE</td></tr><tr><td>91F</td><td>Small Arms/Towed Artillery Repairer</td><td>MODERATE</td></tr><tr><td>91G</td><td>Fire Control Repairer</td><td>MODERATE</td></tr><tr><td>91H</td><td>Track Vehicle Repairer</td><td>MODERATE</td></tr><tr><td>91J</td><td>Quartermaster &amp; Chemical Equipment Repairer</td><td>MODERATE</td></tr><tr><td>91L</td><td>Construction Equipment Repairer</td><td>MODERATE</td></tr><tr><td>91M</td><td>Bradley Fighting Vehicle System Maintainer</td><td>MODERATE</td></tr><tr><td>91P</td><td>Artillery Mechanic</td><td>MODERATE</td></tr><tr><td>91S</td><td>Stryker Systems Maintainer</td><td>MODERATE</td></tr><tr><td>91X</td><td>Maintenance Supervisor</td><td>MODERATE</td></tr><tr><td>91Z</td><td>Mechanical Maintenance Supervisor</td><td>MODERATE</td></tr><tr><td>92A</td><td>Automated Logistical Specialist</td><td>SIGNIFICANT</td></tr><tr><td>92F</td><td>Petroleum Supply Specialist</td><td>SIGNIFICANT</td></tr><tr><td>92G</td><td>Culinary Specialist</td><td>SIGNIFICANT</td></tr><tr><td>92L</td><td>Petroleum Laboratory Specialist</td><td>MODERATE</td></tr><tr><td>92M</td><td>Mortuary Affairs Specialist</td><td>HEAVY</td></tr><tr><td>92R</td><td>Parachute Rigger</td><td>SIGNIFICANT</td></tr><tr><td>92S</td><td>Shower &amp; Laundry Specialist (S&amp;L SPC)</td><td>SIGNIFICANT</td></tr><tr><td>92W</td><td>Water Treatment Specialist</td><td>SIGNIFICANT</td></tr><tr><td>92Y</td><td>Unit Supply Specialist</td><td>MODERATE</td></tr><tr><td>92Z</td><td>Senior Noncommissioned Logistician</td><td>MODERATE</td></tr><tr><td>94A</td><td>Land Combat Electronic Missile System Repairer</td><td>MODERATE</td></tr><tr><td>94D</td><td>Air Traffic Control Equipment Repairer</td><td>MODERATE</td></tr><tr><td>94E</td><td>Radio Equipment Repairer</td><td>MODERATE</td></tr><tr><td>94F</td><td>Computer Detection Systems Repairer</td><td>MODERATE</td></tr><tr><td>94H</td><td>Test, Measurement, &amp; Diagnostic Equipment (TMDE) Maintenance Support Specialist</td><td>MODERATE</td></tr><tr><td>94M</td><td>Radar Repairer</td><td>MODERATE</td></tr><tr><td>94P</td><td>Multiple Launch Rocket System Repairer</td><td>MODERATE</td></tr><tr><td>94R</td><td>Avionic &amp; Survivability Equipment Repairer</td><td>MODERATE</td></tr><tr><td>94S</td><td>Patriot System Repairer</td><td>MODERATE</td></tr><tr><td>94T</td><td>Short Range Air Defense System Repairer</td><td>MODERATE</td></tr><tr><td>94W</td><td>Electronic Maintenance Supervisor</td><td>MODERATE</td></tr><tr><td>94Y</td><td>Integrated Family of Test Equipment (IFTE) Operator &amp; Maintainer</td><td>MODERATE</td></tr><tr><td>94Z</td><td>Senior Electronic Maintenance Supervisor</td><td>MODERATE</td></tr></tbody></table>
+		</div>
+
+        <div id="Commissioned Officer" class="tabcontent">
+          	<h2>Commissioned Officer MOS Chart</h2>
+            <table style="width: 100%;"><tbody><tr><td>11A</td><td>Infantry</td><td>HEAVY</td></tr><tr><td>12A</td><td>Engineer</td><td>HEAVY</td></tr><tr><td>13A</td><td>Field Artillery, General</td><td>HEAVY</td></tr><tr><td>14A</td><td>Air Defense Artillery Officer</td><td>SIGNIFICANT</td></tr><tr><td>15A</td><td>Aviation, General</td><td>HEAVY</td></tr><tr><td>15B</td><td>Aviation Combined Arms Operations</td><td>HEAVY</td></tr><tr><td>15C</td><td>Aviation All-Source Intelligence</td><td>HEAVY</td></tr><tr><td>15D</td><td>Aviation Maintenance Officer</td><td>HEAVY</td></tr><tr><td>17A</td><td>Cyber Warfare</td><td>MODERATE</td></tr><tr><td>17B</td><td>Cyber Electromagnetic Operations Officer (Eff</td><td>MODERATE</td></tr><tr><td>18A</td><td>Special Forces</td><td>HEAVY</td></tr><tr><td>19A</td><td>Armor</td><td>HEAVY</td></tr><tr><td>25A</td><td>Signal, General</td><td>SIGNIFICANT</td></tr><tr><td>25G</td><td>Network Integration</td><td>SIGNIFICANT</td></tr><tr><td>25Z</td><td>Network Integration</td><td>MODERATE</td></tr><tr><td>27A</td><td>Judge Advocate General</td><td>MODERATE</td></tr><tr><td>27B</td><td>Military Judge</td><td>MODERATE</td></tr><tr><td>31A</td><td>Military Police</td><td>SIGNIFICANT</td></tr><tr><td>35D</td><td>All Source Intelligence</td><td>MODERATE</td></tr><tr><td>35E</td><td>Counter Intelligence (CI)</td><td>MODERATE</td></tr><tr><td>35F</td><td>Human Intelligence (HUMINT)</td><td>MODERATE</td></tr><tr><td>35G</td><td>Signals Intelligence/Electronic Warfare (SIGINT/EW)</td><td>MODERATE</td></tr><tr><td>36A</td><td>Financial Manager</td><td>MODERATE</td></tr><tr><td>37A</td><td>Psychological Operations</td><td>MODERATE</td></tr><tr><td>37X</td><td>Psychological Operations, Designated</td><td>MODERATE</td></tr><tr><td>38A</td><td>Civil Affairs (AA &amp; USAR)</td><td>MODERATE</td></tr><tr><td>38G</td><td>Military Government (USAR Only)</td><td>MODERATE</td></tr><tr><td>38X</td><td>Civil Affairs, Designated</td><td>MODERATE</td></tr><tr><td>42B</td><td>Human Resources Officer</td><td>SIGNIFICANT</td></tr><tr><td>42C</td><td>Army Music</td><td>MODERATE</td></tr><tr><td>42H</td><td>Senior Human Resources Officer</td><td>SIGNIFICANT</td></tr><tr><td>56A</td><td>Command &amp; Unit Chaplain</td><td>MODERATE</td></tr><tr><td>56D</td><td>Clinical Pastoral Educator</td><td>MODERATE</td></tr><tr><td>56X</td><td>Chaplain Candidate</td><td>MODERATE</td></tr><tr><td>60A</td><td>Operational Medicine</td><td>MODERATE</td></tr><tr><td>60B</td><td>Nuclear Medicine Officer</td><td>MODERATE</td></tr><tr><td>60C</td><td>Preventive Medicine Officer</td><td>MODERATE</td></tr><tr><td>60D</td><td>Occupational Medicine Officer</td><td>MODERATE</td></tr><tr><td>60F</td><td>Pulmonary Disease/Critical Care Officer</td><td>MODERATE</td></tr><tr><td>60G</td><td>Gastroenterologist</td><td>MODERATE</td></tr><tr><td>60H</td><td>Cardiologist</td><td>MODERATE</td></tr><tr><td>60J</td><td>Obstetrician &amp; Gynecologist</td><td>MODERATE</td></tr><tr><td>60K</td><td>Urologist</td><td>MODERATE</td></tr><tr><td>60L</td><td>Dermatologist</td><td>MODERATE</td></tr><tr><td>60M</td><td>Allergist, Clinical Immunologist</td><td>MODERATE</td></tr><tr><td>60N</td><td>Anesthesiologist</td><td>MODERATE</td></tr><tr><td>60P</td><td>Pediatrician</td><td>MODERATE</td></tr><tr><td>60Q</td><td>Pediatric Sub-Specialist</td><td>MODERATE</td></tr><tr><td>60R</td><td>Child Neurologist</td><td>MODERATE</td></tr><tr><td>60S</td><td>Ophthalmologist</td><td>MODERATE</td></tr><tr><td>60T</td><td>Otolaryngologist</td><td>MODERATE</td></tr><tr><td>60U</td><td>Child Psychiatrist</td><td>MODERATE</td></tr><tr><td>60V</td><td>Neurologist</td><td>MODERATE</td></tr><tr><td>60W</td><td>Psychiatrist</td><td>MODERATE</td></tr><tr><td>61A</td><td>Nephrologist</td><td>MODERATE</td></tr><tr><td>61B</td><td>Medical Oncologist/Hematologist</td><td>MODERATE</td></tr><tr><td>61C</td><td>Endocrinologist</td><td>MODERATE</td></tr><tr><td>61D</td><td>Rheumatologist</td><td>MODERATE</td></tr><tr><td>61E</td><td>Clinical Pharmacologist</td><td>MODERATE</td></tr><tr><td>61F</td><td>Internist</td><td>MODERATE</td></tr><tr><td>61G</td><td>Infectious Disease Officer</td><td>MODERATE</td></tr><tr><td>61H</td><td>Family Medicine</td><td>MODERATE</td></tr><tr><td>61J</td><td>General Surgeon</td><td>MODERATE</td></tr><tr><td>61K</td><td>Thoracic Surgeon</td><td>MODERATE</td></tr><tr><td>61L</td><td>Plastic Surgeon</td><td>MODERATE</td></tr><tr><td>61M</td><td>Orthopedic Surgeon</td><td>MODERATE</td></tr><tr><td>61N</td><td>Flight Surgeon</td><td>MODERATE</td></tr><tr><td>61P</td><td>Physiatrist</td><td>MODERATE</td></tr><tr><td>61Q</td><td>Radiation Oncologist</td><td>MODERATE</td></tr><tr><td>61R</td><td>Diagnostic Radiologist</td><td>MODERATE</td></tr><tr><td>61U</td><td>Pathologist</td><td>MODERATE</td></tr><tr><td>61W</td><td>Peripheral Vascular Surgeon</td><td>MODERATE</td></tr><tr><td>61Z</td><td>Neurosurgeon</td><td>MODERATE</td></tr><tr><td>62A</td><td>Emergency Physician</td><td>MODERATE</td></tr><tr><td>62B</td><td>Field Surgeon</td><td>MODERATE</td></tr><tr><td>63A</td><td>General Dentist</td><td>MODERATE</td></tr><tr><td>63B</td><td>Comprehensive Dentist</td><td>MODERATE</td></tr><tr><td>63D</td><td>Periodontist</td><td>MODERATE</td></tr><tr><td>63E</td><td>Endodontist</td><td>MODERATE</td></tr><tr><td>63F</td><td>Prosthodonist</td><td>MODERATE</td></tr><tr><td>63H</td><td>Public Health Dentist</td><td>MODERATE</td></tr><tr><td>63K</td><td>Pediatric Dentist</td><td>MODERATE</td></tr><tr><td>63M</td><td>Orthodontist</td><td>MODERATE</td></tr><tr><td>63N</td><td>Oral &amp; Maxillofacial Surgeon</td><td>MODERATE</td></tr><tr><td>63P</td><td>Oral Pathologist</td><td>MODERATE</td></tr><tr><td>63R</td><td>Executive Dentist</td><td>MODERATE</td></tr><tr><td>64A</td><td>Field Veterinary Service</td><td>MODERATE</td></tr><tr><td>64B</td><td>Veterinary Preventive Medicine</td><td>MODERATE</td></tr><tr><td>64C</td><td>Veterinary Laboratory Animal Medicine</td><td>MODERATE</td></tr><tr><td>64D</td><td>Veterinary Pathology</td><td>MODERATE</td></tr><tr><td>64E</td><td>Veterinary Biomedical Scientist</td><td>MODERATE</td></tr><tr><td>64F</td><td>Veterinary Clinical Medicine</td><td>MODERATE</td></tr><tr><td>64Z</td><td>Senior Veterinarian (Immaterial)</td><td>MODERATE</td></tr><tr><td>65A</td><td>Occupational Therapy</td><td>MODERATE</td></tr><tr><td>65B</td><td>Physical Therapy</td><td>MODERATE</td></tr><tr><td>65C</td><td>Dietitian</td><td>MODERATE</td></tr><tr><td>65D</td><td>Physician Assistant</td><td>MODERATE</td></tr><tr><td>65X</td><td>Specialist Allied Operations</td><td>MODERATE</td></tr><tr><td>66B</td><td>Army Public Health Nurse</td><td>MODERATE</td></tr><tr><td>66C</td><td>Psychiatric/Behavioral Health Nurse</td><td>MODERATE</td></tr><tr><td>66E</td><td>Perioperative Nurse</td><td>MODERATE</td></tr><tr><td>66F</td><td>Nurse Anesthetist</td><td>MODERATE</td></tr><tr><td>66G</td><td>Obstetrics &amp; Gynecology</td><td>MODERATE</td></tr><tr><td>66H</td><td>Medical-Surgical Nurse</td><td>MODERATE</td></tr><tr><td>66N</td><td>Generalist Nurse</td><td>MODERATE</td></tr><tr><td>66P</td><td>Family Nurse Practitioner</td><td>MODERATE</td></tr><tr><td>66R</td><td>Psychiatric/Behavioral Health Nurse Practitioner</td><td>MODERATE</td></tr><tr><td>66S</td><td>Critical Care Nursing</td><td>MODERATE</td></tr><tr><td>66T</td><td>Emergency Nursing</td><td>MODERATE</td></tr><tr><td>66W</td><td>Certified Nurse Midwife</td><td>MODERATE</td></tr><tr><td>67A</td><td>Health Services</td><td>MODERATE</td></tr><tr><td>67B</td><td>Laboratory Sciences</td><td>MODERATE</td></tr><tr><td>67C</td><td>Preventive Medicine Sciences</td><td>MODERATE</td></tr><tr><td>67D</td><td>Behavioral Sciences</td><td>MODERATE</td></tr><tr><td>67E</td><td>Pharmacy</td><td>MODERATE</td></tr><tr><td>67F</td><td>Optometry</td><td>MODERATE</td></tr><tr><td>67G</td><td>Podiatry</td><td>MODERATE</td></tr><tr><td>67J</td><td>Aeromedical Evacuation</td><td>MODERATE</td></tr><tr><td>74A</td><td>Chemical, Biological, Radiological &amp; Nuclear (CBRN)</td><td>MODERATE</td></tr><tr><td>88A</td><td>Transportation, General</td><td>HEAVY</td></tr><tr><td>89E</td><td>Explosive Ordnance Disposal</td><td>HEAVY</td></tr><tr><td>90A</td><td>Logistics</td><td>MODERATE</td></tr><tr><td>91A</td><td>Maintenance &amp; Munitions Materiel Officer</td><td>MODERATE</td></tr><tr><td>92A</td><td>Quartermaster, General</td><td>HEAVY</td></tr></tbody></table>
+		</div>
+        <div id="Warrant Officer" class="tabcontent">
+        	<h2>Warrant Officer MOS Chart</h2>
+            <table style="width: 100%;"><tbody><tr><td>120A</td><td>Construction Engineering Technician</td><td>MODERATE</td></tr><tr><td>125D</td><td>Geospatial Engineering Technician</td><td>MODERATE</td></tr><tr><td>131A</td><td>Field Artillery Technician</td><td>MODERATE</td></tr><tr><td>140A</td><td>Command &amp; Control Systems Integrator</td><td>MODERATE</td></tr><tr><td>140E</td><td>Air &amp; Missile Defense (AMD) Systems Tactician/Technician</td><td>MODERATE</td></tr><tr><td>140X</td><td>Air Defense Artillery (ADA) Immaterial</td><td>MODERATE</td></tr><tr><td>150A</td><td>Air Traffic &amp; Air Space Management Technician</td><td>MODERATE</td></tr><tr><td>150U</td><td>Unmanned Aircraft Systems Operations Technician</td><td>MODERATE</td></tr><tr><td>151A</td><td>Aviation Maintenance Technician (Nonrated)</td><td>MODERATE</td></tr><tr><td>152B</td><td>OH-58A/C Scout Pilot (RC)</td><td>HEAVY</td></tr><tr><td>152C</td><td>OH-6 Pilot</td><td>HEAVY</td></tr><tr><td>152D</td><td>OH-58D Pilot</td><td>HEAVY</td></tr><tr><td>152E</td><td>AH-64E Pilot</td><td>HEAVY</td></tr><tr><td>152F</td><td>AH-64A Attack Pilot</td><td>HEAVY</td></tr><tr><td>152H</td><td>AH-64D Attack Pilot</td><td>HEAVY</td></tr><tr><td>153A</td><td>Rotary Wing Aviator (Aircraft Nonspecific)</td><td>HEAVY</td></tr><tr><td>153B</td><td>UH-1 Pilot (RC)</td><td>MODERATE</td></tr><tr><td>153D</td><td>UH-60 Pilot</td><td>HEAVY</td></tr><tr><td>153E</td><td>Mh-60 Pilot</td><td>HEAVY</td></tr><tr><td>153L</td><td>UH-72A Pilot</td><td>HEAVY</td></tr><tr><td>153M</td><td>UH-60M Pilot</td><td>HEAVY</td></tr><tr><td>154C</td><td>CH-47D Pilot</td><td>HEAVY</td></tr><tr><td>154E</td><td>MH-47 Pilot</td><td>HEAVY</td></tr><tr><td>154F</td><td>CH-47F Pilot</td><td>HEAVY</td></tr><tr><td>155A</td><td>Fixed Wing Aviator (Aircraft Nonspecific)</td><td>MODERATE</td></tr><tr><td>155E</td><td>C-12 Pilot</td><td>MODERATE</td></tr><tr><td>155F</td><td>Jet Aircraft Pilot</td><td>MODERATE</td></tr><tr><td>155G</td><td>0-5A/EO-5B/RC-7 Pilot</td><td>MODERATE</td></tr><tr><td>170A</td><td>Cyber Operations Technician</td><td>MODERATE</td></tr><tr><td>170B</td><td>Electronic Warfare Technician (Effective 201810)</td><td>MODERATE</td></tr><tr><td>180A</td><td>Special Forces Warrant Officer</td><td>SIGNIFICANT</td></tr><tr><td>255A</td><td>Information Services Technician</td><td>MODERATE</td></tr><tr><td>255N</td><td>Network Management Technician</td><td>MODERATE</td></tr><tr><td>255S</td><td>Information Protection Technician</td><td>MODERATE</td></tr><tr><td>255Z</td><td>Senior Network Operations Technician</td><td>MODERATE</td></tr><tr><td>270A</td><td>Legal Administrator</td><td>MODERATE</td></tr><tr><td>290A</td><td>Electronic Warfare Technician (Rescind 201810)</td><td>MODERATE</td></tr><tr><td>311A</td><td>Cid Special Agent</td><td>MODERATE</td></tr><tr><td>350F</td><td>All Source Intelligence Technician</td><td>MODERATE</td></tr><tr><td>350G</td><td>Geospatial Intelligence Imagery Technician</td><td>MODERATE</td></tr><tr><td>351L</td><td>Counterintelligence Technician</td><td>MODERATE</td></tr><tr><td>351M</td><td>Human Intelligence Collection Technician</td><td>MODERATE</td></tr><tr><td>351Y</td><td>Area Intelligence Technician</td><td>MODERATE</td></tr><tr><td>351Z</td><td>Attache Technician</td><td>MODERATE</td></tr><tr><td>352N</td><td>Signals Intelligence Analysis Technician</td><td>MODERATE</td></tr><tr><td>352S</td><td>Signals Collection Technician</td><td>MODERATE</td></tr><tr><td>353T</td><td>Intelligence Systems Integration &amp; Maintenance Technician</td><td>MODERATE</td></tr><tr><td>420A</td><td>Human Resources Technician</td><td>SIGNIFICANT</td></tr><tr><td>420C</td><td>Bandmaster</td><td>MODERATE</td></tr><tr><td>640A</td><td>Food Safety Officer</td><td>MODERATE</td></tr><tr><td>670A</td><td>Health Services Maintenance Technician</td><td>MODERATE</td></tr><tr><td>740A</td><td>Chemical, Biological, Radiological &amp; Nuclear (CBRN) Warrant Officer</td><td>MODERATE</td></tr><tr><td>880A</td><td>Marine Deck Officer</td><td>MODERATE</td></tr><tr><td>881A</td><td>Marine Engineering Officer</td><td>MODERATE</td></tr><tr><td>882A</td><td>Mobility Officer</td><td>MODERATE</td></tr><tr><td>890A</td><td>Ammunition Technician</td><td>MODERATE</td></tr><tr><td>913A</td><td>Armament Systems Maintenance Warrant Officer</td><td>MODERATE</td></tr><tr><td>914A</td><td>Allied Trades Warrant Officer</td><td>MODERATE</td></tr><tr><td>915A</td><td>Automotive Maintenance Warrant Officer</td><td>MODERATE</td></tr><tr><td>915E</td><td>Senior Automotive Maintenance Warrant Officer/Senior Ordnance Logistics Warrant</td><td>MODERATE</td></tr><tr><td>919A</td><td>Engineer Equipment Maintenance Warrant Officer</td><td>MODERATE</td></tr><tr><td>920A</td><td>Property Accounting Technician</td><td>MODERATE</td></tr><tr><td>920B</td><td>Supply Systems Technician</td><td>MODERATE</td></tr><tr><td>921A</td><td>Airdrop Systems Technician</td><td>MODERATE</td></tr><tr><td>922A</td><td>Food Service Technician</td><td>MODERATE</td></tr><tr><td>923A</td><td>Petroleum Technician</td><td>MODERATE</td></tr><tr><td>948B</td><td>Electronic Systems Maintenance Warrant Officer</td><td>MODERATE</td></tr><tr><td>948D</td><td>Electronic Missile Systems Maintenance Warrant Officer</td><td>MODERATE</td></tr><tr><td>948E</td><td>Senior Electronics Maintenance Warrant Officer</td><td>MODERATE</td></tr></tbody></table>
+        </div>
+
+        <script>
+        	document.getElementById("defaultOpen").click();
+            function openTab(evt, TabName) {
+              var i, tabcontent, tablinks;
+              tabcontent = document.getElementsByClassName("tabcontent");
+              for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+              }
+              tablinks = document.getElementsByClassName("tablinks");
+              for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+              }
+              document.getElementById(TabName).style.display = "block";
+              evt.currentTarget.className += " active";
+            }
+        </script>
+   
+	</body>
+</html> 

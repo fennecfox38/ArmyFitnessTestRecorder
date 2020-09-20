@@ -16,10 +16,6 @@
             android:id="@+id/menu_ABCP_scale"
             android:icon="@drawable/ic_table_chart"
             android:title="@string/ABCPScale" />
-        <item
-            android:id="@+id/menu_MOS_chart"
-            android:icon="@drawable/ic_table_chart"
-            android:title="@string/MOSChart" />
     </group>
     <group
         android:id="@+id/group_nav_main_2"
