@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:army_fitness_test_recorder/acft.dart';
+import 'package:army_fitness_test_recorder/apft.dart';
+import 'package:army_fitness_test_recorder/abcp.dart';
 import 'package:army_fitness_test_recorder/acft_page.dart';
 import 'package:army_fitness_test_recorder/apft_page.dart';
 import 'package:army_fitness_test_recorder/abcp_page.dart';
+import 'package:army_fitness_test_recorder/log_page.dart';
 
 void main() {
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(systemNavigationBarColor: Colors.orange,),);
@@ -45,21 +49,33 @@ class MyApp extends StatelessWidget {
 }
 
 class MainPage extends StatefulWidget {
-  @override
-  _MainPageState createState() => _MainPageState();
+  @override _MainPageState createState() => _MainPageState();
 }
 
 class _MainPageState extends State<MainPage> {
   int _index = 0;
+  static GlobalKey<LogPageState> _keyLogPage = GlobalKey<LogPageState>();
   final List<Text> _title = [Text('Combat Fitness Test'),Text('Physical Fitness Test'),Text('Body Composition Program'),Text('Log'),];
-  final List<Widget> _pages = <Widget>[ACFTPage(),APFTPage(),ABCPPage(),ACFTPage()];
+  final List<StatefulWidget> _pages = <StatefulWidget>[ACFTPage(),APFTPage(), ABCPPage(),LogPage(key: _keyLogPage),];
+  final List<List<Widget>> _appbarActions = [
+    [ IconButton(icon: Icon(Icons.table_chart,), onPressed: () {  },), ],
+    [ IconButton(icon: Icon(Icons.table_chart,), onPressed: () {  },), ],
+    [ IconButton(icon: Icon(Icons.table_chart,), onPressed: () {  },), ],
+    [ IconButton(icon: Icon(Icons.share,), onPressed: ()=>_keyLogPage.currentState.shareDB(),), IconButton(icon: Icon(Icons.delete,), onPressed: ()=>_keyLogPage.currentState.deleteDB(),), ],
+  ];
 
-  @override
-  Widget build(BuildContext context) {
+  @override void initState(){
+    super.initState();
+    ACFTDBHelper.keyLogPage = _keyLogPage;
+    APFTDBHelper.keyLogPage = _keyLogPage;
+    ABCPDBHelper.keyLogPage = _keyLogPage;
+  }
+
+  @override Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: _title[_index],
-        actions: <Widget>[ IconButton(icon: Icon(Icons.settings,), onPressed: () { print('Menu Pressed'); },), ],
+        actions: _appbarActions[_index],
       ),
       drawer: Drawer(
         child: ListView(
@@ -71,17 +87,19 @@ class _MainPageState extends State<MainPage> {
           ],
         ),
       ),
-      body: IndexedStack(index: _index, children: _pages,),
+      body: IndexedStack(index: _index, sizing: StackFit.expand, children: _pages,),
       bottomNavigationBar: BottomNavigationBar(
         onTap: (_index){ setState(() {this._index = _index;}); FocusScope.of(context).unfocus(); }, //{pageController.jumpToPage(_index);},
         currentIndex: _index,
         items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem( title: Text("ACFT"), icon: Icon(Icons.fitness_center), ),
-          BottomNavigationBarItem( title: Text("APFT"), icon: Icon(Icons.directions_run), ),
-          BottomNavigationBarItem( title: Text("ABCP"), icon: Icon(Icons.accessibility), ),
-          BottomNavigationBarItem( title: Text("Log"), icon: Icon(Icons.receipt), ),
+          BottomNavigationBarItem( label: "ACFT", icon: Icon(Icons.fitness_center), ),
+          BottomNavigationBarItem( label: "APFT", icon: Icon(Icons.directions_run), ),
+          BottomNavigationBarItem( label: "ABCP", icon: Icon(Icons.accessibility), ),
+          BottomNavigationBarItem( label: "Log", icon: Icon(Icons.receipt), ),
         ],
       ),
     );
   }
+
+  void routeToLogPage() => setState(() => this._index = 3);
 }

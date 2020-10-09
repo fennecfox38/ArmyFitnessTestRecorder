@@ -1,8 +1,8 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:army_fitness_test_recorder/abcp.dart';
 import 'package:army_fitness_test_recorder/count_item.dart';
 import 'package:army_fitness_test_recorder/group.dart';
-import 'package:army_fitness_test_recorder/record.dart';
 
 class ABCPPage extends StatefulWidget { @override _ABCPPageState createState() => _ABCPPageState(); }
 
@@ -27,49 +27,40 @@ class _ABCPPageState extends State<ABCPPage> with ABCPRecord {
       CountItem(item: Item.Hips, onChanged: (e){setState(() {hips=e;});}, ),
     ];
     return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween, mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.end, mainAxisSize: MainAxisSize.max,
       children: [
         Expanded( child: ListView( children: (hwPass?itemHW:itemHW+(sex==Sex.Male?itemMale:itemFemale)),), ),
-        Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 16.0, bottom: 4.0, left: 16.0, right: 16.0),
-              child: Row( mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  RadioGroup(title: 'Sex',values: Sex.values, initialValue: sex, onChanged: (_value)=>setState(()=>sex=_value)),
-                  SizedBox(width: 16,),
-                  Spinner(values: AgeABCP.values, initialValue: age, title: 'Age' ,onChanged: (_value)=>setState(()=>age=_value), ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Row( mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text('HW/Pass ',style: TextStyle(fontSize: 16),),
-                  (hwPass?Text('Pass',style: TextStyle(color: Colors.green,fontSize: 20),):Text('Fail',style: TextStyle(color: Colors.red,fontSize: 20),)),
-                  SizedBox(width: 16,),
-                  Text('BodyFat ',style: TextStyle(fontSize: 16),),
-                  (hwPass?Text('N/A',style: TextStyle(fontSize: 20),):Text('$bodyFatPercent%',style: TextStyle(color: (bodyFatPass?Colors.green:Colors.red),fontSize: 20),)),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 4.0, bottom: 16.0, left: 0.0, right: 16.0),
-              child: Row( mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  DatePickTile(onClicked: (_date){ setState(()=>date=_date); },),
-                  (isPassed?Text('Pass',style: TextStyle(color: Colors.green,fontSize: 20),):Text('Fail',style: TextStyle(color: Colors.red,fontSize: 20),)),
-                  FloatingActionButton( child: Icon(Icons.save, ), onPressed: (){
-                      Scaffold.of(context).showSnackBar(SnackBar(content: Text('Save Pressed'), action: SnackBarAction(label: 'OK', onPressed: (){},),));
-                    },
-                  ),
-                ],
-              ),
-            ),
-          ],
+        Padding(
+          padding: const EdgeInsets.only(top: 16.0, bottom: 4.0, left: 16.0, right: 16.0),
+          child: Row( mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              RadioGroup(title: 'Sex',values: Sex.values, initialValue: sex, onChanged: (_value)=>setState(()=>sex=_value)),
+              SizedBox(width: 16,),
+              Spinner(values: AgeABCP.values, initialValue: age, title: 'Age' ,onChanged: (_value)=>setState(()=>age=_value), ),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Row( mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Text('HW/Pass ',style: TextStyle(fontSize: 16),),
+              (hwPass?Text('Pass',style: TextStyle(color: Colors.green,fontSize: 20),):Text('Fail',style: TextStyle(color: Colors.red,fontSize: 20),)),
+              SizedBox(width: 16,),
+              Text('BodyFat ',style: TextStyle(fontSize: 16),),
+              (hwPass?Text('N/A',style: TextStyle(fontSize: 20),):Text('$bodyFatPercent%',style: TextStyle(color: (bodyFatPass?Colors.green:Colors.red),fontSize: 20),)),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top: 4.0, bottom: 16.0, left: 0.0, right: 16.0),
+          child: Row( mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              DatePickTile(onClicked: (_date)=>date=_date,),
+              (isPassed?Text('Pass',style: TextStyle(color: Colors.green,fontSize: 20),):Text('Fail',style: TextStyle(color: Colors.red,fontSize: 20),)),
+              FloatingActionButton( child: Icon(Icons.save, ), onPressed: ()=>ABCPDBHelper().insertRecord(this, context: context),),
+            ],
+          ),
         ),
       ],
     );
@@ -79,7 +70,7 @@ class _ABCPPageState extends State<ABCPPage> with ABCPRecord {
 
 /// *******************************************************************************************************************************************
 
-final List<List<List<int>>> HEIGHTWEIGHT = [ //[2][23][6]
+final List<List<List<int>>> arrayHeightWeight = [ //[2][23][6]
   [
     [58,91,0,0,0,0], [59,94,0,0,0,0],
     [60,97,132,136,139,141], [61,100,136,140,144,146], [62,104,141,144,148,150],
@@ -103,18 +94,18 @@ final List<List<List<int>>> HEIGHTWEIGHT = [ //[2][23][6]
 ];
 
 
-final List<List<int>> BODYFAT = [ [20,22,24,26], [30,32,34,36] ];
+final List<List<int>> arrayBodyFat = [ [20,22,24,26], [30,32,34,36] ];
 
 bool isHWPassed(int sex, int ageGroup, double height, double weight) {
   int index = (height.ceil())-58;
   List<int> table;
   if(index>=23){
-    table = HEIGHTWEIGHT[sex][22];
+    table = arrayHeightWeight[sex][22];
     int increment = (index-22)*(sex==0 ? 6 : 5);
     return (weight>=(table[1]+increment) && weight <=(table[ageGroup+2]+increment));
   }
   else if(index>=0){
-    table = HEIGHTWEIGHT[sex][index];
+    table = arrayHeightWeight[sex][index];
     return (weight>=table[1] && weight<=table[ageGroup+2]);
   }
   else return false;
@@ -130,7 +121,7 @@ double femaleBodyFat(double height, double neck, double waist, double hip) {
   res = (res*10).round()/10;
   return (res>=0 ? res : 0);
 }
-bool isBodyFatPassed(int sex, int ageGroup, double percentage) => percentage<=BODYFAT[sex][ageGroup];
+bool isBodyFatPassed(int sex, int ageGroup, double percentage) => percentage<=arrayBodyFat[sex][ageGroup];
 
 /// *******************************************************************************************************************************************
 

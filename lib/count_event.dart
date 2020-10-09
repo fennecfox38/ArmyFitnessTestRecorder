@@ -43,7 +43,11 @@ class CountEventState extends State<CountEvent> {
 
   @override void initState() {
     super.initState();
-    _textFieldFocus.addListener((){ if(!_textFieldFocus.hasFocus) setState(()=>_setValue(double.parse(_controller.text))); });
+    _textFieldFocus.addListener((){
+      if(!_textFieldFocus.hasFocus)
+        try{ _setValue(double.parse(_controller.text)); }
+      catch(e) { e.printStackTrace(); }
+    });
     //setValue(widget.event.min);
     value=widget.event.min; score=0; levelPF=LevelPF.Fail; isPassed=false;
   }

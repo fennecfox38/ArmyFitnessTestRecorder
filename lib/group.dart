@@ -1,8 +1,21 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:army_fitness_test_recorder/acft.dart';
+import 'package:army_fitness_test_recorder/apft.dart';
+import 'package:army_fitness_test_recorder/abcp.dart';
+import 'package:army_fitness_test_recorder/log_page.dart';
+
+Text textPass = Text('Pass',style: TextStyle(color: Colors.green));
+Text textFail = Text('Fail', style: TextStyle(color: Colors.red));
+Text getPFText(bool boolean) => (boolean ? textPass : textFail);
 
 class MOSLevel {
   final int index;
   const MOSLevel._internal(this.index);
+
 
   static const Moderate = const MOSLevel._internal(0);
   static const Significant = const MOSLevel._internal(1);
@@ -11,6 +24,10 @@ class MOSLevel {
 
   static List<String> _names = ['Moderate','Significant','Heavy',];
   toString() => '${_names[index]}';
+  static MOSLevel fromString(String _str){
+    int _res = _names.indexOf(_str);
+    return MOSLevel._internal(_res!=-1 ? _res : 0);
+  }
 }
 
 class LevelPF {
@@ -41,6 +58,10 @@ class LevelPF {
       else return Fail;
     }
   }
+  static LevelPF fromString(String _str){
+    int _res = _names.indexOf(_str);
+    return LevelPF._internal(_res!=-1 ? _res : 0);
+  }
 }
 
 
@@ -54,6 +75,12 @@ class Sex {
 
   static List<String> _names = ['Male','Female',];
   toString() => '${_names[index]}';
+  static Sex fromString(String _str){
+    int _res = _names.indexOf(_str);
+    return Sex._internal(_res!=-1 ? _res : 0);
+  }
+
+  bool equal(Sex other) => (this.index == other.index);
 }
 
 class AgeAPFT{
@@ -72,6 +99,10 @@ class AgeAPFT{
 
   static List<String> _names = ['17-21', '22-26', '27-31', '32-36','37-41', '42-46', '47-51', '52-56',];
   toString() => '${_names[index]}';
+  static AgeAPFT fromString(String _str){
+    int _res = _names.indexOf(_str);
+    return AgeAPFT._internal(_res!=-1 ? _res : 0);
+  }
 }
 
 class AgeABCP{
@@ -86,6 +117,10 @@ class AgeABCP{
 
   static List<String> _names = ['17-20', '21-27', '28-39', '40+',];
   toString() => '${_names[index]}';
+  static AgeABCP fromString(String _str){
+    int _res = _names.indexOf(_str);
+    return AgeABCP._internal(_res!=-1 ? _res : 0);
+  }
 }
 
 class AlterACFT {
@@ -100,6 +135,11 @@ class AlterACFT {
 
   static List<String> _names = ['2 Mile Run', '5000 M Row', '15000 M Bike', '1000 M Swim',];
   toString() => '${_names[index]}';
+  static AlterACFT fromString(String _str){
+    int _res = _names.indexOf(_str);
+    return AlterACFT._internal(_res!=-1 ? _res : 0);
+  }
+  bool equal(AlterACFT other) => (this.index == other.index);
 }
 
 class AlterAPFT {
@@ -114,6 +154,10 @@ class AlterAPFT {
 
   static List<String> _names = ['2 Mile Run', '2.5 Mile Walk', '6.2 Mile Bike', '800 Yard Swim',];
   toString() => '${_names[index]}';
+  static AlterAPFT fromString(String _str){
+    int _res = _names.indexOf(_str);
+    return AlterAPFT._internal(_res!=-1 ? _res : 0);
+  }
 }
 
 
@@ -196,6 +240,7 @@ class _DatePickTileState extends State<DatePickTile> {
     super.initState();
     date = DateTime.now();
     _textController.value = TextEditingValue(text: string);
+    widget.onClicked(string);
   }
   @override void dispose(){
     _textController.dispose();
@@ -223,3 +268,34 @@ class _DatePickTileState extends State<DatePickTile> {
   twoDigits(n) =>(n>=10 ? "$n":"0$n");
   String get string => ('${date.year}-${twoDigits(date.month)}-${twoDigits(date.day)}');
 }
+
+/*
+class DBHelper{
+  DBHelper._();
+  static final DBHelper _db = DBHelper._();
+  factory DBHelper() => _db;
+
+  static Database _database;
+  static GlobalKey<LogPageState> keyLogPage;
+
+  Future<String> get path async{
+    Directory documentsDirectory = await getApplicationDocumentsDirectory();
+    return join(documentsDirectory.path, 'RecordLog.db');
+  }
+
+  Future<Database> get database async {
+    if(_database != null) return _database;
+    _database = await openDatabase(
+        await this.path,
+        version: 1,
+        onCreate: (db, version) async {
+          await db.execute(ACFTDBHelper.sqlCreateTable);
+          await db.execute(APFTDBHelper.sqlCreateTable);
+          await db.execute(ABCPDBHelper.sqlCreateTable);
+        },
+        onUpgrade: (db, oldVersion, newVersion){}
+    );
+    return _database;
+  }
+}
+*/

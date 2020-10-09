@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:army_fitness_test_recorder/acft.dart';
 import 'package:army_fitness_test_recorder/count_event.dart';
 import 'package:army_fitness_test_recorder/duration_event.dart';
 import 'package:army_fitness_test_recorder/group.dart';
-import 'package:army_fitness_test_recorder/record.dart';
 
 class ACFTPage extends StatefulWidget { @override _ACFTPageState createState() => _ACFTPageState(); }
 
@@ -20,7 +20,7 @@ class _ACFTPageState extends State<ACFTPage> with ACFTRecord{
     qualified=LevelPF.qualified(levelPF);
     isPassed=qualified.satisfies(mos);
     return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween, mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.end, mainAxisSize: MainAxisSize.max,
       children: [
         Expanded(
           child: ListView(
@@ -56,37 +56,28 @@ class _ACFTPageState extends State<ACFTPage> with ACFTRecord{
             ],
           ),
         ),
-        Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 16.0, bottom: 4.0, left: 16.0, right: 16.0),
-              child: RadioGroup(title: 'MOS',values: MOSLevel.values, initialValue: mos, onChanged: (_value)=>setState((){mos=_value; _invalidatePage();}), ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Row( mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text('Score $totalScore satisfies ',style: TextStyle(fontSize: 20),),
-                  Text(qualified.toString(),style: TextStyle(color: (isPassed?Colors.green:Colors.red),fontSize: 20,),),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 4.0, bottom: 16.0, left: 0.0, right: 16.0),
-              child: Row( mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  DatePickTile(onClicked: (_date)=> setState(()=>date=_date),),
-                  (isPassed?Text('Pass',style: TextStyle(color: Colors.green,fontSize: 20),):Text('Fail',style: TextStyle(color: Colors.red,fontSize: 20),)),
-                  FloatingActionButton( child: Icon(Icons.save, ),  onPressed: (){
-                      Scaffold.of(context).showSnackBar(SnackBar(content: Text('Save Pressed'), action: SnackBarAction(label: 'OK', onPressed: (){},),));
-                    },
-                  ),
-                ],
-              ),
-            ),
-          ],
+        Padding(
+          padding: const EdgeInsets.only(top: 16.0, bottom: 4.0, left: 16.0, right: 16.0),
+          child: RadioGroup(title: 'MOS',values: MOSLevel.values, initialValue: mos, onChanged: (_value)=>setState((){mos=_value; _invalidatePage();}), ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Row( mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Text('Score $totalScore satisfies ',style: TextStyle(fontSize: 20),),
+              Text(qualified.toString(),style: TextStyle(color: (isPassed?Colors.green:Colors.red),fontSize: 20,),),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top: 4.0, bottom: 16.0, left: 0.0, right: 16.0),
+          child: Row( mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              DatePickTile(onClicked: (_date)=> date=_date,),
+              (isPassed?Text('Pass',style: TextStyle(color: Colors.green,fontSize: 20),):Text('Fail',style: TextStyle(color: Colors.red,fontSize: 20),)),
+              FloatingActionButton( child: Icon(Icons.save, ),  onPressed: ()=>ACFTDBHelper().insertRecord(this, context: context),),
+            ],
+          ),
         ),
       ],
     );

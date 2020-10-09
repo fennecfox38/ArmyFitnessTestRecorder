@@ -42,7 +42,8 @@ class _CountItemState extends State<CountItem> {
     super.initState();
     _textFieldFocus.addListener((){
       if(!_textFieldFocus.hasFocus)
-        setState(()=>setValue(double.parse(_controller.text)));
+        try{ _setValue(double.parse(_controller.text)); }
+        catch(e){ e.printStackTrace(); }
     });
     value = (widget.initialValue!=null ? widget.initialValue : widget.item.min);
   }
@@ -84,16 +85,16 @@ class _CountItemState extends State<CountItem> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly, mainAxisSize: MainAxisSize.max,
             children: [
-              IconButton(icon: Icon(Icons.remove), onPressed: ()=>setValue(value-=widget.item.increment),),
-              Expanded(child: Slider(value: value, min: widget.item.min, max: widget.item.max, onChanged: (_value)=>setValue(_value),)),
-              IconButton(icon: Icon(Icons.add), onPressed: ()=>setValue(value+=widget.item.increment),),
+              IconButton(icon: Icon(Icons.remove), onPressed: ()=>_setValue(value-=widget.item.increment),),
+              Expanded(child: Slider(value: value, min: widget.item.min, max: widget.item.max, onChanged: (_value)=>_setValue(_value),)),
+              IconButton(icon: Icon(Icons.add), onPressed: ()=>_setValue(value+=widget.item.increment),),
             ],
           ),
         ],
       ),
     );
   }
-  void setValue(double _value){
+  void _setValue(double _value){
     if(_value<=widget.item.min) _value=widget.item.min;
     else if(_value>=widget.item.max) _value=widget.item.max;
     else _value=(_value/widget.item.increment).round()*widget.item.increment;

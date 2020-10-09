@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:army_fitness_test_recorder/apft.dart';
 import 'package:army_fitness_test_recorder/count_event.dart';
 import 'package:army_fitness_test_recorder/duration_event.dart';
 import 'package:army_fitness_test_recorder/group.dart';
-import 'package:army_fitness_test_recorder/record.dart';
 
 class APFTPage extends StatefulWidget { @override _APFTPageState createState() => _APFTPageState(); }
 
@@ -24,7 +24,7 @@ class _APFTPageState extends State<APFTPage> with APFTRecord{
     levelPF.forEach((e) { if(e==LevelPF.Fail) isPassed=false; });
 
     return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisAlignment: MainAxisAlignment.end,
       mainAxisSize: MainAxisSize.max,
       children: [
         Expanded(
@@ -54,35 +54,26 @@ class _APFTPageState extends State<APFTPage> with APFTRecord{
             ],
           ),
         ),
-        Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 16.0, bottom: 0.0, left: 16.0, right: 16.0),
-              child: Row( mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  RadioGroup(title: 'Sex',values: Sex.values, initialValue: sex, onChanged: (_value)=>setState((){sex=_value; _invalidatePage();}), ),
-                  SizedBox(width: 16,),
-                  Spinner(values: AgeAPFT.values, initialValue: age, title: 'Age' ,onChanged: (_value)=>setState((){age=_value; _invalidatePage();}), ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 0.0, bottom: 16.0, left: 0.0, right: 16.0),
-              child: Row( mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  DatePickTile(onClicked: (_date){ setState(()=>date=_date); },),
-                  Text('Score $totalScore ',style: TextStyle(fontSize: 20),),
-                  (isPassed?Text('Pass',style: TextStyle(color: Colors.green,fontSize: 20),):Text('Fail',style: TextStyle(color: Colors.red,fontSize: 20),)),
-                  FloatingActionButton( child: Icon(Icons.save, ), onPressed: (){
-                      Scaffold.of(context).showSnackBar(SnackBar(content: Text('Save Pressed'), action: SnackBarAction(label: 'OK', onPressed: (){},),));
-                    },
-                  ),
-                ],
-              ),
-            ),
-          ],
+        Padding(
+          padding: const EdgeInsets.only(top: 16.0, bottom: 0.0, left: 16.0, right: 16.0),
+          child: Row( mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              RadioGroup(title: 'Sex',values: Sex.values, initialValue: sex, onChanged: (_value)=>setState((){sex=_value; _invalidatePage();}), ),
+              SizedBox(width: 16,),
+              Spinner(values: AgeAPFT.values, initialValue: age, title: 'Age' ,onChanged: (_value)=>setState((){age=_value; _invalidatePage();}), ),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top: 0.0, bottom: 16.0, left: 0.0, right: 16.0),
+          child: Row( mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              DatePickTile(onClicked: (_date)=>date=_date,),
+              Text('Score $totalScore ',style: TextStyle(fontSize: 20),),
+              (isPassed?Text('Pass',style: TextStyle(color: Colors.green,fontSize: 20),):Text('Fail',style: TextStyle(color: Colors.red,fontSize: 20),)),
+              FloatingActionButton( child: Icon(Icons.save, ), onPressed: ()=>APFTDBHelper().insertRecord(this, context: context),),
+            ],
+          ),
         ),
       ],
     );

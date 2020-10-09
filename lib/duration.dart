@@ -18,6 +18,13 @@ class Duration{
     twoDigits(n) =>(n>=10 ? "$n":"0$n");
     return '${twoDigits(min)}:${twoDigits(sec)}';
   }
+  void fromString(String _str){
+    List<String> _list = _str.split(":");
+    try{
+      min = int.parse(_list[0]);
+      sec = int.parse(_list[1]);
+    }catch (e){ e.printStackTrace(); }
+  }
 
   Duration operator +(Duration other){ return Duration(sec: (inSec+other.inSec)); }
   Duration operator -(Duration other){ return Duration(sec: (inSec-other.inSec)); }
@@ -29,7 +36,6 @@ class Duration{
   bool operator >=(Duration other){ return (inSec >= other.inSec); }
 
   @override int get hashCode => hashValues(min, sec);
-
 }
 
 class DurationPicker extends StatefulWidget {
