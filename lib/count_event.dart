@@ -57,47 +57,43 @@ class CountEventState extends State<CountEvent> {
     super.dispose();
   }
 
-  @override
-  Widget build(BuildContext context) {
+  @override Widget build(BuildContext context) {
     _controller.value = TextEditingValue( text: value.toStringAsFixed(widget.event.increment<1?1:0),);
-    return Card(
-      margin: const EdgeInsets.all(8.0),
-      elevation: 2.0,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
+    return Card( margin: const EdgeInsets.all(8.0), elevation: 2.0, child: Column( mainAxisSize: MainAxisSize.min, children: [
+      Padding(
+        padding: const EdgeInsets.only(top: 16.0, bottom: 4.0, left: 16.0, right: 16.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween, mainAxisSize: MainAxisSize.max,
+          children: [
+            Flexible(child: Text(widget.event.title, style: TextStyle(fontSize: 20),)),
+            Text(levelPF.toString(), style: TextStyle(color: (isPassed? Colors.green:Colors.red)),),
+          ],
+        ),
+      ),
+      Padding(
+        padding: const EdgeInsets.only(top: 4.0, bottom: 0.0, left: 16.0, right: 16.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end, mainAxisSize: MainAxisSize.max,
+          children: [
+            IntrinsicWidth(child: TextField(
+              controller: _controller, focusNode: _textFieldFocus,
+              decoration: const InputDecoration(counterText: '',),
+              keyboardType: TextInputType.number, textAlign: TextAlign.center, maxLength: 5,
+            ),),
+            SizedBox(width: 8,), Text(widget.event.unit), SizedBox(width: 8,),
+            Text('$score', style: TextStyle(fontSize: 16),), Text(' points')
+          ],
+        ),
+      ),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween, mainAxisSize: MainAxisSize.max,
         children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 16.0, bottom: 4.0, left: 16.0, right: 16.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween, mainAxisSize: MainAxisSize.max,
-              children: [Text(widget.event.title, style: TextStyle(fontSize: 20),), Text(levelPF.toString(), style: TextStyle(color: (isPassed? Colors.green:Colors.red)),),],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 4.0, bottom: 0.0, left: 16.0, right: 16.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end, mainAxisSize: MainAxisSize.max,
-              children: [
-                Container( width: 60, height: 30, child: TextField(
-                  controller: _controller, focusNode: _textFieldFocus,
-                  decoration: const InputDecoration(counterText: '',border: OutlineInputBorder(),),
-                  keyboardType: TextInputType.number, textAlign: TextAlign.center, maxLength: 5,
-                ), ),
-                SizedBox(width: 8,), Text(widget.event.unit), SizedBox(width: 8,),
-                Text('$score', style: TextStyle(fontSize: 16),), Text(' points') ],
-            ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween, mainAxisSize: MainAxisSize.max,
-            children: [
-              IconButton(icon: Icon(Icons.remove), onPressed: ()=>_setValue(value-=widget.event.increment), ),
-              Expanded(child: Slider(value: value, min: widget.event.min, max: widget.event.max, onChanged: (_value)=>_setValue(_value),)),
-              IconButton(icon: Icon(Icons.add), onPressed: ()=>_setValue(value+=widget.event.increment), ),
-            ],
-          ),
+          IconButton(icon: Icon(Icons.remove), onPressed: ()=>_setValue(value-=widget.event.increment), ),
+          Expanded(child: Slider(value: value, min: widget.event.min, max: widget.event.max, onChanged: (_value)=>_setValue(_value),)),
+          IconButton(icon: Icon(Icons.add), onPressed: ()=>_setValue(value+=widget.event.increment), ),
         ],
       ),
-    );
+    ],),);
   }
   void _setValue(double _value){
     if(_value<=widget.event.min) _value=widget.event.min;

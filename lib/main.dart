@@ -66,10 +66,10 @@ class _MainPageState extends State<MainPage> {
   final PopupMenuButton _logAction = PopupMenuButton(
     icon: Icon(Icons.more_vert,), initialValue: 0,
     itemBuilder: (context) => <PopupMenuEntry>[
-      PopupMenuItem(value: 1, child: Row(children: <Widget>[Icon(Icons.share,), SizedBox(width: 8,), Text('Share as SQL DataBase'),],),),
-      PopupMenuItem(value: 2, child: Row(children: <Widget>[Icon(Icons.share,), SizedBox(width: 8,), Text('Share as MS Excel'),],),),
+      PopupMenuItem(value: 1, child: FittedBox(fit: BoxFit.cover, child: Row(children: <Widget>[Icon(Icons.share,), SizedBox(width: 8,), Text('Share as SQL DataBase'),],)),),
+      PopupMenuItem(value: 2, child: FittedBox(fit: BoxFit.cover, child: Row(children: <Widget>[Icon(Icons.share,), SizedBox(width: 8,), Text('Share as MS Excel'),],)),),
       PopupMenuDivider(),
-      PopupMenuItem(value: 3, child: Row(children: <Widget>[Icon(Icons.delete,), SizedBox(width: 8,), Text('Delete current table'),],),),
+      PopupMenuItem(value: 3, child: FittedBox(fit: BoxFit.cover, child: Row(children: <Widget>[Icon(Icons.delete,), SizedBox(width: 8,), Text('Delete current table'),],)),),
     ],
     onSelected: (value){ switch(value){
       case 1: _keyLogPage.currentState.shareDB(); break;
@@ -111,8 +111,8 @@ class _MainPageState extends State<MainPage> {
         children: <Widget>[
           DrawerHeader( decoration: BoxDecoration(color: Colors.amber,),
             child: Column( mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-              SizedBox(width:96, height: 96, child: Image.asset('assets/ic_launcher.png'),),
-              Text('Army Fitness Test Recorder'),
+              SizedBox(width: 72, height: 72, child: Image.asset('assets/ic_launcher.png'),),
+              Flexible(child: Text('Army Fitness Test Recorder')),
             ],),
           ),
           ListTile( leading: Icon(Icons.table_chart), title: Text('ACFT Score Scale Chart'), onTap: ()=>_routeWebView('ACFT Score Scale Chart', 'assets/ACFTChart.html'), ),

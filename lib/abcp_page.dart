@@ -28,36 +28,39 @@ class _ABCPPageState extends State<ABCPPage> with ABCPRecord {
     ];
     return Column(
       mainAxisAlignment: MainAxisAlignment.end, mainAxisSize: MainAxisSize.max,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Expanded( child: ListView( children: (hwPass?itemHW:itemHW+(sex==Sex.Male?itemMale:itemFemale)),), ),
         Padding(
           padding: const EdgeInsets.only(top: 16.0, bottom: 4.0, left: 16.0, right: 16.0),
-          child: Row( mainAxisAlignment: MainAxisAlignment.start,
-            children: [
+          child: FittedBox( fit: BoxFit.cover,
+            child: Row( mainAxisAlignment: MainAxisAlignment.start, children: [
               RadioGroup(title: 'Sex',values: Sex.values, initialValue: sex, onChanged: (_value)=>setState(()=>sex=_value)),
               SizedBox(width: 16,),
               Spinner(values: AgeABCP.values, initialValue: age, title: 'Age' ,onChanged: (_value)=>setState(()=>age=_value), ),
-            ],
+            ],),
           ),
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Row( mainAxisAlignment: MainAxisAlignment.start,
-            children: [
+          child: FittedBox( fit: BoxFit.cover,
+            child: Row( mainAxisAlignment: MainAxisAlignment.start, children: [
               Text('HW/Pass ',style: TextStyle(fontSize: 16),),
               (hwPass?Text('Pass',style: TextStyle(color: Colors.green,fontSize: 20),):Text('Fail',style: TextStyle(color: Colors.red,fontSize: 20),)),
-              SizedBox(width: 16,),
-              Text('BodyFat ',style: TextStyle(fontSize: 16),),
+              SizedBox(width: 16,), Text('BodyFat ',style: TextStyle(fontSize: 16),),
               (hwPass?Text('N/A',style: TextStyle(fontSize: 20),):Text('$bodyFatPercent%',style: TextStyle(color: (bodyFatPass?Colors.green:Colors.red),fontSize: 20),)),
-            ],
+            ],),
           ),
         ),
         Padding(
           padding: const EdgeInsets.only(top: 4.0, bottom: 16.0, left: 0.0, right: 16.0),
-          child: Row( mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          child: Row( mainAxisAlignment: MainAxisAlignment.spaceBetween, mainAxisSize: MainAxisSize.max,
             children: [
-              DatePickTile(onClicked: (_date)=>date=_date,),
-              (isPassed?Text('Pass',style: TextStyle(color: Colors.green,fontSize: 20),):Text('Fail',style: TextStyle(color: Colors.red,fontSize: 20),)),
+              ConstrainedBox( constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width*0.75, ), child: FittedBox( fit: BoxFit.cover, child: Row( children: [
+                DatePickTile(onClicked: (_date)=> date=_date,), SizedBox(width: 16,),
+                (isPassed?Text('Pass',style: TextStyle(color: Colors.green,fontSize: 20),):Text('Fail',style: TextStyle(color: Colors.red,fontSize: 20),)),
+                SizedBox(width: 16,),
+              ],),),),
               FloatingActionButton( child: Icon(Icons.save, ), onPressed: ()=>ABCPDBHelper().insertRecord(this, context: context), heroTag: 'SaveABCPRecord',),
             ],
           ),
@@ -112,14 +115,18 @@ bool isHWPassed(int sex, int ageGroup, double height, double weight) {
 }
 
 double maleBodyFat(double height, double neck, double abdomen) {
-  double res = ((86.010 * log(abdomen-neck)/ln10) - (70.041 * log(height)/ln10) + 36.76);
-  res = (res*10).round()/10;
-  return (res>=0 ? res : 0);
+  double _circumference = abdomen-neck;
+  if(_circumference<0) return 0;
+  double _res = ((86.010 * log((_circumference).abs())/ln10) - (70.041 * log(height)/ln10) + 36.76);
+  if(_res<0) return 0;
+  return (_res*10).round()/10;
 }
 double femaleBodyFat(double height, double neck, double waist, double hip) {
-  double res = ((163.205 * log(waist+hip-neck)/ln10) - (97.684 * log(height)/ln10) - 78.387);
-  res = (res*10).round()/10;
-  return (res>=0 ? res : 0);
+  double _circumference = waist+hip-neck;
+  if(_circumference<0) return 0;
+  double _res = ((163.205 * log((_circumference).abs())/ln10) - (97.684 * log(height)/ln10) - 78.387);
+  if(_res<0) return 0;
+  return (_res*10).round()/10;
 }
 bool isBodyFatPassed(int sex, int ageGroup, double percentage) => percentage<=arrayBodyFat[sex][ageGroup];
 

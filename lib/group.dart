@@ -174,21 +174,17 @@ class _RadioGroupState extends State<RadioGroup> {
   var value;
   _RadioGroupState(this.value);
 
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Text('${widget.title} ', style: TextStyle(fontSize: 20),),
-        ...widget.values.map((_value) => Padding(
-          padding: const EdgeInsets.all(2.0), child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Radio( value: _value, groupValue: value, onChanged: (e){ setState(()=>value=e); widget.onChanged(e); }, visualDensity: VisualDensity(horizontal: -4.0),),
-              GestureDetector( child: Text(_value.toString()),  onTap: (){ setState(()=>value=_value); widget.onChanged(_value); }, ),
-            ],
-          ),
-        )).toList(), ],
-    );
+  @override Widget build(BuildContext context) {
+    return FittedBox( fit: BoxFit.cover, child: Row( children: [
+      Text('${widget.title} ', style: TextStyle(fontSize: 20),),
+      ...widget.values.map((_value) => Padding(
+        padding: const EdgeInsets.all(2.0),
+        child: Row( mainAxisSize: MainAxisSize.min, children: [
+          Radio( value: _value, groupValue: value, onChanged: (e){ setState(()=>value=e); widget.onChanged(e); }, visualDensity: VisualDensity(horizontal: -4.0),),
+          GestureDetector( child: Text(_value.toString()),  onTap: (){ setState(()=>value=_value); widget.onChanged(_value); }, ),
+        ],),
+      )).toList(),
+    ],),);
   }
 }
 
@@ -217,8 +213,10 @@ class _SpinnerState extends State<Spinner> {
     if(widget.title==null) return spinner;
     else return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0,),
-      child: Row( mainAxisSize: MainAxisSize.min,
-        children: [Text(widget.title, style: TextStyle(fontSize: 20),), SizedBox(width: 8.0,), spinner,],
+      child: FittedBox( fit: BoxFit.cover,
+        child: Row( mainAxisSize: MainAxisSize.min,
+          children: [Text(widget.title, style: TextStyle(fontSize: 20),), SizedBox(width: 8.0,), spinner,],
+        ),
       ),
     );
   }
@@ -248,16 +246,15 @@ class _DatePickTileState extends State<DatePickTile> {
     super.dispose();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Row(
+  @override Widget build(BuildContext context) {
+    return FittedBox( fit: BoxFit.cover, child: Row(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         IconButton(icon: Icon(Icons.calendar_today), onPressed: ()=>datePicker(context),),
-        SizedBox(width: 80, height:40, child: TextField(controller: _textController, readOnly: true, onTap: ()=>datePicker(context), )),
+        IntrinsicWidth(child: TextField(controller: _textController, readOnly: true, onTap: ()=>datePicker(context), )),
       ],
-    );
+    ),);
   }
 
   Future<void> datePicker(BuildContext context) async {

@@ -56,42 +56,37 @@ class _CountItemState extends State<CountItem> {
   @override
   Widget build(BuildContext context) {
     _controller.value = TextEditingValue( text: value.toStringAsFixed(widget.item.increment<1?1:0),);// selection: TextSelection.fromPosition(TextPosition(offset: '$value'.length)),);
-    return Card(
-      margin: const EdgeInsets.all(8.0),
-      elevation: 2.0,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 16, bottom: 8, left: 16, right: 16,),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween, mainAxisSize: MainAxisSize.max,
-              children: [
-                Text(widget.item.title, style: TextStyle(fontSize: 20),),
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container( width: 60, height: 30, child: TextField(
-                      controller: _controller, focusNode: _textFieldFocus,
-                      decoration: const InputDecoration(counterText: '',border: OutlineInputBorder(),),
-                      keyboardType: TextInputType.number, textAlign: TextAlign.center, maxLength: 5,
-                    ), ),
-                    SizedBox(width: 8,), Text(widget.item.unit),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly, mainAxisSize: MainAxisSize.max,
+    return Card( margin: const EdgeInsets.all(8.0), elevation: 2.0,
+      child: Column( mainAxisSize: MainAxisSize.min, children: [
+        Padding(
+          padding: const EdgeInsets.only(top: 16, bottom: 8, left: 16, right: 16,),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween, mainAxisSize: MainAxisSize.max,
             children: [
-              IconButton(icon: Icon(Icons.remove), onPressed: ()=>_setValue(value-=widget.item.increment),),
-              Expanded(child: Slider(value: value, min: widget.item.min, max: widget.item.max, onChanged: (_value)=>_setValue(_value),)),
-              IconButton(icon: Icon(Icons.add), onPressed: ()=>_setValue(value+=widget.item.increment),),
+              Text(widget.item.title, style: TextStyle(fontSize: 20),),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IntrinsicWidth( child: TextField(
+                    controller: _controller, focusNode: _textFieldFocus,
+                    decoration: const InputDecoration(counterText: '',),
+                    keyboardType: TextInputType.number, textAlign: TextAlign.center, maxLength: 5,
+                  ), ),
+                  SizedBox(width: 8,), Text(widget.item.unit),
+                ],
+              ),
             ],
           ),
-        ],
-      ),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly, mainAxisSize: MainAxisSize.max,
+          children: [
+            IconButton(icon: Icon(Icons.remove), onPressed: ()=>_setValue(value-=widget.item.increment),),
+            Expanded(child: Slider(value: value, min: widget.item.min, max: widget.item.max, onChanged: (_value)=>_setValue(_value),)),
+            IconButton(icon: Icon(Icons.add), onPressed: ()=>_setValue(value+=widget.item.increment),),
+          ],
+        ),
+      ],),
     );
   }
   void _setValue(double _value){

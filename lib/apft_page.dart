@@ -24,8 +24,8 @@ class _APFTPageState extends State<APFTPage> with APFTRecord{
     levelPF.forEach((e) { if(e==LevelPF.Fail) isPassed=false; });
 
     return Column(
-      mainAxisAlignment: MainAxisAlignment.end,
-      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.end, mainAxisSize: MainAxisSize.max,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Expanded(
           child: ListView(
@@ -56,21 +56,24 @@ class _APFTPageState extends State<APFTPage> with APFTRecord{
         ),
         Padding(
           padding: const EdgeInsets.only(top: 16.0, bottom: 0.0, left: 16.0, right: 16.0),
-          child: Row( mainAxisAlignment: MainAxisAlignment.start,
-            children: [
+          child: FittedBox( fit: BoxFit.cover,
+            child: Row( mainAxisAlignment: MainAxisAlignment.start, children: [
               RadioGroup(title: 'Sex',values: Sex.values, initialValue: sex, onChanged: (_value)=>setState((){sex=_value; _invalidatePage();}), ),
               SizedBox(width: 16,),
               Spinner(values: AgeAPFT.values, initialValue: age, title: 'Age' ,onChanged: (_value)=>setState((){age=_value; _invalidatePage();}), ),
-            ],
+            ],),
           ),
         ),
         Padding(
           padding: const EdgeInsets.only(top: 0.0, bottom: 16.0, left: 0.0, right: 16.0),
-          child: Row( mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          child: Row( mainAxisAlignment: MainAxisAlignment.spaceBetween, mainAxisSize: MainAxisSize.max,
             children: [
-              DatePickTile(onClicked: (_date)=>date=_date,),
-              Text('Score $totalScore ',style: TextStyle(fontSize: 20),),
-              (isPassed?Text('Pass',style: TextStyle(color: Colors.green,fontSize: 20),):Text('Fail',style: TextStyle(color: Colors.red,fontSize: 20),)),
+              ConstrainedBox( constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width*0.75, ), child: FittedBox( fit: BoxFit.cover, child: Row( children: [
+                DatePickTile(onClicked: (_date)=> date=_date,), SizedBox(width: 16,),
+                Text('Score $totalScore ',style: TextStyle(fontSize: 20),), SizedBox(width: 16,),
+                (isPassed?Text('Pass',style: TextStyle(color: Colors.green,fontSize: 20),):Text('Fail',style: TextStyle(color: Colors.red,fontSize: 20),)),
+                SizedBox(width: 16,),
+              ],),),),
               FloatingActionButton( child: Icon(Icons.save, ), onPressed: ()=>APFTDBHelper().insertRecord(this, context: context), heroTag: 'SaveAPFTRecord',),
             ],
           ),

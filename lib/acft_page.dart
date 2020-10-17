@@ -21,6 +21,7 @@ class _ACFTPageState extends State<ACFTPage> with ACFTRecord{
     isPassed=qualified.satisfies(mos);
     return Column(
       mainAxisAlignment: MainAxisAlignment.end, mainAxisSize: MainAxisSize.max,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Expanded(
           child: ListView(
@@ -64,17 +65,20 @@ class _ACFTPageState extends State<ACFTPage> with ACFTRecord{
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Row( mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Text('Score $totalScore satisfies ',style: TextStyle(fontSize: 20),),
-              Text(qualified.toString(),style: TextStyle(color: (isPassed?Colors.green:Colors.red),fontSize: 20,),),
+              FittedBox(fit: BoxFit.cover, child: Text('Score $totalScore satisfies ',style: TextStyle(fontSize: 20),)),
+              FittedBox(fit: BoxFit.cover, child: Text(qualified.toString(),style: TextStyle(color: (isPassed?Colors.green:Colors.red),fontSize: 20,),)),
             ],
           ),
         ),
         Padding(
           padding: const EdgeInsets.only(top: 4.0, bottom: 16.0, left: 0.0, right: 16.0),
-          child: Row( mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          child: Row( mainAxisAlignment: MainAxisAlignment.spaceBetween, mainAxisSize: MainAxisSize.max,
             children: [
-              DatePickTile(onClicked: (_date)=> date=_date,),
-              (isPassed?Text('Pass',style: TextStyle(color: Colors.green,fontSize: 20),):Text('Fail',style: TextStyle(color: Colors.red,fontSize: 20),)),
+              ConstrainedBox( constraints: BoxConstraints( maxWidth: MediaQuery.of(context).size.width*0.75,), child: FittedBox( fit: BoxFit.cover, child: Row( children: [
+                DatePickTile(onClicked: (_date)=> date=_date,), SizedBox(width: 16,),
+                (isPassed?Text('Pass',style: TextStyle(color: Colors.green,fontSize: 20),):Text('Fail',style: TextStyle(color: Colors.red,fontSize: 20),)),
+                SizedBox(width: 16,),
+              ],),),),
               FloatingActionButton( child: Icon(Icons.save, ),  onPressed: ()=>ACFTDBHelper().insertRecord(this, context: context), heroTag: 'SaveACFTRecord',),
             ],
           ),

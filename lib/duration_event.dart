@@ -56,42 +56,31 @@ class DurationEventState extends State<DurationEvent> {
   @override
   Widget build(BuildContext context) {
     _controller.value = TextEditingValue(text: duration.toString());
-    return Card(
-      margin: const EdgeInsets.all(8.0),
-      elevation: 2.0,
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
+    return Card( margin: const EdgeInsets.all(8.0), elevation: 2.0, child: Padding( padding: const EdgeInsets.all(16.0),
+      child: Column( mainAxisSize: MainAxisSize.min, children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween, mainAxisSize: MainAxisSize.max,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween, mainAxisSize: MainAxisSize.max,
-              children: [Text(widget.event.title, style: TextStyle(fontSize: 20),), Text(levelPF.toString(), style: TextStyle(color: (isPassed? Colors.green:Colors.red)),),],
-            ),
-            SizedBox(height: 8,),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween, mainAxisSize: MainAxisSize.max,
-              children: [
-                (alter!=null ? Spinner(values: (widget.event==EventDuration.CardioACFT ? AlterACFT.values : AlterAPFT.values), onChanged: (e)=>setState((){alter=e; _setValue(duration);}),) : SizedBox() ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end, mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container( width: 70, height: 30, child: TextField( readOnly: true,
-                      controller: _controller, textAlign: TextAlign.center,
-                      decoration: const InputDecoration(border: OutlineInputBorder(),),
-                      onTap: () async => await showDialog(
-                          context: context, builder: (context)=>DurationPicker(duration, min: widget.event.min, max: widget.event.max,)
-                      ).then( (_value) { if(_value!=null) _setValue(_value); } ),
-                    ),),
-                    SizedBox(width: 8,), Text('$score points', style: TextStyle(fontSize: 16),),
-                  ],
-                ),
-              ],
-            ),
+            Flexible(child: (alter== null ? Text(widget.event.title, style: TextStyle(fontSize: 20))
+                : Spinner(values: (widget.event==EventDuration.CardioACFT ? AlterACFT.values : AlterAPFT.values), onChanged: (e)=>setState((){alter=e; _setValue(duration);}),)), ),
+            Text(levelPF.toString(), style: TextStyle(color: (isPassed? Colors.green:Colors.red)),),
           ],
         ),
-      ),
-    );
+        SizedBox(height: 8,),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end, mainAxisSize: MainAxisSize.max,
+          children: [
+            IntrinsicWidth( child: TextField( readOnly: true,
+              controller: _controller, textAlign: TextAlign.center,
+              onTap: () async => await showDialog(
+                  context: context, builder: (context)=>DurationPicker(duration, min: widget.event.min, max: widget.event.max,)
+              ).then( (_value) { if(_value!=null) _setValue(_value); } ),
+            ),),
+            SizedBox(width: 8,), Text('$score points', style: TextStyle(fontSize: 16),),
+          ],
+        ),
+      ],),
+    ),);
   }
 
   void _setValue(Duration _duration) => setState( (){
