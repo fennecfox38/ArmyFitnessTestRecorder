@@ -1,13 +1,7 @@
-import 'dart:io';
+import 'package:excel/excel.dart';
 import 'package:flutter/material.dart';
-import 'package:path/path.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:share/share.dart';
-import 'package:sqflite/sqflite.dart';
-import 'package:army_fitness_test_recorder/acft.dart';
-import 'package:army_fitness_test_recorder/apft.dart';
 import 'package:army_fitness_test_recorder/group.dart';
-import 'package:army_fitness_test_recorder/log_page.dart';
 
 class ABCPRecord{
   double height=58.0, weight=90, neck=10.0, abdomen=20.0, waist=20.0, hips=20.0;
@@ -35,44 +29,21 @@ class ABCPRecord{
 }
 
 
-class ABCPDBHelper {
-  ABCPDBHelper._();
-  static final ABCPDBHelper _db = ABCPDBHelper._();
-  factory ABCPDBHelper() => _db;
-
-  static Database _database;
-  static GlobalKey<LogPageState> keyLogPage;
-
-  Future<Database> get database async {
-    if(_database != null) return _database;
-    _database = await initDB();
-    return _database;
-  }
-
-  initDB() async {
-    Directory documentsDirectory = await getApplicationDocumentsDirectory();
-    String path = join(documentsDirectory.path, 'RecordLog.db');
-
-    return await openDatabase(
-        path,
-        version: 1,
-        onCreate: (db, version) async {
-          await db.execute(sqlCreateTable);
-          await db.execute(ACFTDBHelper.sqlCreateTable);
-          await db.execute(APFTDBHelper.sqlCreateTable);
-        },
-        onUpgrade: (db, oldVersion, newVersion){}
-    );
-  }
-
-  insertRecord(ABCPRecord record,{BuildContext context}) async {
+class ABCPDBHelper extends DBHelper{
+  Future<void> insertRecord(ABCPRecord record,{BuildContext context}) async {
     final db = await database;
     var res = await db.rawInsert(sqlInsert, record.values);
-    keyLogPage.currentState.invalidateABCP();
+    DBHelper.keyLogPage.currentState.invalidateABCP();
     if(context!=null)
       Scaffold.of(context).showSnackBar(SnackBar(content: Text('Record has been saved to DB.'),
-        action: SnackBarAction(label: 'Undo', onPressed: ()=>ABCPDBHelper().deleteRecord(record, context: context),),));
+        action: SnackBarAction(label: 'Undo', onPressed: ()=>deleteRecord(record, context: context),),));
     return res;
+  }
+
+  Future<void> saveList(List<ABCPRecord> list, {BuildContext context}) async {
+    final db = await database;
+    list.forEach((e) => db.rawInsert(sqlInsert, e.values));
+    DBHelper.keyLogPage.currentState.invalidateABCP();
   }
 
   Future<List<ABCPRecord>> getRecordList() async {
@@ -102,7 +73,7 @@ class ABCPDBHelper {
     return list;
   }
 
-  deleteRecord(ABCPRecord record, {BuildContext context}) async {
+  Future<void> deleteRecord(ABCPRecord record, {BuildContext context}) async {
     String sqlExec = sqlDeleteWhere + sqlWhereString(columnRecordDate,record.date) + "AND ";
     sqlExec += sqlWhereString(columnSex,record.sex.toString()) + "AND ";
     sqlExec += sqlWhereString(columnAge,record.age.toString()) + "AND ";
@@ -116,40 +87,62 @@ class ABCPDBHelper {
 
     final db = await database;
     var res = db.execute(sqlExec);
-    keyLogPage.currentState.invalidateABCP();
+    DBHelper.keyLogPage.currentState.invalidateABCP();
     if(context!=null)
-      Scaffold.of(context).showSnackBar(SnackBar(content: Text('Record has been deleted from DB.'),
-        action: SnackBarAction(label: 'Undo', onPressed: ()=>ABCPDBHelper().insertRecord(record, context: context),),));
+      Scaffold.of(context).showSnackBar(SnackBar(content: Text('ABCP Records have been deleted from DB.'),
+        action: SnackBarAction(label: 'Undo', onPressed: ()=>insertRecord(record, context: context),),
+      ));
     return res;
   }
 
-  deleteAllRecord() async {
+  Future<void> deleteAllRecord({BuildContext context}) async {
+    List<ABCPRecord> _backup = await getRecordList();
     final db = await database;
     db.rawDelete(sqlDeleteAll);
-    keyLogPage.currentState.invalidateABCP();
+    DBHelper.keyLogPage.currentState.invalidateABCP();
+    if(context!=null)
+      Scaffold.of(context).showSnackBar(SnackBar(content: Text('Record has been deleted from DB.'),
+        action: SnackBarAction(label: 'Undo', onPressed: ()=>saveList(_backup),),
+      ));
   }
 
-  static String tableName = "ABCPRecord";
-  static String columnRecordDate = "RecordDate", columnSex = "Sex", columnAge = "AgeGroup";
-  static String columnHeight = "Height", columnWeight = "Weight", columnNeck = "Neck";
-  static String columnAbdomenWaist = "AbdomenWaist", columnHips = "Hips", columnHWPass = "HWPass";
-  static String columnBodyFatPass = "BodyFatPass", columnBodyFatPercent = "BodyFatPercent", columnIsPassed = "isPassed";
+  Future<Excel> exportSheet(Excel excel) async {
+    Sheet _sheet = excel['ABCPRecord'];
+    List<ABCPRecord> _list = await getRecordList();
+    int rowIndex = 0;
+    _sheet.insertRowIterables(columnNames, rowIndex++);
+    for(ABCPRecord _record in _list)  // will be single record. (single row)
+      _sheet.insertRowIterables(_record.values, rowIndex++);
+    return excel;
+  }
 
-  static String sqlCreateTable="CREATE TABLE IF NOT EXISTS "+ tableName +" ("+
+  static const String tableName = "ABCPRecord";
+  static const String columnRecordDate = "RecordDate", columnSex = "Sex", columnAge = "AgeGroup";
+  static const String columnHeight = "Height", columnWeight = "Weight", columnNeck = "Neck";
+  static const String columnAbdomenWaist = "AbdomenWaist", columnHips = "Hips", columnHWPass = "HWPass";
+  static const String columnBodyFatPass = "BodyFatPass", columnBodyFatPercent = "BodyFatPercent", columnIsPassed = "isPassed";
+
+  static const List<String> columnNames = <String>[
+    columnRecordDate,columnSex,columnAge,
+    columnHeight,columnWeight, columnHWPass,columnNeck,
+    columnAbdomenWaist,columnHips,columnBodyFatPercent,
+    columnBodyFatPass,columnIsPassed,
+  ];
+
+  static const String sqlCreateTable="CREATE TABLE IF NOT EXISTS "+ tableName +" ("+
       columnRecordDate+" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,"+ columnSex+" TEXT NOT NULL,"+ columnAge+" TEXT NOT NULL,"+
       columnHeight+" FLOAT NOT NULL,"+ columnWeight+" INTEGER NOT NULL,"+ columnHWPass+" TEXT NOT NULL,"+
       columnNeck+" FLOAT,"+ columnAbdomenWaist+" FLOAT,"+ columnHips+" FLOAT,"+
       columnBodyFatPercent+" FLOAT NOT NULL,"+ columnBodyFatPass+" TEXT NOT NULL,"+ columnIsPassed+" TEXT NOT NULL)";
-  static String sqlDropTable = "DROP TABLE IF EXISTS "+ tableName;
-  static String sqlSelect = "SELECT * FROM " + tableName;
-  static String sqlInsert = "INSERT OR REPLACE INTO "+tableName+
+  static const String sqlDropTable = "DROP TABLE IF EXISTS "+ tableName;
+  static const String sqlSelect = "SELECT * FROM " + tableName;
+  static const String sqlInsert = "INSERT OR REPLACE INTO "+tableName+
       "("+columnRecordDate+", "+columnSex+", "+columnAge+", "+
       columnHeight+", "+columnWeight+", "+ columnHWPass+", "+columnNeck+", "+
       columnAbdomenWaist+", "+columnHips+", "+ columnBodyFatPercent+", "+
       columnBodyFatPass+", "+ columnIsPassed+") VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
-  static String sqlDeleteWhere = "DELETE FROM " + tableName + " WHERE ";
-  static String sqlDeleteAll = "DELETE FROM " + tableName;
-
+  static const String sqlDeleteWhere = "DELETE FROM " + tableName + " WHERE ";
+  static const String sqlDeleteAll = "DELETE FROM " + tableName;
 }
 
 String sqlWhereString(String _column, String _arg){ return (_column+"=\""+_arg+"\" "); }
@@ -162,7 +155,7 @@ class ABCPLogCard extends StatelessWidget {
 
   @override Widget build(BuildContext context) {
     Offset _tapPosition;
-    _showPopupMenu() async {
+    Future<void> _showPopupMenu() async {
       final RenderBox overlay = Overlay.of(context).context.findRenderObject();
       await showMenu( context: context, elevation: 8.0, initialValue: 0,
         position: RelativeRect.fromRect(_tapPosition & Size(40, 40), Offset.zero & overlay.size,), //(smaller rect(the touch area),  Bigger rect(the entire screen))
@@ -177,58 +170,47 @@ class ABCPLogCard extends StatelessWidget {
       }});
     }
 
-    if(record.hwPass) return GestureDetector(
-      onTapDown: (TapDownDetails details)=>_tapPosition = details.globalPosition,
-      onLongPress: ()=>_showPopupMenu(),
-      child: Card(
-        margin: const EdgeInsets.all(8.0),
-        elevation: 2.0,
-        child: Table(
-          children: [
-            TableRow(children: [
-              TableCell(child: Text(record.date)),
-              TableCell(child: Text(record.sex.toString())),
-              TableCell(child: Text(record.age.toString())),
-              TableCell(child: getPFText(record.isPassed), ),
-            ]),
-            TableRow( children: [
-              TableCell(child: Column(children: [Text('Height'), Text('${record.height} inches')],)),
-              TableCell(child: Column(children: [Text('Weight'), Text('${record.weight.toInt()} lbs')],)),
-              TableCell(child: Column(children: [Text('H/Weight'), textPass,],)),
-              TableCell(child: Column(children: [Text('BodyFat'), Text('N/A'),],)),
-            ]),
-          ],
-        ),
-      ),
+    Table _table = Table(
+      children: [
+        TableRow(children: [
+          TableCell(child: Text(record.date)),
+          TableCell(child: Text(record.sex.toString(), textAlign: TextAlign.center,)),
+          TableCell(child: Text(record.age.toString(), textAlign: TextAlign.center,)),
+          TableCell(child: getPFText(record.isPassed), ),
+        ]),
+      ],
     );
-    else return GestureDetector(
+    if(record.hwPass) _table.children.add(TableRow( children: [
+      TableCell(child: Column(children: [Text('Height'), Text('${record.height} inches')],)),
+      TableCell(child: Column(children: [Text('Weight'), Text('${record.weight.toInt()} lbs')],)),
+      TableCell(child: Column(children: [Text('H/Weight'), textPass,],)),
+      TableCell(child: Column(children: [Text('BodyFat'), Text('N/A'),],)),
+    ]));
+    else {
+      _table.children.add(TableRow( children: [
+        TableCell(child: Column(children: [Text('Height'), Text('${record.height} inches')],)),
+        TableCell(child: Column(children: [Text('Weight'), Text('${record.weight.toInt()} lbs')],)),
+        TableCell(child: Column(children: [Text('H/Weight'), textFail,],)),
+        TableCell(child: Column(children: [Text('BodyFat'), getPFText(record.bodyFatPass),],)),
+      ]));
+      _table.children.add(TableRow( children: [
+        TableCell(child: Column(children: [Text('Neck'), Text('${record.neck} inches')],)),
+        TableCell(child: Column(children: [Text(record.sex.equal(Sex.Male)?'Abdomen':'Waist'),
+          Text('${record.sex.equal(Sex.Male)?record.abdomen:record.waist} inches')],),),
+        TableCell(child: Column(children: [Text('Hips'), Text(record.sex.equal(Sex.Male) ? 'N/A' : '${record.hips} inches'),],)),
+        TableCell(child: Column(children: [Text('BodyFat %'), Text('${record.bodyFatPercent}%'),],)),
+      ]));
+    }
+
+    return GestureDetector(
       onTapDown: (TapDownDetails details)=>_tapPosition = details.globalPosition,
       onLongPress: ()=>_showPopupMenu(),
       child: Card(
         margin: const EdgeInsets.all(8.0),
         elevation: 2.0,
-        child: Table(
-          children: [
-            TableRow(children: [
-              TableCell(child: Text(record.date)),
-              TableCell(child: Text(record.sex.toString())),
-              TableCell(child: Text(record.age.toString())),
-              TableCell(child: getPFText(record.isPassed), ),
-            ]),
-            TableRow( children: [
-              TableCell(child: Column(children: [Text('Height'), Text('${record.height} inches')],)),
-              TableCell(child: Column(children: [Text('Weight'), Text('${record.weight.toInt()} lbs')],)),
-              TableCell(child: Column(children: [Text('H/Weight'), textFail,],)),
-              TableCell(child: Column(children: [Text('BodyFat'), getPFText(record.bodyFatPass),],)),
-            ]),
-            TableRow( children: [
-              TableCell(child: Column(children: [Text('Neck'), Text('${record.neck} inches')],)),
-              TableCell(child: Column(children: [Text(record.sex.equal(Sex.Male)?'Abdomen':'Waist'),
-                Text('${record.sex.equal(Sex.Male)?record.abdomen:record.waist} inches')],),),
-              TableCell(child: Column(children: [Text('Hips'), Text(record.sex.equal(Sex.Male) ? 'N/A' : '${record.hips} inches'),],)),
-              TableCell(child: Column(children: [Text('BodyFat %'), Text('${record.bodyFatPercent}%'),],)),
-            ]),
-          ],
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: _table,
         ),
       ),
     );

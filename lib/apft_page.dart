@@ -71,7 +71,7 @@ class _APFTPageState extends State<APFTPage> with APFTRecord{
               DatePickTile(onClicked: (_date)=>date=_date,),
               Text('Score $totalScore ',style: TextStyle(fontSize: 20),),
               (isPassed?Text('Pass',style: TextStyle(color: Colors.green,fontSize: 20),):Text('Fail',style: TextStyle(color: Colors.red,fontSize: 20),)),
-              FloatingActionButton( child: Icon(Icons.save, ), onPressed: ()=>APFTDBHelper().insertRecord(this, context: context),),
+              FloatingActionButton( child: Icon(Icons.save, ), onPressed: ()=>APFTDBHelper().insertRecord(this, context: context), heroTag: 'SaveAPFTRecord',),
             ],
           ),
         ),

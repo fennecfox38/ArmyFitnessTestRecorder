@@ -58,7 +58,7 @@ class _ABCPPageState extends State<ABCPPage> with ABCPRecord {
             children: [
               DatePickTile(onClicked: (_date)=>date=_date,),
               (isPassed?Text('Pass',style: TextStyle(color: Colors.green,fontSize: 20),):Text('Fail',style: TextStyle(color: Colors.red,fontSize: 20),)),
-              FloatingActionButton( child: Icon(Icons.save, ), onPressed: ()=>ABCPDBHelper().insertRecord(this, context: context),),
+              FloatingActionButton( child: Icon(Icons.save, ), onPressed: ()=>ABCPDBHelper().insertRecord(this, context: context), heroTag: 'SaveABCPRecord',),
             ],
           ),
         ),

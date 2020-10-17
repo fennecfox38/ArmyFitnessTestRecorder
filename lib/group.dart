@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:excel/excel.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
@@ -8,8 +9,8 @@ import 'package:army_fitness_test_recorder/apft.dart';
 import 'package:army_fitness_test_recorder/abcp.dart';
 import 'package:army_fitness_test_recorder/log_page.dart';
 
-Text textPass = Text('Pass',style: TextStyle(color: Colors.green));
-Text textFail = Text('Fail', style: TextStyle(color: Colors.red));
+const Text textPass = Text('Pass', textAlign: TextAlign.center, style: TextStyle(color: Colors.green));
+const Text textFail = Text('Fail', textAlign: TextAlign.center, style: TextStyle(color: Colors.red));
 Text getPFText(bool boolean) => (boolean ? textPass : textFail);
 
 class MOSLevel {
@@ -182,7 +183,7 @@ class _RadioGroupState extends State<RadioGroup> {
           padding: const EdgeInsets.all(2.0), child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Radio( value: _value, groupValue: value, onChanged: (e){ setState(()=>value=e); widget.onChanged(e); }, activeColor: Colors.orangeAccent, visualDensity: VisualDensity(horizontal: -4.0),),
+              Radio( value: _value, groupValue: value, onChanged: (e){ setState(()=>value=e); widget.onChanged(e); }, visualDensity: VisualDensity(horizontal: -4.0),),
               GestureDetector( child: Text(_value.toString()),  onTap: (){ setState(()=>value=_value); widget.onChanged(_value); }, ),
             ],
           ),
@@ -269,18 +270,18 @@ class _DatePickTileState extends State<DatePickTile> {
   String get string => ('${date.year}-${twoDigits(date.month)}-${twoDigits(date.day)}');
 }
 
-/*
-class DBHelper{
-  DBHelper._();
-  static final DBHelper _db = DBHelper._();
-  factory DBHelper() => _db;
 
+class DBHelper{
   static Database _database;
   static GlobalKey<LogPageState> keyLogPage;
 
   Future<String> get path async{
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
     return join(documentsDirectory.path, 'RecordLog.db');
+  }
+  Future<String> get xlsxPath async{
+    Directory documentsDirectory = await getApplicationDocumentsDirectory();
+    return join(documentsDirectory.path, 'RecordLog.xlsx');
   }
 
   Future<Database> get database async {
@@ -297,5 +298,19 @@ class DBHelper{
     );
     return _database;
   }
+
+  Future<String> exportExcel() async{
+    String _path = await xlsxPath;
+    Excel excel = Excel.createExcel();
+    excel = await ACFTDBHelper().exportSheet(excel);
+    excel = await APFTDBHelper().exportSheet(excel);
+    excel = await ABCPDBHelper().exportSheet(excel);
+    excel.delete('Sheet1');
+    var bytes = await excel.encode();
+    File(_path)
+      ..createSync(recursive: true)
+      ..writeAsBytesSync(bytes);
+    return _path;
+  }
+
 }
-*/

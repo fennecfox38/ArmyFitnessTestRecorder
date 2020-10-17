@@ -1,17 +1,11 @@
-import 'dart:io';
+import 'package:excel/excel.dart';
 import 'package:flutter/material.dart';
-import 'package:path/path.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:share/share.dart';
-import 'package:sqflite/sqflite.dart';
-import 'package:army_fitness_test_recorder/acft.dart';
-import 'package:army_fitness_test_recorder/abcp.dart';
 import 'package:army_fitness_test_recorder/duration.dart';
 import 'package:army_fitness_test_recorder/group.dart';
-import 'package:army_fitness_test_recorder/log_page.dart';
 
 class APFTRecord{
-  double valuePU=0, valueSU=0; Duration valueCardio=Duration.inSec(2400); AlterAPFT alter;
+  double valuePU=0, valueSU=0; Duration valueCardio=Duration.inSec(2400); AlterAPFT alter=AlterAPFT.Run;
   List<int> score = <int>[0,0,0,];
   int get totalScore {
     int _result=0;
@@ -41,44 +35,21 @@ class APFTRecord{
   APFTLogCard get logCard =>APFTLogCard(this);
 }
 
-class APFTDBHelper {
-  APFTDBHelper._();
-  static final APFTDBHelper _db = APFTDBHelper._();
-  factory APFTDBHelper() => _db;
-
-  static Database _database;
-  static GlobalKey<LogPageState> keyLogPage;
-
-  Future<Database> get database async {
-    if(_database != null) return _database;
-    _database = await initDB();
-    return _database;
-  }
-
-  initDB() async {
-    Directory documentsDirectory = await getApplicationDocumentsDirectory();
-    String path = join(documentsDirectory.path, 'RecordLog.db');
-
-    return await openDatabase(
-        path,
-        version: 1,
-        onCreate: (db, version) async {
-          await db.execute(sqlCreateTable);
-          await db.execute(ACFTDBHelper.sqlCreateTable);
-          await db.execute(ABCPDBHelper.sqlCreateTable);
-        },
-        onUpgrade: (db, oldVersion, newVersion){}
-    );
-  }
-
-  insertRecord(APFTRecord record, {BuildContext context}) async {
+class APFTDBHelper extends DBHelper{
+  Future<void> insertRecord(APFTRecord record, {BuildContext context}) async {
     final db = await database;
     var res = await db.rawInsert(sqlInsert, record.values);
-    keyLogPage.currentState.invalidateAPFT();
+    DBHelper.keyLogPage.currentState.invalidateAPFT();
     if(context!=null)
       Scaffold.of(context).showSnackBar(SnackBar(content: Text('Record has been saved to DB.'),
-        action: SnackBarAction(label: 'Undo', onPressed: ()=>APFTDBHelper().deleteRecord(record, context: context),), ));
+        action: SnackBarAction(label: 'Undo', onPressed: ()=>deleteRecord(record, context: context),), ));
     return res;
+  }
+
+  Future<void> saveList(List<APFTRecord> list, {BuildContext context}) async {
+    final db = await database;
+    list.forEach((e) => db.rawInsert(sqlInsert, e.values));
+    DBHelper.keyLogPage.currentState.invalidateAPFT();
   }
 
   Future<List<APFTRecord>> getRecordList() async {
@@ -105,7 +76,7 @@ class APFTDBHelper {
     return list;
   }
 
-  deleteRecord(APFTRecord record, {BuildContext context}) async {
+  Future<void> deleteRecord(APFTRecord record, {BuildContext context}) async {
     String sqlExec = sqlDeleteWhere + sqlWhereString(columnRecordDate,record.date) + "AND ";
     sqlExec += sqlWhereString(columnSex,record.sex.toString()) + "AND ";
     sqlExec += sqlWhereString(columnAge,record.age.toString()) + "AND ";
@@ -119,42 +90,64 @@ class APFTDBHelper {
 
     final db = await database;
     var res = db.execute(sqlExec);
-    keyLogPage.currentState.invalidateAPFT();
+    DBHelper.keyLogPage.currentState.invalidateAPFT();
     if(context!=null)
-      Scaffold.of(context).showSnackBar(SnackBar(content: Text('Record has been deleted from DB.'),
-        action: SnackBarAction(label: 'Undo', onPressed: ()=>APFTDBHelper().insertRecord(record, context: context),),));
+      Scaffold.of(context).showSnackBar(SnackBar(content: Text('APFT Records have been deleted from DB.'),
+        action: SnackBarAction(label: 'Undo', onPressed: ()=>insertRecord(record, context: context),),
+      ));
     return res;
   }
 
-  deleteAllRecord() async {
+  Future<void> deleteAllRecord({BuildContext context}) async {
+    List<APFTRecord> _backup = await getRecordList();
     final db = await database;
     db.rawDelete(sqlDeleteAll);
-    keyLogPage.currentState.invalidateAPFT();
+    DBHelper.keyLogPage.currentState.invalidateAPFT();
+    if(context!=null)
+      Scaffold.of(context).showSnackBar(SnackBar(content: Text('Record has been deleted from DB.'),
+        action: SnackBarAction(label: 'Undo', onPressed: ()=>saveList(_backup)),
+      ));
   }
 
-  static String tableName = "APFTRecord";
-  static String columnRecordDate = "RecordDate", columnSex = "Sex", columnAge = "AgeGroup";
-  static String columnRawPU = "PURaw", columnRawSU = "SURaw", columnRawCardio = "CardioRaw";
-  static String columnScorePU = "PUScore", columnScoreSU = "SUScore", columnScoreCardio = "CardioScore";
-  static String columnCardioAlter = "CardioAlter", columnScoreTotal = "ScoreTotal", columnIsPassed = "isPassed";
+  Future<Excel> exportSheet(Excel excel) async {
+    Sheet _sheet = excel['APFTRecord'];
+    List<APFTRecord> _list = await getRecordList();
+    int rowIndex = 0;
+    _sheet.insertRowIterables(columnNames, rowIndex++);
+    for(APFTRecord _record in _list)  // will be single record. (single row)
+      _sheet.insertRowIterables(_record.values, rowIndex++);
+    return excel;
+  }
 
-  static String sqlCreateTable="CREATE TABLE IF NOT EXISTS "+ tableName +" ("+
+  static const String tableName = "APFTRecord";
+  static const String columnRecordDate = "RecordDate", columnSex = "Sex", columnAge = "AgeGroup";
+  static const String columnRawPU = "PURaw", columnRawSU = "SURaw", columnRawCardio = "CardioRaw";
+  static const String columnScorePU = "PUScore", columnScoreSU = "SUScore", columnScoreCardio = "CardioScore";
+  static const String columnCardioAlter = "CardioAlter", columnScoreTotal = "ScoreTotal", columnIsPassed = "isPassed";
+
+  static const List<String> columnNames = <String>[
+    columnRecordDate,columnSex,columnAge,
+    columnRawPU,columnScorePU, columnRawSU,columnScoreSU,
+    columnRawCardio,columnScoreCardio,columnCardioAlter,
+    columnScoreTotal,columnIsPassed,
+  ];
+
+  static const String sqlCreateTable="CREATE TABLE IF NOT EXISTS "+ tableName +" ("+
       columnRecordDate+" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,"+ columnSex+" TEXT NOT NULL,"+ columnAge+" TEXT NOT NULL,"+
       columnRawPU+" INTEGER NOT NULL,"+ columnScorePU+" INTEGER NOT NULL,"+
       columnRawSU+" INTEGER NOT NULL,"+ columnScoreSU+" INTEGER NOT NULL,"+
       columnRawCardio+" TEXT NOT NULL,"+ columnScoreCardio+" INTEGER NOT NULL,"+
       columnCardioAlter+" TEXT NOT NULL,"+ columnScoreTotal+" INTEGER NOT NULL,"+
       columnIsPassed+" TEXT NOT NULL)";
-  static String sqlDropTable = "DROP TABLE IF EXISTS "+ tableName;
-  static String sqlSelect = "SELECT * FROM " + tableName;
-  static String sqlInsert = "INSERT OR REPLACE INTO "+tableName+
+  static const String sqlDropTable = "DROP TABLE IF EXISTS "+ tableName;
+  static const String sqlSelect = "SELECT * FROM " + tableName;
+  static const String sqlInsert = "INSERT OR REPLACE INTO "+tableName+
       "("+columnRecordDate+", "+columnSex+", "+columnAge+", "+
       columnRawPU+", "+columnScorePU+", "+ columnRawSU+", "+columnScoreSU+", "+
       columnRawCardio+", "+columnScoreCardio+", "+ columnCardioAlter+", "+
       columnScoreTotal+", "+ columnIsPassed+") VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
-  static String sqlDeleteWhere = "DELETE FROM " + tableName + " WHERE ";
-  static String sqlDeleteAll = "DELETE FROM " + tableName;
-
+  static const String sqlDeleteWhere = "DELETE FROM " + tableName + " WHERE ";
+  static const String sqlDeleteAll = "DELETE FROM " + tableName;
 }
 
 String sqlWhereString(String _column, String _arg){ return (_column+"=\""+_arg+"\" "); }
@@ -168,7 +161,7 @@ class APFTLogCard extends StatelessWidget {
 
   @override Widget build(BuildContext context) {
     Offset _tapPosition;
-    _showPopupMenu() async {
+    Future<void> _showPopupMenu() async {
       final RenderBox overlay = Overlay.of(context).context.findRenderObject();
       await showMenu( context: context, elevation: 8.0, initialValue: 0,
         position: RelativeRect.fromRect(_tapPosition & Size(40, 40), Offset.zero & overlay.size,), //(smaller rect(the touch area),  Bigger rect(the entire screen))
@@ -189,37 +182,40 @@ class APFTLogCard extends StatelessWidget {
       child: Card(
         margin: const EdgeInsets.all(8.0),
         elevation: 2.0,
-        child: Table(
-          children: [
-            TableRow(children: [
-              TableCell(child: Text(record.date)),
-              TableCell(child: Text(record.sex.toString())),
-              TableCell(child: Text(record.age.toString())),
-              TableCell(child: Text('${record.totalScore} point',
-                style: TextStyle(color: (record.isPassed ? Colors.green : Colors.red) ),)),
-            ]),
-            TableRow( children: [
-              TableCell(child: Text('Push-Up')),
-              TableCell(child: Text('${record.valuePU.toInt()} reps'),),
-              TableCell(child: Text('${record.score[0]} point')),
-              TableCell(child: Text('${record.levelPF[0].toString()}',
-                style: TextStyle(color: (record.levelPF[0]==LevelPF.Pass ? Colors.green : Colors.red) ),),),
-            ]),
-            TableRow( children: [
-              TableCell(child: Text('Sit-Up')),
-              TableCell(child: Text('${record.valueSU.toInt()} reps'),),
-              TableCell(child: Text('${record.score[1]} point')),
-              TableCell(child: Text('${record.levelPF[1].toString()}',
-                style: TextStyle(color: (record.levelPF[0]==LevelPF.Pass ? Colors.green : Colors.red) ),),),
-            ]),
-            TableRow( children: [
-              TableCell(child: Text(record.alter.toString())),
-              TableCell(child: Text(record.valueCardio.toString()),),
-              TableCell(child: Text('${record.score[2]} point')),
-              TableCell(child: Text('${record.levelPF[2].toString()}',
-                style: TextStyle(color: (record.levelPF[0]==LevelPF.Pass ? Colors.green : Colors.red) ),),),
-            ]),
-          ],
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Table(
+            children: [
+              TableRow(children: [
+                TableCell(child: Text(record.date)),
+                TableCell(child: Text(record.sex.toString(), textAlign: TextAlign.center,)),
+                TableCell(child: Text(record.age.toString(), textAlign: TextAlign.center,)),
+                TableCell(child: Text('${record.totalScore} point', textAlign: TextAlign.end,
+                  style: TextStyle(color: (record.isPassed ? Colors.green : Colors.red) ),)),
+              ]),
+              TableRow( children: [
+                TableCell(child: Text('Push-Up')),
+                TableCell(child: Text('${record.valuePU.toInt()} reps', textAlign: TextAlign.center,),),
+                TableCell(child: Text('${record.score[0]} point', textAlign: TextAlign.end,)),
+                TableCell(child: Text('${record.levelPF[0].toString()}', textAlign: TextAlign.center,
+                  style: TextStyle(color: (record.levelPF[0]==LevelPF.Pass ? Colors.green : Colors.red) ),),),
+              ]),
+              TableRow( children: [
+                TableCell(child: Text('Sit-Up')),
+                TableCell(child: Text('${record.valueSU.toInt()} reps', textAlign: TextAlign.center,),),
+                TableCell(child: Text('${record.score[1]} point', textAlign: TextAlign.end,)),
+                TableCell(child: Text('${record.levelPF[1].toString()}', textAlign: TextAlign.center,
+                  style: TextStyle(color: (record.levelPF[0]==LevelPF.Pass ? Colors.green : Colors.red) ),),),
+              ]),
+              TableRow( children: [
+                TableCell(child: Text(record.alter.toString())),
+                TableCell(child: Text(record.valueCardio.toString(), textAlign: TextAlign.center,),),
+                TableCell(child: Text('${record.score[2]} point', textAlign: TextAlign.end,)),
+                TableCell(child: Text('${record.levelPF[2].toString()}', textAlign: TextAlign.center,
+                  style: TextStyle(color: (record.levelPF[0]==LevelPF.Pass ? Colors.green : Colors.red) ),),),
+              ]),
+            ],
+          ),
         ),
       ),
     );
